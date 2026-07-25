@@ -2,6 +2,35 @@
 
 const IMAME = (() => {
   const CART_KEY = "imame_cart";
+  const WISHLIST_KEY = "danedane_wishlist";
+
+  /* ---------- Favoriler (wishlist) yardımcıları ---------- */
+  function getWishlist() {
+    try { return JSON.parse(localStorage.getItem(WISHLIST_KEY)) || []; }
+    catch (e) { return []; }
+  }
+  function saveWishlist(list) {
+    localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
+    updateWishlistCount();
+  }
+  function isInWishlist(id) { return getWishlist().some(w => w.id === id); }
+  function toggleWishlist(item) {
+    const list = getWishlist();
+    const idx = list.findIndex(w => w.id === item.id);
+    let added;
+    if (idx > -1) { list.splice(idx, 1); added = false; }
+    else { list.push(item); added = true; }
+    saveWishlist(list);
+    return added;
+  }
+  function removeFromWishlist(id) { saveWishlist(getWishlist().filter(w => w.id !== id)); }
+  function updateWishlistCount() {
+    const n = getWishlist().length;
+    document.querySelectorAll("[data-wishlist-count]").forEach(el => {
+      el.textContent = n;
+      el.style.display = n > 0 ? "flex" : "none";
+    });
+  }
 
   /* ---------- Sepet yardımcıları ---------- */
   function getCart() {
@@ -145,6 +174,34 @@ const IMAME = (() => {
     applyFilters();
   }
 
+  /* ---------- Favori (kalp) butonları ---------- */
+  function initWishlistButtons() {
+    document.querySelectorAll(".product-card").forEach(card => {
+      const wishBtn = card.querySelector(".product-wish");
+      const addBtn = card.querySelector("[data-add-cart]");
+      if (!wishBtn || !addBtn) return;
+      bindWishBtn(wishBtn, addBtn.dataset);
+    });
+    const pdActions = document.querySelector(".pd-actions");
+    if (pdActions) {
+      const wishBtn = pdActions.querySelector('[aria-label="Favorilere ekle"]');
+      const addBtn = pdActions.querySelector("[data-add-cart]");
+      if (wishBtn && addBtn) bindWishBtn(wishBtn, addBtn.dataset);
+    }
+    updateWishlistCount();
+  }
+  function bindWishBtn(wishBtn, data) {
+    const { id, name, price, cat } = data;
+    if (!id) return;
+    if (isInWishlist(id)) wishBtn.classList.add("active");
+    wishBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const added = toggleWishlist({ id, name, price: parseFloat(price), cat });
+      wishBtn.classList.toggle("active", added);
+      toast(added ? `"${name}" favorilere eklendi` : `"${name}" favorilerden çıkarıldı`);
+    });
+  }
+
   /* ---------- Çerez onayı ---------- */
   function initCookieBar() {
     const bar = document.getElementById("cookie-bar");
@@ -178,9 +235,13 @@ const IMAME = (() => {
     initFilterChips();
     initNewsletter();
     initCookieBar();
+    initWishlistButtons();
   }
 
   document.addEventListener("DOMContentLoaded", init);
 
-  return { getCart, saveCart, addToCart, removeFromCart, setQty, clearCart, cartTotal, cartCount, formatTL, toast };
+  return {
+    getCart, saveCart, addToCart, removeFromCart, setQty, clearCart, cartTotal, cartCount, formatTL, toast,
+    getWishlist, saveWishlist, isInWishlist, toggleWishlist, removeFromWishlist,
+  };
 })();

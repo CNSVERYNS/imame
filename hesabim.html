@@ -32,6 +32,10 @@
       <a href="iletisim.html">İletişim</a>
     </nav>
     <div class="header-actions">
+      <a href="hesap-panelim.html#favoriler" class="icon-btn" aria-label="Favorilerim">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg>
+        <span class="cart-count" data-wishlist-count>0</span>
+      </a>
       <a href="sepet.html" class="icon-btn" aria-label="Sepetim">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
         <span class="cart-count" data-cart-count>0</span>
@@ -184,8 +188,8 @@
       document.getElementById('panel-' + btn.dataset.authTab).classList.add('active');
     });
   });
-  document.getElementById('login-form').addEventListener('submit', (e) => { e.preventDefault(); IMAME.toast('Bu bir örnek arayüzdür — giriş simüle edildi.'); });
-  document.getElementById('register-form').addEventListener('submit', (e) => { e.preventDefault(); IMAME.toast('Hesabınız oluşturuldu (örnek).'); });
+  document.getElementById('login-form').addEventListener('submit', (e) => { e.preventDefault(); window.location.href = 'hesap-panelim.html'; });
+  document.getElementById('register-form').addEventListener('submit', (e) => { e.preventDefault(); window.location.href = 'hesap-panelim.html'; });
 </script>
 </body>
 </html>

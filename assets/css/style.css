@@ -275,6 +275,10 @@ input, select, textarea { font-family: inherit; }
 }
 .product-wish:hover { color: var(--gold-bright); border-color: var(--gold); }
 .product-wish svg { width: 15px; height: 15px; }
+.product-wish.active { color: var(--oxblood-bright); border-color: var(--oxblood-bright); }
+.product-wish.active svg { fill: currentColor; }
+.add-btn.active { color: var(--oxblood-bright); border-color: var(--oxblood-bright); }
+.add-btn.active svg { fill: currentColor; }
 .product-info { padding: 20px; }
 .product-cat { font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-dim); }
 .product-name { font-family: var(--font-display); font-size: 19px; margin: 6px 0 8px; }
@@ -573,6 +577,31 @@ input, select, textarea { font-family: inherit; }
 .track-live { display: flex; align-items: center; gap: 9px; margin-top: 30px; font-size: 12px; color: var(--ivory-faint); }
 .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(92,138,90,0.6); animation: livepulse 1.8s infinite; }
 @keyframes livepulse { 0% { box-shadow: 0 0 0 0 rgba(92,138,90,0.5); } 70% { box-shadow: 0 0 0 8px rgba(92,138,90,0); } 100% { box-shadow: 0 0 0 0 rgba(92,138,90,0); } }
+
+.status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 11px; letter-spacing: 0.04em; }
+.status-pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.status-pill.ok { background: rgba(92,138,90,0.16); color: var(--ok); }
+.status-pill.wait { background: rgba(198,164,86,0.14); color: var(--gold-bright); }
+.status-pill.warn { background: rgba(163,50,63,0.14); color: var(--oxblood-bright); }
+.status-pill.info { background: rgba(168,160,138,0.12); color: var(--ivory-dim); }
+
+/* ---------- Hesap Panelim ---------- */
+.acc-tabs { display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid var(--gold-line); margin-bottom: 40px; }
+.acc-tab { padding: 13px 20px; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ivory-faint); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.acc-tab.active { color: var(--gold-bright); border-color: var(--gold); }
+.acc-panel { display: none; }
+.acc-panel.active { display: block; }
+.order-card { border: 1px solid var(--gold-line); padding: 22px 24px; margin-bottom: 16px; }
+.order-card-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--gold-line); }
+.order-card-head strong { font-family: var(--font-display); font-size: 17px; }
+.order-card-head small { display: block; color: var(--ivory-faint); font-size: 11.5px; margin-top: 2px; }
+.order-items { font-size: 13.5px; color: var(--ivory-dim); margin-bottom: 14px; }
+.order-card-foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.address-card { border: 1px solid var(--gold-line); padding: 22px 24px; margin-bottom: 16px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.address-card h4 { font-size: 15px; margin-bottom: 8px; }
+.address-card p { font-size: 13.5px; color: var(--ivory-dim); line-height: 1.7; }
+.address-card .tag { display: inline-block; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-dim); border: 1px solid var(--gold-line-strong); padding: 3px 9px; border-radius: 20px; margin-bottom: 10px; }
+.address-actions { display: flex; gap: 10px; align-self: flex-start; }
 
 /* ---------- Yasal sayfalar ---------- */
 .legal-layout { display: grid; grid-template-columns: 240px 1fr; gap: 56px; align-items: start; }
