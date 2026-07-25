@@ -119,6 +119,7 @@ const IMAME = (() => {
     toggle.addEventListener("click", () => nav.classList.add("open"));
     close && close.addEventListener("click", () => nav.classList.remove("open"));
     nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => nav.classList.remove("open")));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") nav.classList.remove("open"); });
   }
 
   /* ---------- Sepete ekle butonları ---------- */
@@ -272,6 +273,66 @@ const IMAME = (() => {
     });
   }
 
+  /* ---------- Form doğrulama geri bildirimi ---------- */
+  function ensureErrorEl(field, msg) {
+    if (field.querySelector(".field-error")) return field.querySelector(".field-error");
+    const el = document.createElement("div");
+    el.className = "field-error";
+    el.textContent = msg;
+    field.appendChild(el);
+    return el;
+  }
+  function initFormValidation() {
+    document.querySelectorAll('input[type="email"]').forEach(input => {
+      const field = input.closest(".field");
+      if (!field) return;
+      ensureErrorEl(field, "Geçerli bir e-posta adresi girin.");
+      input.addEventListener("blur", () => {
+        if (!input.value) return;
+        const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
+        field.classList.toggle("has-error", !valid);
+      });
+      input.addEventListener("input", () => field.classList.remove("has-error"));
+    });
+
+    const regPw = document.querySelector("#register-form input[type=password]");
+    if (regPw) {
+      const field = regPw.closest(".field");
+      const bar = document.createElement("div");
+      bar.className = "pw-strength";
+      bar.innerHTML = '<div class="pw-strength-bar"></div>';
+      const label = document.createElement("div");
+      label.className = "pw-strength-label";
+      field.append(bar, label);
+      regPw.addEventListener("input", () => {
+        const val = regPw.value;
+        let score = 0;
+        if (val.length >= 8) score++;
+        if (/[A-Z]/.test(val)) score++;
+        if (/[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+        const pct = [0, 25, 50, 75, 100][score];
+        const colors = ["var(--oxblood-bright)", "var(--oxblood-bright)", "var(--gold-bright)", "var(--gold-bright)", "var(--ok)"];
+        const labels = ["", "Zayıf şifre", "Orta güçte şifre", "İyi şifre", "Güçlü şifre"];
+        bar.querySelector(".pw-strength-bar").style.width = pct + "%";
+        bar.querySelector(".pw-strength-bar").style.background = colors[score];
+        label.textContent = val ? labels[score] : "";
+      });
+    }
+
+    document.querySelectorAll('input[placeholder*="TR00"]').forEach(input => {
+      const field = input.closest(".field");
+      if (!field) return;
+      ensureErrorEl(field, 'IBAN "TR" ile başlamalı ve toplam 26 karakter olmalıdır.');
+      input.addEventListener("blur", () => {
+        if (!input.value) return;
+        const cleaned = input.value.replace(/\s/g, "").toUpperCase();
+        field.classList.toggle("has-error", !/^TR\d{24}$/.test(cleaned));
+      });
+      input.addEventListener("input", () => field.classList.remove("has-error"));
+    });
+  }
+
   /* ---------- Çerez onayı ---------- */
   function initCookieBar() {
     const bar = document.getElementById("cookie-bar");
@@ -307,6 +368,7 @@ const IMAME = (() => {
     initCookieBar();
     initWishlistButtons();
     initSearchOverlay();
+    initFormValidation();
   }
 
   document.addEventListener("DOMContentLoaded", init);
