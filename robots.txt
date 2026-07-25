@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /sepet.html
+Disallow: /odeme.html
+Disallow: /hesap-panelim.html
+Disallow: /satici-merkezi/panel/
+
+Sitemap: https://danedane.com/sitemap.xml
