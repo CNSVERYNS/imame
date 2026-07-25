@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div id="save-note" class="panel-box" style="border-color: var(--panel-accent-line); margin-bottom:24px;" hidden>
+    <div id="save-note" data-save-note class="panel-box" style="border-color: var(--panel-accent-line); margin-bottom:24px;" hidden>
       <div style="display:flex; align-items:center; gap:12px;">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--panel-accent-bright)" stroke-width="1.6"><path d="M20 6L9 17l-5-5"/></svg>
         <div><strong style="color:var(--panel-accent-bright);">Ürün taslak olarak kaydedildi.</strong><div class="muted" style="font-size:12.5px;">İnceleme sonrası mağazanızda yayınlanacaktır.</div></div>
@@ -81,6 +81,20 @@
                 <div class="field"><label>Boncuk Sayısı / Ölçü</label><input type="text" placeholder="Örn. 33'lü ya da 18 numara"></div>
                 <div class="field"><label>Ağırlık (gram)</label><input type="number" placeholder="28"></div>
               </div>
+              <div class="field-row">
+                <div class="field">
+                  <label>Kargo Seçeneği</label>
+                  <select id="shipping-option">
+                    <option value="ucretsiz">Ücretsiz Kargo (Ben Karşılarım)</option>
+                    <option value="alici">Kargo Ücretini Alıcı Öder</option>
+                  </select>
+                </div>
+                <div class="field" id="shipping-fee-field">
+                  <label>Kargo Ücreti (TL)</label>
+                  <input type="number" id="shipping-fee" placeholder="79.90">
+                </div>
+              </div>
+              <p class="field-hint">Kargo ücretini her ürün için siz belirlersiniz; alıcı ekranında bu tutar gösterilir.</p>
             </div>
           </div>
         </div>

@@ -81,36 +81,31 @@ input, select, textarea { font-family: inherit; }
 .section { padding: 96px 0; position: relative; }
 .section--tight { padding: 64px 0; }
 .section--alt { background: var(--bg-alt); }
-.section--pattern {
-  background-image: url("../img/pattern-geo.svg");
-  background-size: 120px 120px;
-  background-repeat: repeat;
-  background-blend-mode: normal;
-  position: relative;
-}
-.section--pattern::before {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, var(--bg) 0%, rgba(11,13,9,0.72) 40%, var(--bg) 100%);
-  pointer-events: none;
-}
-.section--pattern > * { position: relative; z-index: 1; }
-
-.section--pattern-tri {
-  background-image: url("../img/pattern-triangle.svg");
-  background-size: 1600px auto;
-  background-position: center;
-  background-repeat: no-repeat;
+.section--pattern, .section--pattern-tri {
   position: relative;
   overflow: hidden;
 }
-.section--pattern-tri::before {
+.section--pattern::before, .section--pattern-tri::before {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, var(--bg) 0%, rgba(11,13,9,0.72) 40%, var(--bg) 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: sepia(0.5) saturate(1.25) hue-rotate(-10deg) brightness(0.48) contrast(1.1);
+  opacity: 0.55;
+  z-index: 0;
   pointer-events: none;
 }
-.section--pattern-tri > * { position: relative; z-index: 1; }
+.section--pattern::before { background-image: url("../img/star-photo.jpg"); }
+.section--pattern-tri::before { background-image: url("../img/triangle-photo.jpg"); }
+.section--pattern::after, .section--pattern-tri::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(11,13,9,0.55) 45%, var(--bg) 85%);
+  z-index: 1;
+  pointer-events: none;
+}
+.section--pattern > *, .section--pattern-tri > * { position: relative; z-index: 2; }
 
 .hairline { border: none; border-top: 1px solid var(--gold-line); margin: 0; }
 .center { text-align: center; }
@@ -130,7 +125,10 @@ input, select, textarea { font-family: inherit; }
 
 .motif-zulfikar {
   position: absolute; right: -30px; top: 50%; transform: translateY(-50%);
-  width: 560px; max-width: 68%; height: auto; opacity: 0.13; pointer-events: none;
+  width: 560px; max-width: 68%; height: auto; opacity: 0.3; pointer-events: none;
+  filter: sepia(0.5) saturate(1.25) hue-rotate(-10deg) brightness(0.85) contrast(1.1);
+  -webkit-mask-image: radial-gradient(ellipse 62% 62% at center, #000 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse 62% 62% at center, #000 30%, transparent 78%);
 }
 
 /* ---------- Düğmeler ---------- */
@@ -219,7 +217,10 @@ input, select, textarea { font-family: inherit; }
 }
 .hero-motif {
   position: absolute; right: -60px; top: 50%; transform: translateY(-50%);
-  width: 620px; opacity: 0.1; pointer-events: none;
+  width: 620px; opacity: 0.32; pointer-events: none;
+  filter: sepia(0.5) saturate(1.25) hue-rotate(-10deg) brightness(0.85) contrast(1.1);
+  -webkit-mask-image: radial-gradient(ellipse 62% 62% at center, #000 32%, transparent 78%);
+  mask-image: radial-gradient(ellipse 62% 62% at center, #000 32%, transparent 78%);
 }
 .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
 .hero h1 { font-size: 58px; line-height: 1.08; margin: 18px 0 26px; font-weight: 500; }

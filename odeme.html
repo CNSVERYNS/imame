@@ -61,14 +61,14 @@
 
           <div class="panel-box" style="margin-bottom:24px;">
             <h3>Kargo Seçimi</h3>
-            <p class="muted" style="font-size:13px; margin-bottom:22px;">Anlaşmalı kargo firmalarımızla, sipariş sonrası canlı takip bağlantısı otomatik oluşturulur.</p>
+            <p class="muted" style="font-size:13px; margin-bottom:22px;">Kargo ücreti satıcıya göre değişir. Anlaşmalı kargo firmalarımızla, sipariş sonrası canlı takip bağlantısı otomatik oluşturulur.</p>
             <label class="pay-method selected">
-              <input type="radio" name="shipping" checked>
-              <span style="flex:1;">Standart Kargo <small>2-4 iş günü · 1.500 TL üzeri ücretsiz</small></span>
+              <input type="radio" name="shipping" data-price="79.90" checked>
+              <span style="flex:1;">Standart Kargo <small>2-4 iş günü</small></span>
               <strong>79,90 TL</strong>
             </label>
             <label class="pay-method">
-              <input type="radio" name="shipping">
+              <input type="radio" name="shipping" data-price="139.90">
               <span style="flex:1;">Hızlı Teslimat <small>1-2 iş günü</small></span>
               <strong>139,90 TL</strong>
             </label>
@@ -131,18 +131,22 @@
       <div class="summary-row"><span>${i.name} × ${i.qty}</span><span>${IMAME.formatTL(i.price * i.qty)}</span></div>
     `).join('') || '<p class="muted" style="font-size:13px;">Sepetiniz boş — yine de örnek olarak devam edebilirsiniz.</p>';
     const subtotal = IMAME.cartTotal();
-    const shipping = subtotal >= 1500 ? 0 : 79.9;
+    const selectedShipping = document.querySelector('input[name=shipping]:checked');
+    const shipping = selectedShipping ? parseFloat(selectedShipping.dataset.price) : 0;
     document.getElementById('co-subtotal').textContent = IMAME.formatTL(subtotal);
-    document.getElementById('co-shipping').textContent = shipping === 0 ? 'Ücretsiz' : IMAME.formatTL(shipping);
+    document.getElementById('co-shipping').textContent = IMAME.formatTL(shipping);
     document.getElementById('co-total').textContent = IMAME.formatTL(subtotal + shipping);
   }
   document.addEventListener('DOMContentLoaded', renderSummary);
 
   document.querySelectorAll('.pay-method').forEach(label => {
     label.addEventListener('click', () => {
-      const group = label.querySelector('input').name;
-      document.querySelectorAll(`.pay-method input[name=${group}]`).forEach(i => i.closest('.pay-method').classList.remove('selected'));
+      const input = label.querySelector('input');
+      const group = input.name;
+      document.querySelectorAll(`.pay-method input[name=${group}]`).forEach(i => { i.checked = false; i.closest('.pay-method').classList.remove('selected'); });
+      input.checked = true;
       label.classList.add('selected');
+      if (group === 'shipping') renderSummary();
     });
   });
 

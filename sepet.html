@@ -15,7 +15,7 @@
   <div class="container">
     <div class="topbar-links">
       <a href="tel:+902121234567">0212 123 45 67</a>
-      <span>1.500 TL üzeri siparişlerde kargo ücretsiz</span>
+      <span>Kargo ücreti satıcıya göre değişir</span>
     </div>
     <div class="topbar-links">
       <a href="satici-merkezi/index.html">Satıcı Merkezi</a>
@@ -204,10 +204,9 @@
     }).join('');
 
     const subtotal = IMAME.cartTotal();
-    const shipping = subtotal >= 1500 || subtotal === 0 ? 0 : 79.9;
     document.getElementById('sum-subtotal').textContent = IMAME.formatTL(subtotal);
-    document.getElementById('sum-shipping').textContent = shipping === 0 ? 'Ücretsiz' : IMAME.formatTL(shipping);
-    document.getElementById('sum-total').textContent = IMAME.formatTL(subtotal + shipping);
+    document.getElementById('sum-shipping').textContent = 'Ödemede hesaplanır';
+    document.getElementById('sum-total').textContent = IMAME.formatTL(subtotal);
 
     rows.querySelectorAll('[data-remove]').forEach(el => el.addEventListener('click', () => { IMAME.removeFromCart(el.dataset.remove); renderCart(); }));
     rows.querySelectorAll('[data-inc]').forEach(el => el.addEventListener('click', () => {

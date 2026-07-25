@@ -39,6 +39,20 @@
     });
   }
 
+  function initShippingOption() {
+    const select = document.getElementById("shipping-option");
+    const feeField = document.getElementById("shipping-fee-field");
+    const feeInput = document.getElementById("shipping-fee");
+    if (!select || !feeField) return;
+    const sync = () => {
+      const buyerPays = select.value === "alici";
+      feeField.style.display = buyerPays ? "" : "none";
+      if (!buyerPays && feeInput) feeInput.value = "";
+    };
+    select.addEventListener("change", sync);
+    sync();
+  }
+
   function initFormSteps() {
     // Ürün ekle formunda basit görsel geri bildirim: kaydet butonuna basınca toast benzeri mesaj
     document.querySelectorAll("[data-panel-save]").forEach(form => {
@@ -57,6 +71,7 @@
     initSidebar();
     initUploadBox();
     initStatusSelects();
+    initShippingOption();
     initFormSteps();
   });
 })();
