@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 640" fill="none">
+  <!-- Pomel -->
+  <ellipse cx="120" cy="612" rx="13" ry="9" fill="#c6a456"/>
+  <!-- Kabza -->
+  <g stroke="#c6a456" stroke-linecap="round">
+    <path d="M120,601 L120,559" stroke-width="7"/>
+    <path d="M109,589 L131,589 M109,576 L131,576" stroke-width="2"/>
+  </g>
+  <!-- Namlu koruyucusu (adaletin sembolü) -->
+  <path d="M58,548 C50,538 54,526 66,524 C90,536 150,536 174,524 C186,526 190,538 182,548 C150,536 90,536 58,548 Z"
+        stroke="#c6a456" stroke-width="3.4" stroke-linejoin="round"/>
+  <!-- Namlu gövdesi -->
+  <path d="M120,536 C116,460 124,360 118,260" stroke="#c6a456" stroke-width="5" stroke-linecap="round"/>
+  <!-- Çatal uç: uzun kol (ilim) -->
+  <path d="M118,260 C95,210 55,165 42,95 C36,62 44,35 58,18" stroke="#c6a456" stroke-width="4.4" stroke-linecap="round"/>
+  <path d="M58,18 L50,4 M58,18 L68,8" stroke="#e3c579" stroke-width="1.4" stroke-linecap="round"/>
+  <!-- Çatal uç: kısa kol (iman) -->
+  <path d="M118,260 C132,215 158,180 158,120 C158,95 148,72 132,58" stroke="#c6a456" stroke-width="3.8" stroke-linecap="round"/>
+  <path d="M132,58 L128,44 M132,58 L142,50" stroke="#e3c579" stroke-width="1.2" stroke-linecap="round"/>
+</svg>

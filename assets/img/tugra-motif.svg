@@ -1,13 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500" fill="none">
-  <g stroke="#c6a456" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M70,430 C60,340 78,220 68,120 C64,80 78,55 104,44"/>
-    <path d="M112,430 C100,330 120,210 106,110 C101,72 119,47 146,39"/>
-    <path d="M154,430 C140,320 162,205 146,105 C139,67 159,41 188,34"/>
-    <path d="M70,430 C120,452 300,458 420,430 C520,406 560,340 536,280 C516,230 452,214 414,244 C384,268 392,306 424,318 C446,326 470,316 478,296"/>
-    <path d="M150,420 C260,442 400,436 470,388"/>
-    <path d="M70,432 C36,452 4,462 -30,452"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 550" fill="none">
+  <!-- Tuğ (üç dikey elif, uçlarında zülfe kıvrımı) -->
+  <g stroke="#c6a456" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M110,480 C100,380 112,260 102,150 C97,100 106,68 92,46 C82,32 98,26 112,34"/>
+    <path d="M158,480 C146,375 160,255 148,145 C140,92 152,58 136,34 C124,18 142,12 158,22"/>
+    <path d="M206,480 C192,372 208,250 194,140 C184,84 198,48 178,22 C164,6 184,0 204,10"/>
   </g>
-  <g stroke="#c6a456" stroke-width="1.1" opacity="0.7">
-    <path d="M470,150 L482,178 L512,180 L488,198 L497,228 L470,210 L443,228 L452,198 L428,180 L458,178 Z"/>
+
+  <!-- Sere (taban çizgileri) -->
+  <g stroke="#c6a456" stroke-width="4" stroke-linecap="round">
+    <path d="M108,480 C165,496 235,502 305,493"/>
+    <path d="M120,496 C185,510 255,514 322,506"/>
   </g>
+
+  <!-- Beyze (iç ve dış oval kıvrımlar) -->
+  <g stroke-linecap="round">
+    <path d="M305,492 C420,516 565,494 615,405 C662,322 630,215 538,196 C455,179 405,238 427,290 C443,327 490,338 512,312" stroke="#c6a456" stroke-width="3.4"/>
+    <path d="M322,478 C415,498 505,480 534,418 C558,366 538,300 480,291 C438,284 413,317 427,343" stroke="#e3c579" stroke-width="2.2" opacity="0.85"/>
+  </g>
+
+  <!-- Hançer (kuyruk) -->
+  <path d="M305,493 C388,522 490,533 572,506 C624,489 645,452 618,425" stroke="#c6a456" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M108,482 C75,503 40,511 8,503" stroke="#c6a456" stroke-width="2.6" stroke-linecap="round"/>
+
+  <!-- Süsleme: sekiz kollu yıldız mühür -->
+  <g stroke="#c6a456" stroke-width="1.1" opacity="0.75">
+    <path d="M560,150 L572,178 L602,180 L578,198 L587,228 L560,210 L533,228 L542,198 L518,180 L548,178 Z"/>
+  </g>
+  <circle cx="560" cy="150" r="2.2" fill="#e3c579"/>
 </svg>

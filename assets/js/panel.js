@@ -1,4 +1,4 @@
-/* İMAME Satıcı Merkezi — panel davranışları */
+/* Danedane Satıcı Merkezi — panel davranışları */
 
 (() => {
   function initSidebar() {

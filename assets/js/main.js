@@ -1,4 +1,4 @@
-/* İMAME — mağaza ön yüz davranışları (sepet, menü, filtre, bildirimler) */
+/* Danedane — mağaza ön yüz davranışları (sepet, menü, filtre, bildirimler) */
 
 const IMAME = (() => {
   const CART_KEY = "imame_cart";

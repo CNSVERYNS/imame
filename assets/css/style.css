@@ -1,5 +1,5 @@
 /* =========================================================
-   İMAME — Temel Tasarım Sistemi
+   Danedane — Temel Tasarım Sistemi
    Tesbih & Yüzük — mağaza stil dosyası
    ========================================================= */
 
@@ -96,6 +96,20 @@ input, select, textarea { font-family: inherit; }
 }
 .section--pattern > * { position: relative; z-index: 1; }
 
+.section--pattern-tri {
+  background-image: url("../img/pattern-triangle.svg");
+  background-size: 70px 70px;
+  background-repeat: repeat;
+  position: relative;
+}
+.section--pattern-tri::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(11,13,9,0.72) 40%, var(--bg) 100%);
+  pointer-events: none;
+}
+.section--pattern-tri > * { position: relative; z-index: 1; }
+
 .hairline { border: none; border-top: 1px solid var(--gold-line); margin: 0; }
 .center { text-align: center; }
 .muted { color: var(--ivory-dim); }
@@ -110,7 +124,12 @@ input, select, textarea { font-family: inherit; }
 .divider-star::before, .divider-star::after {
   content: ""; height: 1px; width: 72px; background: var(--gold-line-strong);
 }
-.divider-star svg { width: 16px; height: 16px; }
+.divider-star svg, .divider-star img { width: 16px; height: 16px; }
+
+.motif-zulfikar {
+  position: absolute; right: 60px; top: 50%; transform: translateY(-50%);
+  height: 300px; width: auto; opacity: 0.1; pointer-events: none;
+}
 
 /* ---------- Düğmeler ---------- */
 .btn {

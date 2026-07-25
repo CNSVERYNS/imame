@@ -1,4 +1,4 @@
-/* İMAME — canlı kargo takibi (örnek/mock veri motoru) */
+/* Danedane — canlı kargo takibi (örnek/mock veri motoru) */
 
 (() => {
   const form = document.querySelector("#tracking-form");
@@ -6,7 +6,7 @@
   if (!form || !result) return;
 
   const STEPS = [
-    { key: "alindi", label: "Siparişiniz Alındı", desc: "Ödemeniz onaylandı, siparişiniz atölyeye iletildi." },
+    { key: "alindi", label: "Siparişiniz Alındı", desc: "Ödemeniz onaylandı, siparişiniz satıcıya iletildi." },
     { key: "hazirlaniyor", label: "Özenle Hazırlanıyor", desc: "Ürününüz kontrol edilip özel kutusuna yerleştiriliyor." },
     { key: "kargoda", label: "Kargoya Verildi", desc: "Paketiniz anlaşmalı kargo firmasına teslim edildi." },
     { key: "transfer", label: "Transfer Merkezinde", desc: "Paketiniz bölge aktarma merkezinde işleniyor." },
