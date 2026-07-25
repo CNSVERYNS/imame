@@ -102,11 +102,12 @@
 
         <div class="panel-box" style="margin-bottom:24px;">
           <h3>Kimlik Doğrulama</h3>
-          <p class="muted" style="font-size:13px; margin-bottom:18px;">Kimlik belgenizin ön yüzünün fotoğrafını yükleyin.</p>
-          <div class="upload-box">
+          <p class="muted" style="font-size:13px; margin-bottom:18px;">Kimlik belgenizin ön yüzünün fotoğrafını yükleyin. Bu belge yalnızca ekibimiz tarafından görüntülenir.</p>
+          <label class="upload-box" for="kimlik-dosya" id="upload-box-label" style="cursor:pointer;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
-            <span class="upload-box-text">Dosya seçmek için tıklayın (örnek)</span>
-          </div>
+            <span class="upload-box-text" id="upload-box-text">Dosya seçmek için tıklayın</span>
+          </label>
+          <input type="file" id="kimlik-dosya" name="kimlik_dosya" accept="image/*,.pdf" required style="position:absolute; width:1px; height:1px; opacity:0; pointer-events:none;">
         </div>
 
         <label class="checkbox-row" style="margin-bottom:26px;">
@@ -118,6 +119,16 @@
       </form>
     </div>
   </section>
+</div>
+
+<div id="otp-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:200; align-items:center; justify-content:center;">
+  <div class="panel-box" style="max-width:380px; width:90%; text-align:center;">
+    <h3 style="margin-bottom:10px;">E-postanızı Doğrulayın</h3>
+    <p class="muted" style="font-size:13px; margin-bottom:20px;"><strong id="otp-email-label"></strong> adresine gönderilen 6 haneli kodu girin.</p>
+    <div class="field"><input type="text" id="otp-code" inputmode="numeric" maxlength="6" placeholder="123456" style="text-align:center; letter-spacing:6px; font-size:20px;"></div>
+    <button type="button" class="btn btn-solid btn-block" id="otp-confirm" style="margin-top:14px;">Kodu Doğrula ve Başvuruyu Gönder</button>
+    <button type="button" class="btn btn-ghost btn-sm btn-block" id="otp-resend" style="margin-top:10px;">Kodu Tekrar Gönder</button>
+  </div>
 </div>
 
 <div id="success-view" class="order-success section" hidden>
@@ -170,38 +181,86 @@
     }
   });
 
+  const fileInput = document.getElementById('kimlik-dosya');
+  fileInput.addEventListener('change', () => {
+    document.getElementById('upload-box-text').textContent = fileInput.files[0] ? fileInput.files[0].name : 'Dosya seçmek için tıklayın';
+  });
+
+  function sellerFields() {
+    return {
+      store_name: form.magaza_adi.value.trim(),
+      owner_name: `${form.ad.value.trim()} ${form.soyad.value.trim()}`.trim(),
+      phone: form.telefon.value.trim(),
+      tc_no: form.tc_no.value.trim(),
+      birth_date: form.dogum_tarihi.value || null,
+      business_type: form.isletme_turu.value,
+      category_pref: form.kategori.value,
+      iban: form.iban.value.trim(),
+      bank_name: form.banka.value.trim(),
+      bio: form.tanitim.value.trim(),
+    };
+  }
+
+  async function finishApplication() {
+    const idDocPath = await DB.uploadIdDocument(fileInput.files[0]);
+    await DB.applyAsSeller({ ...sellerFields(), id_document_path: idDocPath });
+    document.getElementById('otp-modal').style.display = 'none';
+    document.getElementById('form-view').hidden = true;
+    document.getElementById('success-view').hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  let pendingEmail = null;
+
+  document.getElementById('otp-confirm').addEventListener('click', async () => {
+    const btn = document.getElementById('otp-confirm');
+    const code = document.getElementById('otp-code').value.trim();
+    if (!code) { IMAME.toast('Lütfen kodu girin.'); return; }
+    btn.disabled = true;
+    btn.textContent = 'Doğrulanıyor…';
+    try {
+      const { error } = await DB.verifySignupOtp(pendingEmail, code);
+      if (error) throw error;
+      await finishApplication();
+    } catch (err) {
+      IMAME.toast('Doğrulama başarısız: ' + (err.message || 'kod hatalı.'));
+      btn.disabled = false;
+      btn.textContent = 'Kodu Doğrula ve Başvuruyu Gönder';
+    }
+  });
+
+  document.getElementById('otp-resend').addEventListener('click', async () => {
+    try {
+      await DB.resendSignupOtp(pendingEmail);
+      IMAME.toast('Kod tekrar gönderildi.');
+    } catch (err) {
+      IMAME.toast('Gönderilemedi: ' + (err.message || 'bilinmeyen hata.'));
+    }
+  });
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!fileInput.files[0]) { IMAME.toast('Lütfen kimlik belgesi yükleyin.'); return; }
     const submitBtn = form.querySelector('[type=submit]');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Gönderiliyor…';
 
     try {
-      let user = existingUser;
-      if (!user) {
-        const fullName = `${form.ad.value.trim()} ${form.soyad.value.trim()}`.trim();
-        const { data, error } = await DB.signUp(form.email.value.trim(), form.sifre.value, fullName);
-        if (error) throw error;
-        if (!data.session) throw new Error('Hesabınız oluşturuldu ama giriş için e-posta doğrulaması gerekiyor. Doğruladıktan sonra tekrar başvurun.');
-        user = data.user;
+      if (existingUser) {
+        await finishApplication();
+        return;
       }
 
-      await DB.applyAsSeller({
-        store_name: form.magaza_adi.value.trim(),
-        owner_name: `${form.ad.value.trim()} ${form.soyad.value.trim()}`.trim(),
-        phone: form.telefon.value.trim(),
-        tc_no: form.tc_no.value.trim(),
-        birth_date: form.dogum_tarihi.value || null,
-        business_type: form.isletme_turu.value,
-        category_pref: form.kategori.value,
-        iban: form.iban.value.trim(),
-        bank_name: form.banka.value.trim(),
-        bio: form.tanitim.value.trim(),
-      });
+      const email = form.email.value.trim();
+      const fullName = `${form.ad.value.trim()} ${form.soyad.value.trim()}`.trim();
+      const { error } = await DB.signUp(email, form.sifre.value, fullName);
+      if (error) throw error;
 
-      document.getElementById('form-view').hidden = true;
-      document.getElementById('success-view').hidden = false;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      pendingEmail = email;
+      document.getElementById('otp-email-label').textContent = email;
+      document.getElementById('otp-modal').style.display = 'flex';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Başvuruyu Gönder';
     } catch (err) {
       console.error('[Danedane] Satıcı başvurusu başarısız:', err);
       IMAME.toast('Başvuru gönderilemedi: ' + (err.message || 'bilinmeyen hata.'));

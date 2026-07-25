@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yönetim Paneli — Danedane</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b0d09">
+<link rel="apple-touch-icon" href="../assets/img/logo-mark.svg">
+<link rel="icon" href="../assets/img/logo-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/panel.css">
+</head>
+<body class="panel-body">
+
+<div class="panel-shell">
+  <aside class="panel-sidebar">
+    <a href="index.html" class="panel-brand">
+      <img src="../assets/img/logo-mark.svg" alt="">
+      <div><strong>DANEDANE</strong><small>Yönetim Paneli</small></div>
+    </a>
+    <nav class="panel-nav">
+      <div class="panel-nav-label">Genel</div>
+      <a href="index.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/></svg> Satıcı Başvuruları</a>
+    </nav>
+    <div class="panel-sidebar-foot">
+      <a href="../index.html" class="btn btn-ghost btn-sm btn-block">Mağazaya Dön</a>
+      <a href="#" id="signout-link" class="btn btn-sm btn-block" style="margin-top:8px;">Çıkış Yap</a>
+    </div>
+  </aside>
+
+  <main class="panel-main">
+    <div class="panel-topbar">
+      <button class="panel-menu-toggle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <div>
+        <h1>Satıcı Başvuruları</h1>
+        <p>Bekleyen başvuruları inceleyip onaylayın veya reddedin.</p>
+      </div>
+    </div>
+
+    <div class="filter-bar" id="seller-filter-bar" style="border:none; padding-bottom:0; margin-bottom:20px;">
+      <div class="filter-chips">
+        <button class="chip active" data-seller-filter="pending">Bekleyen</button>
+        <button class="chip" data-seller-filter="approved">Onaylı</button>
+        <button class="chip" data-seller-filter="rejected">Reddedilen</button>
+        <button class="chip" data-seller-filter="all">Tümü</button>
+      </div>
+    </div>
+
+    <div id="sellers-list">
+      <p class="muted">Yükleniyor…</p>
+    </div>
+
+    <div class="panel-card" style="margin-top:30px;">
+      <div class="panel-card-body">
+        <h3 style="font-size:16px; margin-bottom:14px;">Yönetici Ekle</h3>
+        <p class="muted" style="font-size:13px; margin-bottom:16px;">Kayıtlı bir kullanıcının e-postasını girerek ona yönetim paneli erişimi verebilirsiniz.</p>
+        <form id="grant-admin-form" style="display:flex; gap:10px; max-width:460px;">
+          <input type="email" required placeholder="ornek@eposta.com" style="flex:1; background:var(--bg); border:1px solid var(--gold-line-strong); color:var(--ivory); padding:10px 14px; border-radius:var(--radius); font-size:13px;">
+          <button type="submit" class="btn btn-solid btn-sm">Admin Yap</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-client.js"></script>
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/panel.js"></script>
+<script>
+  const STATUS_LABEL = { pending: 'Bekliyor', approved: 'Onaylı', rejected: 'Reddedildi' };
+  const STATUS_CLASS = { pending: 'wait', approved: 'ok', rejected: 'warn' };
+  let allSellers = [];
+  let currentFilter = 'pending';
+
+  (async () => {
+    const user = await DB.getUser();
+    if (!user) { window.location.href = '../hesabim.html?redirect=admin/index.html'; return; }
+    const admin = await DB.isAdmin();
+    if (!admin) {
+      document.querySelector('.panel-main').innerHTML = '<div class="panel-box"><strong>Bu sayfaya erişim yetkiniz yok.</strong></div>';
+      return;
+    }
+    document.getElementById('signout-link').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await DB.signOut();
+      window.location.href = '../hesabim.html';
+    });
+    loadSellers();
+  })();
+
+  async function loadSellers() {
+    try {
+      allSellers = await DB.fetchAllSellers();
+      renderSellers();
+    } catch (err) {
+      console.error('[Danedane] Satıcılar yüklenemedi:', err);
+      document.getElementById('sellers-list').innerHTML = '<p class="muted">Yüklenirken bir sorun oluştu.</p>';
+    }
+  }
+
+  function renderSellers() {
+    const list = currentFilter === 'all' ? allSellers : allSellers.filter(s => s.status === currentFilter);
+    const wrap = document.getElementById('sellers-list');
+    if (!list.length) {
+      wrap.innerHTML = '<p class="muted">Bu filtrede başvuru yok.</p>';
+      return;
+    }
+    wrap.innerHTML = list.map(s => `
+      <div class="panel-card">
+        <div class="panel-card-body">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+            <div>
+              <h3 style="font-size:16px; margin-bottom:4px;">${IMAME.escapeHtml(s.store_name)}</h3>
+              <p class="muted" style="font-size:13px;">${IMAME.escapeHtml(s.owner_name)} · ${IMAME.escapeHtml(s.phone || '-')}</p>
+            </div>
+            <span class="status-pill ${STATUS_CLASS[s.status]}">${STATUS_LABEL[s.status]}</span>
+          </div>
+          <table class="spec-table" style="margin-top:14px;">
+            <tr><td>T.C. Kimlik No</td><td>${IMAME.escapeHtml(s.tc_no || '-')}</td></tr>
+            <tr><td>Doğum Tarihi</td><td>${IMAME.escapeHtml(s.birth_date || '-')}</td></tr>
+            <tr><td>İşletme Türü</td><td>${IMAME.escapeHtml(s.business_type || '-')}</td></tr>
+            <tr><td>Kategori Tercihi</td><td>${IMAME.escapeHtml(s.category_pref || '-')}</td></tr>
+            <tr><td>IBAN</td><td>${IMAME.escapeHtml(s.iban || '-')}</td></tr>
+            <tr><td>Banka</td><td>${IMAME.escapeHtml(s.bank_name || '-')}</td></tr>
+            <tr><td>Tanıtım</td><td>${IMAME.escapeHtml(s.bio || '-')}</td></tr>
+          </table>
+          <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
+            ${s.id_document_path ? `<button class="btn btn-ghost btn-sm" data-view-doc="${s.id_document_path}">Kimlik Belgesini Görüntüle</button>` : '<span class="muted" style="font-size:12.5px;">Kimlik belgesi yok</span>'}
+            ${s.status !== 'approved' ? `<button class="btn btn-solid btn-sm" data-approve="${s.id}">Onayla</button>` : ''}
+            ${s.status !== 'rejected' ? `<button class="btn btn-sm" style="background:var(--oxblood-bright);" data-reject="${s.id}">Reddet</button>` : ''}
+          </div>
+        </div>
+      </div>`).join('');
+
+    wrap.querySelectorAll('[data-view-doc]').forEach(btn => btn.addEventListener('click', async () => {
+      try {
+        const url = await DB.getSignedIdDocumentUrl(btn.dataset.viewDoc);
+        window.open(url, '_blank');
+      } catch (err) {
+        IMAME.toast('Belge açılamadı: ' + (err.message || 'bilinmeyen hata.'));
+      }
+    }));
+    wrap.querySelectorAll('[data-approve]').forEach(btn => btn.addEventListener('click', () => updateStatus(btn.dataset.approve, 'approved')));
+    wrap.querySelectorAll('[data-reject]').forEach(btn => btn.addEventListener('click', () => updateStatus(btn.dataset.reject, 'rejected')));
+  }
+
+  async function updateStatus(id, status) {
+    try {
+      await DB.setSellerStatus(id, status);
+      const s = allSellers.find(x => x.id === id);
+      if (s) s.status = status;
+      renderSellers();
+      IMAME.toast(status === 'approved' ? 'Satıcı onaylandı.' : 'Başvuru reddedildi.');
+    } catch (err) {
+      IMAME.toast('Güncellenemedi: ' + (err.message || 'bilinmeyen hata.'));
+    }
+  }
+
+  document.querySelectorAll('#seller-filter-bar .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#seller-filter-bar .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      currentFilter = chip.dataset.sellerFilter;
+      renderSellers();
+    });
+  });
+
+  document.getElementById('grant-admin-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = e.target.querySelector('input');
+    try {
+      await DB.grantAdminByEmail(input.value.trim());
+      IMAME.toast('Yönetici yetkisi verildi: ' + input.value.trim());
+      input.value = '';
+    } catch (err) {
+      IMAME.toast('İşlem başarısız: ' + (err.message || 'bilinmeyen hata.'));
+    }
+  });
+</script>
+</body>
+</html>

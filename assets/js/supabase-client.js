@@ -46,6 +46,19 @@ const DB = (() => {
   async function updatePassword(newPassword) {
     return sb.auth.updateUser({ password: newPassword });
   }
+  async function verifySignupOtp(email, token) {
+    return sb.auth.verifyOtp({ email, token, type: "signup" });
+  }
+  async function resendSignupOtp(email) {
+    return sb.auth.resend({ type: "signup", email });
+  }
+  async function isAdmin() {
+    const user = await getUser();
+    if (!user) return false;
+    const { data, error } = await sb.from("profiles").select("is_admin").eq("id", user.id).maybeSingle();
+    if (error) throw error;
+    return !!(data && data.is_admin);
+  }
 
   /* ---------- Ürünler (alıcı tarafı, herkese açık) ---------- */
   async function fetchProducts({ category, material, excludeId, limit } = {}) {
@@ -95,6 +108,20 @@ const DB = (() => {
     const { data, error } = await sb.from("sellers").update(changes).eq("user_id", user.id).select().single();
     if (error) throw error;
     return data;
+  }
+  async function uploadIdDocument(file) {
+    const user = await getUser();
+    if (!user) throw new Error("Giriş yapmalısınız.");
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+    const path = `${user.id}/kimlik-${Date.now()}.${ext}`;
+    const { error } = await sb.storage.from("id-documents").upload(path, file);
+    if (error) throw error;
+    return path;
+  }
+  async function getSignedIdDocumentUrl(path) {
+    const { data, error } = await sb.storage.from("id-documents").createSignedUrl(path, 300);
+    if (error) throw error;
+    return data.signedUrl;
   }
 
   /* ---------- Satıcı ürün yönetimi ---------- */
@@ -184,12 +211,32 @@ const DB = (() => {
     return data;
   }
 
+  /* ---------- Admin ---------- */
+  async function fetchAllSellers() {
+    const { data, error } = await sb.from("sellers").select("*").order("created_at", { ascending: false });
+    if (error) throw error;
+    return data;
+  }
+  async function setSellerStatus(id, status) {
+    const { data, error } = await sb.from("sellers").update({ status }).eq("id", id).select().single();
+    if (error) throw error;
+    return data;
+  }
+  async function grantAdminByEmail(email) {
+    const { data, error } = await sb.from("profiles").update({ is_admin: true }).eq("email", email).select();
+    if (error) throw error;
+    if (!data || !data.length) throw new Error("Bu e-postayla kayıtlı bir kullanıcı bulunamadı.");
+    return data[0];
+  }
+
   return {
     signUp, signIn, signOut, getUser, onAuthStateChange, getMyProfile, updateMyProfile, updatePassword,
+    verifySignupOtp, resendSignupOtp, isAdmin,
     fetchProducts, searchProducts, fetchProductById,
-    applyAsSeller, getMySeller, updateMySeller,
+    applyAsSeller, getMySeller, updateMySeller, uploadIdDocument, getSignedIdDocumentUrl,
     fetchMyProducts, createProduct, updateProduct, deleteProduct,
     createOrder, fetchMyOrders,
     fetchSellerOrderItems, fetchSellerOrders, updateOrderStatus,
+    fetchAllSellers, setSellerStatus, grantAdminByEmail,
   };
 })();
