@@ -145,6 +145,20 @@ const IMAME = (() => {
     applyFilters();
   }
 
+  /* ---------- Çerez onayı ---------- */
+  function initCookieBar() {
+    const bar = document.getElementById("cookie-bar");
+    if (!bar) return;
+    const KEY = "danedane_cookie_consent";
+    if (!localStorage.getItem(KEY)) {
+      setTimeout(() => bar.classList.add("show"), 700);
+    }
+    const accept = document.getElementById("cookie-accept");
+    const decline = document.getElementById("cookie-decline");
+    accept && accept.addEventListener("click", () => { localStorage.setItem(KEY, "accepted"); bar.classList.remove("show"); });
+    decline && decline.addEventListener("click", () => { localStorage.setItem(KEY, "essential-only"); bar.classList.remove("show"); });
+  }
+
   /* ---------- Bülten formu ---------- */
   function initNewsletter() {
     document.querySelectorAll("[data-newsletter]").forEach(form => {
@@ -163,6 +177,7 @@ const IMAME = (() => {
     initFadeIn();
     initFilterChips();
     initNewsletter();
+    initCookieBar();
   }
 
   document.addEventListener("DOMContentLoaded", init);

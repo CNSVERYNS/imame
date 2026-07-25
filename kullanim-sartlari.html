@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hesabım — Danedane</title>
-<meta name="robots" content="noindex, follow">
+<title>Kullanım Şartları — Danedane</title>
+<meta name="description" content="Danedane platformunu kullanırken geçerli olan üyelik, satıcı ve alıcı yükümlülükleri ile genel kullanım şartları.">
+<link rel="canonical" href="https://danedane.com/kullanim-sartlari.html">
 <meta name="theme-color" content="#0b0d09">
 <link rel="manifest" href="assets/manifest.json">
 <link rel="apple-touch-icon" href="assets/img/logo-mark.svg">
@@ -32,6 +33,9 @@
       <a href="iletisim.html">İletişim</a>
     </nav>
     <div class="header-actions">
+      <a href="hesabim.html" class="icon-btn" aria-label="Hesabım">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      </a>
       <a href="sepet.html" class="icon-btn" aria-label="Sepetim">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
         <span class="cart-count" data-cart-count>0</span>
@@ -54,53 +58,63 @@
   <a href="hakkimizda.html">Hikayemiz</a>
   <a href="iletisim.html">İletişim</a>
   <a href="kargo-takip.html">Kargo Takip</a>
+  <a href="hesabim.html">Hesabım</a>
   <a href="sepet.html">Sepetim</a>
   <a href="satici-merkezi/index.html">Satıcı Merkezi</a>
 </div>
 
-<section class="section section--pattern">
-  <div class="container auth-wrap">
-    <div class="center" style="margin-bottom:34px;">
-      <img src="assets/img/logo-mark.svg" style="width:40px; margin:0 auto 16px;">
-      <h1 style="font-size:28px;">Hesabım</h1>
-      <p class="muted" style="font-size:13.5px; margin-top:8px;">Siparişlerinizi görün, favori ürünlerinizi kaydedin.</p>
-    </div>
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Anasayfa</a><span>/</span>Kullanım Şartları</div>
+    <h1>Kullanım Şartları</h1>
+  </div>
+</div>
 
-    <div class="auth-card">
-      <div class="auth-tabs">
-        <button class="active" data-auth-tab="giris">Giriş Yap</button>
-        <button data-auth-tab="kayit">Hesap Oluştur</button>
-      </div>
+<section class="section">
+  <div class="container legal-layout">
+    <aside class="legal-toc">
+      <div>Bu Sayfada</div>
+      <a href="#genel">1. Genel Hükümler</a>
+      <a href="#uyelik">2. Üyelik</a>
+      <a href="#satici">3. Satıcı Yükümlülükleri</a>
+      <a href="#alici">4. Alıcı Yükümlülükleri</a>
+      <a href="#fikri">5. Fikri Mülkiyet</a>
+      <a href="#sorumluluk">6. Sorumluluğun Sınırlandırılması</a>
+      <a href="#degisiklik">7. Değişiklikler</a>
+      <a href="#uyusmazlik">8. Uyuşmazlıkların Çözümü</a>
+    </aside>
+    <div class="legal-content">
+      <p class="updated">Son güncelleme: 1 Ocak 2026</p>
 
-      <div class="auth-panel active" id="panel-giris">
-        <form id="login-form">
-          <div class="field"><label>E-posta</label><input type="email" required placeholder="ornek@eposta.com"></div>
-          <div class="field"><label>Şifre</label><input type="password" required placeholder="••••••••"></div>
-          <div class="auth-alt-row">
-            <label class="checkbox-row" style="align-items:center;"><input type="checkbox"> Beni hatırla</label>
-            <a href="#">Şifremi unuttum</a>
-          </div>
-          <button type="submit" class="btn btn-solid btn-block">Giriş Yap</button>
-        </form>
-        <div class="auth-divider">veya</div>
-        <p class="center muted" style="font-size:12.5px;">Satıcı hesabınız mı var? <a href="satici-merkezi/giris.html" style="color:var(--gold);">Satıcı Merkezi'nden giriş yapın →</a></p>
-      </div>
+      <h2 id="genel">1. Genel Hükümler</h2>
+      <p>danedane.com'u ("Platform") kullanarak işbu Kullanım Şartları'nı kabul etmiş sayılırsınız. Danedane, bağımsız satıcıların ürünlerini alıcılarla buluşturan bir <strong>pazar yeridir</strong> ve aracı hizmet sağlayıcı sıfatıyla faaliyet gösterir.</p>
 
-      <div class="auth-panel" id="panel-kayit">
-        <form id="register-form">
-          <div class="field-row">
-            <div class="field"><label>Ad</label><input type="text" required></div>
-            <div class="field"><label>Soyad</label><input type="text" required></div>
-          </div>
-          <div class="field"><label>E-posta</label><input type="email" required placeholder="ornek@eposta.com"></div>
-          <div class="field"><label>Şifre</label><input type="password" required placeholder="En az 8 karakter"></div>
-          <label class="checkbox-row" style="margin-bottom:22px;">
-            <input type="checkbox" required>
-            <span>Üyelik sözleşmesini ve gizlilik politikasını okudum, kabul ediyorum.</span>
-          </label>
-          <button type="submit" class="btn btn-solid btn-block">Hesap Oluştur</button>
-        </form>
-      </div>
+      <h2 id="uyelik">2. Üyelik</h2>
+      <p>Platformu kullanmak için üye olurken verdiğiniz bilgilerin doğru ve güncel olmasından siz sorumlusunuz. Hesabınızın güvenliğinden (şifre dahil) siz sorumlusunuz; hesabınızda gerçekleşen işlemlerden Danedane sorumlu tutulamaz.</p>
+
+      <h2 id="satici">3. Satıcı Yükümlülükleri</h2>
+      <ul>
+        <li>Listelediğiniz ürünlerin açıklamalarının doğru, eksiksiz ve yanıltıcı olmaması</li>
+        <li>Belirttiğiniz stok, fiyat ve kargo bilgilerine uyulması</li>
+        <li>Siparişlerin belirtilen sürede özenle paketlenip kargoya verilmesi</li>
+        <li>Satış yaptığınız ürünlerle ilgili yasal ayıptan sorumluluğun tarafınıza ait olduğunun kabulü</li>
+        <li>Danedane Satıcı Sözleşmesi ve komisyon şartlarına uyulması</li>
+      </ul>
+
+      <h2 id="alici">4. Alıcı Yükümlülükleri</h2>
+      <p>Sipariş verirken doğru teslimat bilgisi sağlamak, ödeme yükümlülüğünüzü yerine getirmek ve platformu kötüye kullanmamak (sahte sipariş, kötüye kullanım vb.) alıcı olarak sorumluluklarınızdandır.</p>
+
+      <h2 id="fikri">5. Fikri Mülkiyet</h2>
+      <p>Danedane markası, logosu, motifleri ve site tasarımı Danedane'ye aittir ve izinsiz kullanılamaz. Satıcıların yüklediği ürün görsel ve açıklamaları üzerindeki haklar ilgili satıcıya aittir.</p>
+
+      <h2 id="sorumluluk">6. Sorumluluğun Sınırlandırılması</h2>
+      <p>Danedane, aracı hizmet sağlayıcı olması nedeniyle satıcıların listelediği ürünlerin doğruluğunu garanti etmez; ancak bildirilen sorunları değerlendirmek ve gerektiğinde satıcı hesaplarını askıya almak üzere makul özeni gösterir. Platformun kesintisiz veya hatasız çalışacağı garanti edilmez.</p>
+
+      <h2 id="degisiklik">7. Değişiklikler</h2>
+      <p>Danedane, işbu Kullanım Şartları'nı gerektiğinde güncelleyebilir. Güncel şartlar bu sayfada yayımlandığı andan itibaren geçerli olur.</p>
+
+      <h2 id="uyusmazlik">8. Uyuşmazlıkların Çözümü</h2>
+      <p>İşbu şartlardan doğabilecek uyuşmazlıklarda Türk hukuku uygulanır; Konya Mahkemeleri ve İcra Daireleri yetkilidir.</p>
     </div>
   </div>
 </section>
@@ -175,17 +189,5 @@
 </div>
 
 <script src="assets/js/main.js"></script>
-<script>
-  document.querySelectorAll('[data-auth-tab]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-auth-tab]').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('panel-' + btn.dataset.authTab).classList.add('active');
-    });
-  });
-  document.getElementById('login-form').addEventListener('submit', (e) => { e.preventDefault(); IMAME.toast('Bu bir örnek arayüzdür — giriş simüle edildi.'); });
-  document.getElementById('register-form').addEventListener('submit', (e) => { e.preventDefault(); IMAME.toast('Hesabınız oluşturuldu (örnek).'); });
-</script>
 </body>
 </html>
