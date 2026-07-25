@@ -119,6 +119,20 @@
           <label class="filter-option"><input type="checkbox" checked> 22 — 24</label>
         </div>
         <div class="filter-group">
+          <h4>Kargo</h4>
+          <label class="filter-option"><input type="checkbox" data-filter-input="shipping-free"> Sadece Ücretsiz Kargo</label>
+        </div>
+        <div class="filter-group">
+          <h4>Ürün Puanı</h4>
+          <label class="filter-option"><input type="checkbox" data-filter-input="rating" value="4"> 4 Yıldız ve Üzeri</label>
+          <label class="filter-option"><input type="checkbox" data-filter-input="rating" value="3"> 3 Yıldız ve Üzeri</label>
+        </div>
+        <div class="filter-group">
+          <h4>Öne Çıkanlar</h4>
+          <label class="filter-option"><input type="checkbox" data-filter-input="new"> Yeni Ürünler</label>
+          <label class="filter-option"><input type="checkbox" data-filter-input="bestseller"> Çok Satanlar</label>
+        </div>
+        <div class="filter-group">
           <h4>Fiyat Aralığı</h4>
           <input type="range" min="300" max="2000" value="2000" style="width:100%; accent-color:var(--gold);">
           <div class="field-hint">300 TL — 2.000 TL</div>
@@ -136,7 +150,7 @@
 
       <div class="product-grid">
 
-        <div class="product-card fade-in" data-product-item data-material="akik">
+        <div class="product-card fade-in" data-product-item data-material="akik" data-rating="5" data-shipping="ucretsiz" data-new="true">
           <div class="product-media">
             <span class="product-badge product-badge--new">Yeni</span>
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
@@ -155,7 +169,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="oltu">
+        <div class="product-card fade-in" data-product-item data-material="oltu" data-rating="4" data-shipping="ucretsiz">
           <div class="product-media">
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
             <img src="assets/img/illus-yuzuk.svg" alt="Oltu Taşı Yüzük">
@@ -173,7 +187,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="zumrut">
+        <div class="product-card fade-in" data-product-item data-material="zumrut" data-rating="5" data-shipping="alici">
           <div class="product-media">
             <span class="product-badge">Sınırlı Üretim</span>
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
@@ -192,7 +206,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="sade">
+        <div class="product-card fade-in" data-product-item data-material="sade" data-rating="5" data-shipping="ucretsiz" data-bestseller="true">
           <div class="product-media">
             <span class="product-badge">Çok Satan</span>
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
@@ -211,7 +225,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="yakut">
+        <div class="product-card fade-in" data-product-item data-material="yakut" data-rating="5" data-shipping="alici">
           <div class="product-media">
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
             <img src="assets/img/illus-yuzuk.svg" alt="Yakut Taşlı Yüzük">
@@ -229,7 +243,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="akik">
+        <div class="product-card fade-in" data-product-item data-material="akik" data-rating="4" data-shipping="ucretsiz" data-new="true">
           <div class="product-media">
             <span class="product-badge product-badge--new">Yeni</span>
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
@@ -248,7 +262,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="oltu">
+        <div class="product-card fade-in" data-product-item data-material="oltu" data-rating="4" data-shipping="ucretsiz">
           <div class="product-media">
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
             <img src="assets/img/illus-yuzuk.svg" alt="Oval Oltu Yüzük">
@@ -266,7 +280,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="sade">
+        <div class="product-card fade-in" data-product-item data-material="sade" data-rating="5" data-shipping="alici">
           <div class="product-media">
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
             <img src="assets/img/illus-yuzuk.svg" alt="Zeytin Yaprağı Yüzük">

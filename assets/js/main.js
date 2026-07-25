@@ -94,22 +94,55 @@ const IMAME = (() => {
     items.forEach(i => io.observe(i));
   }
 
-  /* ---------- Filtre çipleri (görsel + basit kategori filtresi) ---------- */
+  /* ---------- Filtre çipleri + kenar çubuğu filtreleri (kargo, puan, öne çıkanlar) ---------- */
   function initFilterChips() {
-    document.querySelectorAll("[data-filter-group]").forEach(group => {
-      const chips = group.querySelectorAll(".chip");
-      chips.forEach(chip => {
-        chip.addEventListener("click", () => {
-          chips.forEach(c => c.classList.remove("active"));
-          chip.classList.add("active");
-          const val = chip.dataset.filter;
-          document.querySelectorAll("[data-product-item]").forEach(card => {
-            const show = val === "all" || card.dataset.material === val;
-            card.style.display = show ? "" : "none";
-          });
-        });
+    const chipGroup = document.querySelector("[data-filter-group]");
+    const cards = document.querySelectorAll("[data-product-item]");
+    if (!chipGroup || !cards.length) return;
+
+    const chips = chipGroup.querySelectorAll(".chip");
+    const sideInputs = document.querySelectorAll("[data-filter-input]");
+    const applyBtn = document.querySelector(".filter-side .btn-block");
+
+    function activeMaterial() {
+      const active = chipGroup.querySelector(".chip.active");
+      return active ? active.dataset.filter : "all";
+    }
+
+    function applyFilters() {
+      const material = activeMaterial();
+      const wantFreeShipping = document.querySelector('[data-filter-input="shipping-free"]')?.checked;
+      const wantNew = document.querySelector('[data-filter-input="new"]')?.checked;
+      const wantBestseller = document.querySelector('[data-filter-input="bestseller"]')?.checked;
+      const checkedRatings = Array.from(document.querySelectorAll('[data-filter-input="rating"]:checked'))
+        .map(el => parseFloat(el.value));
+      const minRating = checkedRatings.length ? Math.min(...checkedRatings) : null;
+
+      let visibleCount = 0;
+      cards.forEach(card => {
+        let show = material === "all" || card.dataset.material === material;
+        if (show && wantFreeShipping) show = card.dataset.shipping === "ucretsiz";
+        if (show && wantNew) show = card.dataset.new === "true";
+        if (show && wantBestseller) show = card.dataset.bestseller === "true";
+        if (show && minRating !== null) show = parseFloat(card.dataset.rating || "0") >= minRating;
+        card.style.display = show ? "" : "none";
+        if (show) visibleCount++;
+      });
+      return visibleCount;
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        chips.forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        applyFilters();
       });
     });
+
+    sideInputs.forEach(input => input.addEventListener("change", applyFilters));
+    if (applyBtn) applyBtn.addEventListener("click", (e) => { e.preventDefault(); applyFilters(); });
+
+    applyFilters();
   }
 
   /* ---------- Bülten formu ---------- */

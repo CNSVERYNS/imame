@@ -119,6 +119,20 @@
           <label class="filter-option"><input type="checkbox" checked> 99'lu</label>
         </div>
         <div class="filter-group">
+          <h4>Kargo</h4>
+          <label class="filter-option"><input type="checkbox" data-filter-input="shipping-free"> Sadece Ücretsiz Kargo</label>
+        </div>
+        <div class="filter-group">
+          <h4>Ürün Puanı</h4>
+          <label class="filter-option"><input type="checkbox" data-filter-input="rating" value="4"> 4 Yıldız ve Üzeri</label>
+          <label class="filter-option"><input type="checkbox" data-filter-input="rating" value="3"> 3 Yıldız ve Üzeri</label>
+        </div>
+        <div class="filter-group">
+          <h4>Öne Çıkanlar</h4>
+          <label class="filter-option"><input type="checkbox" data-filter-input="new"> Yeni Ürünler</label>
+          <label class="filter-option"><input type="checkbox" data-filter-input="bestseller"> Çok Satanlar</label>
+        </div>
+        <div class="filter-group">
           <h4>Fiyat Aralığı</h4>
           <input type="range" min="300" max="2500" value="2500" style="width:100%; accent-color:var(--gold);">
           <div class="field-hint">300 TL — 2.500 TL</div>
@@ -138,7 +152,7 @@
 
       <div class="product-grid">
 
-        <div class="product-card fade-in" data-product-item data-material="kehribar">
+        <div class="product-card fade-in" data-product-item data-material="kehribar" data-rating="5" data-shipping="ucretsiz" data-bestseller="true">
           <div class="product-media">
             <span class="product-badge">Çok Satan</span>
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
@@ -157,7 +171,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="oltu">
+        <div class="product-card fade-in" data-product-item data-material="oltu" data-rating="5" data-shipping="ucretsiz" data-new="true">
           <div class="product-media">
             <span class="product-badge product-badge--new">Yeni</span>
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
@@ -176,7 +190,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="sedef">
+        <div class="product-card fade-in" data-product-item data-material="sedef" data-rating="5" data-shipping="alici">
           <div class="product-media">
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
             <img src="assets/img/illus-tesbih.svg" alt="Sedef İşlemeli Tesbih">
@@ -194,7 +208,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="sandal">
+        <div class="product-card fade-in" data-product-item data-material="sandal" data-rating="4" data-shipping="ucretsiz">
           <div class="product-media">
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
             <img src="assets/img/illus-tesbih.svg" alt="Sandal Ağacı Tesbih">
@@ -212,7 +226,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="kehribar">
+        <div class="product-card fade-in" data-product-item data-material="kehribar" data-rating="5" data-shipping="alici">
           <div class="product-media">
             <span class="product-badge">Sınırlı Üretim</span>
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
@@ -231,7 +245,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="oltu">
+        <div class="product-card fade-in" data-product-item data-material="oltu" data-rating="4" data-shipping="ucretsiz">
           <div class="product-media">
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
             <img src="assets/img/illus-tesbih.svg" alt="Oltu Taşı Şeffaf Tesbih">
@@ -249,7 +263,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="ceviz">
+        <div class="product-card fade-in" data-product-item data-material="ceviz" data-rating="4" data-shipping="ucretsiz" data-new="true">
           <div class="product-media">
             <span class="product-badge product-badge--new">Yeni</span>
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
@@ -268,7 +282,7 @@
           </div>
         </div>
 
-        <div class="product-card fade-in" data-product-item data-material="sedef">
+        <div class="product-card fade-in" data-product-item data-material="sedef" data-rating="5" data-shipping="alici">
           <div class="product-media">
             <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
             <img src="assets/img/illus-tesbih.svg" alt="Sedef Beyaz Tesbih">
