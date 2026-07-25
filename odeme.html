@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ödeme — İmame</title>
+<link rel="icon" href="assets/img/logo-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <img src="assets/img/logo-mark.svg" alt="İmame">
+      <span>
+        <span class="brand-name">İM<em>A</em>ME</span>
+        <span class="brand-sub">Tesbih &amp; Yüzük Atölyesi</span>
+      </span>
+    </a>
+    <nav class="main-nav"></nav>
+    <div class="header-actions">
+      <span class="muted" style="font-size:12.5px; letter-spacing:.08em;">🔒 Güvenli Ödeme</span>
+    </div>
+  </div>
+</header>
+
+<section class="section section--tight">
+  <div class="container">
+
+    <div id="checkout-view">
+      <div class="checkout-steps">
+        <div class="cstep active"><span class="num">1</span> Adres</div>
+        <div class="line"></div>
+        <div class="cstep active"><span class="num">2</span> Kargo</div>
+        <div class="line"></div>
+        <div class="cstep active"><span class="num">3</span> Ödeme</div>
+      </div>
+
+      <div class="cart-layout">
+        <form id="checkout-form">
+          <div class="panel-box" style="margin-bottom:24px;">
+            <h3>Teslimat Adresi</h3>
+            <p class="muted" style="font-size:13px; margin-bottom:22px;">Kargonuz bu adrese gönderilecek ve canlı takip bu bilgilerle eşleştirilecektir.</p>
+            <div class="field-row">
+              <div class="field"><label>Ad</label><input type="text" required placeholder="Adınız"></div>
+              <div class="field"><label>Soyad</label><input type="text" required placeholder="Soyadınız"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>E-posta</label><input type="email" required placeholder="ornek@eposta.com"></div>
+              <div class="field"><label>Telefon</label><input type="tel" required placeholder="05xx xxx xx xx"></div>
+            </div>
+            <div class="field"><label>Adres</label><textarea rows="3" required placeholder="Mahalle, cadde, sokak, no, daire"></textarea></div>
+            <div class="field-row">
+              <div class="field"><label>İl</label><input type="text" required placeholder="İl"></div>
+              <div class="field"><label>İlçe</label><input type="text" required placeholder="İlçe"></div>
+            </div>
+          </div>
+
+          <div class="panel-box" style="margin-bottom:24px;">
+            <h3>Kargo Seçimi</h3>
+            <p class="muted" style="font-size:13px; margin-bottom:22px;">Anlaşmalı kargo firmalarımızla, sipariş sonrası canlı takip bağlantısı otomatik oluşturulur.</p>
+            <label class="pay-method selected">
+              <input type="radio" name="shipping" checked>
+              <span style="flex:1;">Standart Kargo <small>2-4 iş günü · 1.500 TL üzeri ücretsiz</small></span>
+              <strong>79,90 TL</strong>
+            </label>
+            <label class="pay-method">
+              <input type="radio" name="shipping">
+              <span style="flex:1;">Hızlı Teslimat <small>1-2 iş günü</small></span>
+              <strong>139,90 TL</strong>
+            </label>
+          </div>
+
+          <div class="panel-box">
+            <h3>Ödeme Yöntemi</h3>
+            <p class="muted" style="font-size:13px; margin-bottom:22px;">Bu bir örnek arayüzdür; gerçek kart bilgisi işlenmez.</p>
+            <label class="pay-method selected">
+              <input type="radio" name="pay" checked>
+              <span>Kredi / Banka Kartı</span>
+            </label>
+            <div class="field-row" style="margin-top:18px;">
+              <div class="field" style="grid-column:1/-1;"><label>Kart Üzerindeki İsim</label><input type="text" placeholder="Ad Soyad"></div>
+            </div>
+            <div class="field"><label>Kart Numarası</label><input type="text" placeholder="•••• •••• •••• ••••" inputmode="numeric"></div>
+            <div class="field-row">
+              <div class="field"><label>Son Kullanma</label><input type="text" placeholder="AA/YY"></div>
+              <div class="field"><label>CVC</label><input type="text" placeholder="•••"></div>
+            </div>
+            <label class="pay-method" style="margin-top:6px;">
+              <input type="radio" name="pay">
+              <span>Kapıda Ödeme</span>
+            </label>
+          </div>
+        </form>
+
+        <aside class="summary-box">
+          <h3 style="font-size:19px; margin-bottom:22px;">Sipariş Özeti</h3>
+          <div id="co-items" style="margin-bottom:18px;"></div>
+          <div class="summary-row"><span>Ara Toplam</span><span id="co-subtotal">0,00 TL</span></div>
+          <div class="summary-row"><span>Kargo</span><span id="co-shipping">79,90 TL</span></div>
+          <div class="summary-row total"><span>Toplam</span><span class="val" id="co-total">0,00 TL</span></div>
+          <button type="submit" form="checkout-form" class="btn btn-solid btn-block">Siparişi Tamamla</button>
+          <p class="field-hint center" style="margin-top:16px;">“Siparişi Tamamla”ya basarak satış sözleşmesini kabul etmiş olursunuz.</p>
+        </aside>
+      </div>
+    </div>
+
+    <div id="success-view" class="order-success" hidden>
+      <div class="ok-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h2>Siparişiniz Alındı</h2>
+      <p class="muted">Bereketli olsun. Sipariş onayı e-posta adresinize gönderildi.</p>
+      <div class="ordno" id="order-number"></div>
+      <div class="hero-actions" style="justify-content:center;">
+        <a href="#" id="track-link" class="btn btn-solid">Kargomu Takip Et</a>
+        <a href="index.html" class="btn">Anasayfaya Dön</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script src="assets/js/main.js"></script>
+<script>
+  function renderSummary() {
+    const cart = IMAME.getCart();
+    const itemsEl = document.getElementById('co-items');
+    itemsEl.innerHTML = cart.map(i => `
+      <div class="summary-row"><span>${i.name} × ${i.qty}</span><span>${IMAME.formatTL(i.price * i.qty)}</span></div>
+    `).join('') || '<p class="muted" style="font-size:13px;">Sepetiniz boş — yine de örnek olarak devam edebilirsiniz.</p>';
+    const subtotal = IMAME.cartTotal();
+    const shipping = subtotal >= 1500 ? 0 : 79.9;
+    document.getElementById('co-subtotal').textContent = IMAME.formatTL(subtotal);
+    document.getElementById('co-shipping').textContent = shipping === 0 ? 'Ücretsiz' : IMAME.formatTL(shipping);
+    document.getElementById('co-total').textContent = IMAME.formatTL(subtotal + shipping);
+  }
+  document.addEventListener('DOMContentLoaded', renderSummary);
+
+  document.querySelectorAll('.pay-method').forEach(label => {
+    label.addEventListener('click', () => {
+      const group = label.querySelector('input').name;
+      document.querySelectorAll(`.pay-method input[name=${group}]`).forEach(i => i.closest('.pay-method').classList.remove('selected'));
+      label.classList.add('selected');
+    });
+  });
+
+  document.getElementById('checkout-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const orderNo = 'IMM-' + Math.floor(100000 + Math.random() * 900000);
+    document.getElementById('order-number').textContent = 'Sipariş No: ' + orderNo;
+    document.getElementById('track-link').href = 'kargo-takip.html?no=' + orderNo;
+    document.getElementById('checkout-view').hidden = true;
+    document.getElementById('success-view').hidden = false;
+    IMAME.clearCart();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

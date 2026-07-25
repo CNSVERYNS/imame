@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220">
+  <defs>
+    <radialGradient id="beadGrad" cx="35%" cy="28%" r="80%">
+      <stop offset="0%" stop-color="#e3c579"/>
+      <stop offset="55%" stop-color="#c6a456"/>
+      <stop offset="100%" stop-color="#6d5827"/>
+    </radialGradient>
+    <radialGradient id="beadGradBig" cx="35%" cy="28%" r="80%">
+      <stop offset="0%" stop-color="#b23f4d"/>
+      <stop offset="55%" stop-color="#7c2632"/>
+      <stop offset="100%" stop-color="#3d0f16"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="100" cy="95" rx="58" ry="62" fill="none" stroke="#8a713a" stroke-width="1" opacity="0.5"/>
+  <g>
+    <circle cx="158" cy="95" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="156" cy="111" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="150.2" cy="126" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="141" cy="138.8" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="129" cy="148.7" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="115" cy="154.9" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="100" cy="157" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="85" cy="154.9" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="71" cy="148.7" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="59" cy="138.8" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="49.8" cy="126" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="44" cy="111" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="42" cy="95" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="44" cy="78.9" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="49.8" cy="64" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="59" cy="51.2" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="71" cy="41.3" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="85" cy="35.1" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="115" cy="35.1" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="129" cy="41.3" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="141" cy="51.2" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="150.2" cy="64" r="8.5" fill="url(#beadGrad)"/>
+    <circle cx="156" cy="78.9" r="8.5" fill="url(#beadGrad)"/>
+  </g>
+  <circle cx="100" cy="33" r="12.5" fill="url(#beadGradBig)" stroke="#e3c579" stroke-width="0.8"/>
+  <g stroke="#c6a456" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.9">
+    <path d="M100 165 C 95 180 90 190 84 205"/>
+    <path d="M100 165 C 100 182 100 194 100 208"/>
+    <path d="M100 165 C 105 180 110 190 116 205"/>
+  </g>
+</svg>

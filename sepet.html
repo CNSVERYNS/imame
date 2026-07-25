@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sepetim — İmame</title>
+<link rel="icon" href="assets/img/logo-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-links">
+      <a href="tel:+902121234567">0212 123 45 67</a>
+      <span>1.500 TL üzeri siparişlerde kargo ücretsiz</span>
+    </div>
+    <div class="topbar-links">
+      <a href="satici-merkezi/index.html">Satıcı Merkezi</a>
+      <a href="kargo-takip.html">Kargo Takip</a>
+      <a href="iletisim.html">İletişim</a>
+    </div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <img src="assets/img/logo-mark.svg" alt="İmame">
+      <span>
+        <span class="brand-name">İM<em>A</em>ME</span>
+        <span class="brand-sub">Tesbih &amp; Yüzük Atölyesi</span>
+      </span>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html">Anasayfa</a>
+      <a href="tesbih.html">Tesbih</a>
+      <a href="yuzuk.html">Yüzük</a>
+      <a href="hakkimizda.html">Hikayemiz</a>
+      <a href="iletisim.html">İletişim</a>
+    </nav>
+    <div class="header-actions">
+      <a href="hesabim.html" class="icon-btn" aria-label="Hesabım">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      </a>
+      <a href="sepet.html" class="icon-btn" aria-label="Sepetim">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+      <a href="satici-merkezi/index.html" class="btn btn-sm">Satıcı Ol</a>
+      <button class="nav-toggle" aria-label="Menü">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav">
+  <div class="mobile-nav-close">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </div>
+  <a href="index.html">Anasayfa</a>
+  <a href="tesbih.html">Tesbih</a>
+  <a href="yuzuk.html">Yüzük</a>
+  <a href="hakkimizda.html">Hikayemiz</a>
+  <a href="iletisim.html">İletişim</a>
+  <a href="kargo-takip.html">Kargo Takip</a>
+  <a href="hesabim.html">Hesabım</a>
+  <a href="sepet.html">Sepetim</a>
+  <a href="satici-merkezi/index.html">Satıcı Merkezi</a>
+</div>
+
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Anasayfa</a><span>/</span>Sepetim</div>
+    <h1>Sepetim</h1>
+  </div>
+</div>
+
+<section class="section section--tight">
+  <div class="container">
+    <div id="cart-filled" class="cart-layout" hidden>
+      <div>
+        <table class="cart-table">
+          <thead>
+            <tr><th>Ürün</th><th>Fiyat</th><th>Adet</th><th>Ara Toplam</th><th></th></tr>
+          </thead>
+          <tbody id="cart-rows"></tbody>
+        </table>
+        <div style="margin-top:28px;">
+          <a href="tesbih.html" class="btn btn-ghost btn-sm">← Alışverişe Devam Et</a>
+        </div>
+      </div>
+      <aside class="summary-box">
+        <h3 style="font-size:19px; margin-bottom:22px;">Sipariş Özeti</h3>
+        <div class="summary-row"><span>Ara Toplam</span><span id="sum-subtotal">0,00 TL</span></div>
+        <div class="summary-row"><span>Kargo</span><span id="sum-shipping">0,00 TL</span></div>
+        <div class="coupon-row">
+          <input type="text" placeholder="İndirim kodu">
+          <button class="btn btn-sm">Uygula</button>
+        </div>
+        <div class="summary-row total"><span>Toplam</span><span class="val" id="sum-total">0,00 TL</span></div>
+        <a href="odeme.html" class="btn btn-solid btn-block">Ödemeye Geç</a>
+        <p class="field-hint center" style="margin-top:16px;">Vergiler dahildir. Kargo, adım adım ödeme ekranında hesaplanır.</p>
+      </aside>
+    </div>
+
+    <div id="cart-empty" class="empty-state" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+      <h3>Sepetiniz şu an boş</h3>
+      <p>Kehribar, oltu taşı ya da gümüş bir yüzükle sepetinizi anlamlandırın.</p>
+      <a href="tesbih.html" class="btn btn-solid">Alışverişe Başla</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand">
+          <img src="assets/img/logo-mark.svg" alt="İmame">
+          <span><span class="brand-name">İM<em>A</em>ME</span></span>
+        </a>
+        <p>El emeği tesbih ve yüzükler; sabrın, zikrin ve zarafetin buluştuğu atölyemizden kapınıza.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Pinterest">PN</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Mağaza</h5>
+        <ul>
+          <li><a href="tesbih.html">Tesbih Koleksiyonu</a></li>
+          <li><a href="yuzuk.html">Yüzük Koleksiyonu</a></li>
+          <li><a href="hakkimizda.html">Hikayemiz</a></li>
+          <li><a href="iletisim.html">İletişim</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Yardım</h5>
+        <ul>
+          <li><a href="kargo-takip.html">Kargo Takip</a></li>
+          <li><a href="hesabim.html">Hesabım</a></li>
+          <li><a href="sepet.html">Sepetim</a></li>
+          <li><a href="satici-merkezi/index.html">Satıcı Merkezi</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Bültenimize Katılın</h5>
+        <p style="font-size:13px; color:var(--ivory-dim); margin-bottom:16px;">Yeni koleksiyon ve özel fırsatlardan ilk siz haberdar olun.</p>
+        <form data-newsletter style="display:flex; gap:8px;">
+          <input type="email" required placeholder="E-posta adresiniz" style="flex:1; background:var(--surface); border:1px solid var(--gold-line-strong); color:var(--ivory); padding:11px 14px; border-radius:var(--radius); font-size:13px;">
+          <button class="btn btn-sm btn-solid" type="submit">Katıl</button>
+        </form>
+      </div>
+    </div>
+    <hr class="hairline">
+    <div class="footer-bottom">
+      <span>© 2026 İmame. Tüm hakları saklıdır.</span>
+      <div class="payment-icons">VISA · MASTERCARD · TROY · Kapıda Ödeme</div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  function renderCart() {
+    const cart = IMAME.getCart();
+    const filled = document.getElementById('cart-filled');
+    const empty = document.getElementById('cart-empty');
+    if (!cart.length) { filled.hidden = true; empty.hidden = false; return; }
+    filled.hidden = false; empty.hidden = true;
+
+    const rows = document.getElementById('cart-rows');
+    rows.innerHTML = cart.map(item => {
+      const img = item.cat === 'Yüzük' ? 'assets/img/illus-yuzuk.svg' : 'assets/img/illus-tesbih.svg';
+      return `
+        <tr data-row="${item.id}">
+          <td>
+            <div class="cart-item-main">
+              <div class="thumb"><img src="${img}" alt=""></div>
+              <div>
+                <strong>${item.name}</strong>
+                <small>${item.cat}</small><br>
+                <span class="cart-remove" data-remove="${item.id}">Kaldır</span>
+              </div>
+            </div>
+          </td>
+          <td>${IMAME.formatTL(item.price)}</td>
+          <td>
+            <div class="qty-stepper">
+              <button type="button" data-dec="${item.id}">−</button>
+              <span>${item.qty}</span>
+              <button type="button" data-inc="${item.id}">+</button>
+            </div>
+          </td>
+          <td>${IMAME.formatTL(item.price * item.qty)}</td>
+          <td><span class="cart-remove" data-remove="${item.id}">✕</span></td>
+        </tr>`;
+    }).join('');
+
+    const subtotal = IMAME.cartTotal();
+    const shipping = subtotal >= 1500 || subtotal === 0 ? 0 : 79.9;
+    document.getElementById('sum-subtotal').textContent = IMAME.formatTL(subtotal);
+    document.getElementById('sum-shipping').textContent = shipping === 0 ? 'Ücretsiz' : IMAME.formatTL(shipping);
+    document.getElementById('sum-total').textContent = IMAME.formatTL(subtotal + shipping);
+
+    rows.querySelectorAll('[data-remove]').forEach(el => el.addEventListener('click', () => { IMAME.removeFromCart(el.dataset.remove); renderCart(); }));
+    rows.querySelectorAll('[data-inc]').forEach(el => el.addEventListener('click', () => {
+      const c = IMAME.getCart().find(i => i.id === el.dataset.inc);
+      IMAME.setQty(el.dataset.inc, c.qty + 1); renderCart();
+    }));
+    rows.querySelectorAll('[data-dec]').forEach(el => el.addEventListener('click', () => {
+      const c = IMAME.getCart().find(i => i.id === el.dataset.dec);
+      if (c.qty <= 1) { IMAME.removeFromCart(el.dataset.dec); } else { IMAME.setQty(el.dataset.dec, c.qty - 1); }
+      renderCart();
+    }));
+  }
+  document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+</body>
+</html>

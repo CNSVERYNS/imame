@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Satıcı Başvurusu — İmame Satıcı Merkezi</title>
+<link rel="icon" href="../assets/img/logo-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/panel.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <img src="../assets/img/logo-mark.svg" alt="İmame">
+      <span>
+        <span class="brand-name">İM<em>A</em>ME</span>
+        <span class="brand-sub" style="color:var(--panel-accent-bright);">Satıcı Merkezi</span>
+      </span>
+    </a>
+    <nav class="main-nav"></nav>
+    <div class="header-actions">
+      <a href="index.html" class="btn btn-ghost btn-sm">← Satıcı Merkezine Dön</a>
+      <a href="giris.html" class="btn btn-sm">Giriş Yap</a>
+    </div>
+  </div>
+</header>
+
+<div id="form-view">
+  <div class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">Satıcı Merkezi</a><span>/</span>Başvuru</div>
+      <h1>Satıcı Başvurusu</h1>
+      <p class="muted">Şirket belgesi gerekmez. Formu doldurun, 48 saat içinde size dönelim.</p>
+    </div>
+  </div>
+
+  <section class="section section--tight">
+    <div class="container" style="max-width:760px; margin:0 auto;">
+      <form id="apply-form">
+
+        <div class="panel-box" style="margin-bottom:24px;">
+          <h3>Kişisel Bilgiler</h3>
+          <p class="muted" style="font-size:13px; margin-bottom:22px;">Bu bilgiler sadece kimlik doğrulama ve ödeme için kullanılır.</p>
+          <div class="field-row">
+            <div class="field"><label>Ad</label><input type="text" required></div>
+            <div class="field"><label>Soyad</label><input type="text" required></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>T.C. Kimlik No</label><input type="text" required maxlength="11" placeholder="11 haneli"></div>
+            <div class="field"><label>Doğum Tarihi</label><input type="date" required></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Telefon</label><input type="tel" required placeholder="05xx xxx xx xx"></div>
+            <div class="field"><label>E-posta</label><input type="email" required placeholder="ornek@eposta.com"></div>
+          </div>
+        </div>
+
+        <div class="panel-box" style="margin-bottom:24px;">
+          <h3>Mağaza Bilgileri</h3>
+          <p class="muted" style="font-size:13px; margin-bottom:22px;">Şirket kurma zorunluluğu yoktur; bireysel üretici olarak da başvurabilirsiniz.</p>
+          <div class="field"><label>Mağaza / Atölye Adı</label><input type="text" required placeholder="Örn. Konya El Sanatları"></div>
+          <div class="field-row">
+            <div class="field">
+              <label>Ürün Kategorisi</label>
+              <select>
+                <option>Tesbih</option>
+                <option>Yüzük</option>
+                <option>Her İkisi</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>İşletme Türü</label>
+              <select>
+                <option>Bireysel Üretici / Zanaatkâr</option>
+                <option>Şahıs Şirketi</option>
+                <option>Limited / Anonim Şirket</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>Kısa Tanıtım</label><textarea rows="4" placeholder="Ürünleriniz ve üretim şekliniz hakkında birkaç cümle yazın."></textarea></div>
+        </div>
+
+        <div class="panel-box" style="margin-bottom:24px;">
+          <h3>Ödeme Bilgileri</h3>
+          <div class="field-row">
+            <div class="field"><label>IBAN</label><input type="text" required placeholder="TR00 0000 0000 0000 0000 0000 00"></div>
+            <div class="field"><label>Banka</label><input type="text" required placeholder="Banka adı"></div>
+          </div>
+        </div>
+
+        <div class="panel-box" style="margin-bottom:24px;">
+          <h3>Kimlik Doğrulama</h3>
+          <p class="muted" style="font-size:13px; margin-bottom:18px;">Kimlik belgenizin ön yüzünün fotoğrafını yükleyin.</p>
+          <div class="upload-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
+            <span class="upload-box-text">Dosya seçmek için tıklayın (örnek)</span>
+          </div>
+        </div>
+
+        <label class="checkbox-row" style="margin-bottom:26px;">
+          <input type="checkbox" required>
+          <span>Satıcı sözleşmesini ve komisyon şartlarını okudum, kabul ediyorum.</span>
+        </label>
+
+        <button type="submit" class="btn btn-solid btn-block">Başvuruyu Gönder</button>
+      </form>
+    </div>
+  </section>
+</div>
+
+<div id="success-view" class="order-success section" hidden>
+  <div class="container">
+    <div class="ok-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <h2>Başvurunuz Alındı</h2>
+    <p class="muted" style="max-width:460px; margin:0 auto;">Ekibimiz başvurunuzu inceliyor. Sonucu 48 saat içinde e-posta ile ileteceğiz.</p>
+    <div class="hero-actions" style="justify-content:center; margin-top:30px;">
+      <a href="index.html" class="btn">Satıcı Merkezine Dön</a>
+      <a href="../index.html" class="btn btn-solid">Mağazayı Gez</a>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none; padding-top:30px;">
+      <span>© 2026 İmame Satıcı Merkezi. Tüm hakları saklıdır.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+<script>
+  document.getElementById('apply-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    document.getElementById('form-view').hidden = true;
+    document.getElementById('success-view').hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

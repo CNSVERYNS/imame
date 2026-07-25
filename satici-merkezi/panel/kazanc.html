@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kazançlarım — İmame Satıcı Merkezi</title>
+<link rel="icon" href="../../assets/img/logo-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../assets/css/panel.css">
+</head>
+<body class="panel-body">
+
+<div class="panel-shell">
+  <aside class="panel-sidebar">
+    <a href="index.html" class="panel-brand">
+      <img src="../../assets/img/logo-mark.svg" alt="">
+      <div><strong>İMAME</strong><small>Satıcı Merkezi</small></div>
+    </a>
+    <nav class="panel-nav">
+      <div class="panel-nav-label">Genel</div>
+      <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/></svg> Panelim</a>
+      <div class="panel-nav-label">Mağaza</div>
+      <a href="urunler.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> Ürünlerim</a>
+      <a href="urun-ekle.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg> Yeni Ürün Ekle</a>
+      <a href="siparisler.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h11v8H3z"/><path d="M14 11h4l3 3v1h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg> Siparişler</a>
+      <a href="kazanc.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/><path d="M16 12h2"/></svg> Kazançlarım</a>
+    </nav>
+    <div class="panel-sidebar-foot">
+      <div class="seller-mini">
+        <div class="avatar">A.</div>
+        <div><span>Konya El Sanatları</span><small>Ahmet Yılmaz</small></div>
+      </div>
+      <a href="../../index.html" class="btn btn-ghost btn-sm btn-block" style="margin-top:14px;">Mağazaya Dön</a>
+      <a href="../giris.html" class="btn btn-sm btn-block" style="margin-top:8px;">Çıkış Yap</a>
+    </div>
+  </aside>
+
+  <main class="panel-main">
+    <div class="panel-topbar">
+      <button class="panel-menu-toggle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <div>
+        <h1>Kazançlarım</h1>
+        <p>Ödemeleriniz her hafta Perşembe günü IBAN'ınıza aktarılır.</p>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 2fr; gap:22px; margin-bottom:26px; align-items:stretch;">
+      <div class="payout-highlight">
+        <div class="stat-label">Ödenecek Bakiye</div>
+        <div class="stat-value">3.240,00 TL</div>
+        <p class="muted" style="font-size:12px; margin-top:8px;">Bir sonraki ödeme: 30 Temmuz 2026</p>
+      </div>
+      <div class="stat-grid" style="margin-bottom:0; grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card">
+          <div class="stat-label">Bu Ay Kazanç</div>
+          <div class="stat-value">12.480 TL</div>
+          <div class="stat-delta up">▲ %18</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Toplam Kazanç</div>
+          <div class="stat-value">147.430 TL</div>
+          <div class="stat-delta">Katılımdan bu yana</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Komisyon Oranı</div>
+          <div class="stat-value">%8</div>
+          <div class="stat-delta">Sabit oran</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-card-head">
+        <h3>Ödeme Geçmişi</h3>
+        <span class="muted" style="font-size:12.5px;">IBAN: TR•• •••• •••• •••• •••• 42</span>
+      </div>
+      <table class="p-table">
+        <thead><tr><th>Tarih</th><th>Açıklama</th><th>Tutar</th><th>Yöntem</th><th>Durum</th></tr></thead>
+        <tbody>
+          <tr><td>23 Tem 2026</td><td>Haftalık ödeme — 14 sipariş</td><td>2.910,00 TL</td><td>Banka Havalesi</td><td><span class="status-pill ok">Ödendi</span></td></tr>
+          <tr><td>16 Tem 2026</td><td>Haftalık ödeme — 11 sipariş</td><td>2.340,00 TL</td><td>Banka Havalesi</td><td><span class="status-pill ok">Ödendi</span></td></tr>
+          <tr><td>9 Tem 2026</td><td>Haftalık ödeme — 9 sipariş</td><td>1.870,00 TL</td><td>Banka Havalesi</td><td><span class="status-pill ok">Ödendi</span></td></tr>
+          <tr><td>2 Tem 2026</td><td>Haftalık ödeme — 16 sipariş</td><td>3.120,00 TL</td><td>Banka Havalesi</td><td><span class="status-pill ok">Ödendi</span></td></tr>
+          <tr><td>30 Tem 2026</td><td>Bu haftanın ödemesi — 17 sipariş</td><td>3.240,00 TL</td><td>Banka Havalesi</td><td><span class="status-pill wait">Bekliyor</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-card-body">
+        <h3 style="font-size:16px; margin-bottom:16px;">Ödeme Bilgileri</h3>
+        <div class="field-row">
+          <div class="field"><label>IBAN</label><input type="text" value="TR12 3456 7890 1234 5678 9012 42"></div>
+          <div class="field"><label>Banka</label><input type="text" value="Kuveyt Türk Katılım Bankası"></div>
+        </div>
+        <button class="btn btn-sm">Bilgileri Güncelle</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="../../assets/js/panel.js"></script>
+</body>
+</html>
