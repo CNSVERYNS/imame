@@ -98,9 +98,11 @@ input, select, textarea { font-family: inherit; }
 
 .section--pattern-tri {
   background-image: url("../img/pattern-triangle.svg");
-  background-size: 70px 70px;
-  background-repeat: repeat;
+  background-size: 1600px auto;
+  background-position: center;
+  background-repeat: no-repeat;
   position: relative;
+  overflow: hidden;
 }
 .section--pattern-tri::before {
   content: "";
@@ -127,8 +129,8 @@ input, select, textarea { font-family: inherit; }
 .divider-star svg, .divider-star img { width: 16px; height: 16px; }
 
 .motif-zulfikar {
-  position: absolute; right: 60px; top: 50%; transform: translateY(-50%);
-  height: 300px; width: auto; opacity: 0.1; pointer-events: none;
+  position: absolute; right: -30px; top: 50%; transform: translateY(-50%);
+  width: 560px; max-width: 68%; height: auto; opacity: 0.13; pointer-events: none;
 }
 
 /* ---------- Düğmeler ---------- */
