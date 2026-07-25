@@ -57,33 +57,33 @@
       </div>
     </div>
 
-    <form data-panel-save>
+    <form id="apply-form">
       <div class="panel-form-grid">
         <div>
           <div class="panel-card">
             <div class="panel-card-body">
-              <div class="field"><label>Ürün Adı</label><input type="text" required placeholder="Örn. Kehribar Sultani Tesbih"></div>
+              <div class="field"><label>Ürün Adı</label><input type="text" name="name" required placeholder="Örn. Kehribar Sultani Tesbih"></div>
               <div class="field-row">
                 <div class="field">
                   <label>Kategori</label>
-                  <select><option>Tesbih</option><option>Yüzük</option></select>
+                  <select name="category"><option>Tesbih</option><option>Yüzük</option></select>
                 </div>
                 <div class="field">
                   <label>Malzeme</label>
-                  <select>
+                  <select name="material">
                     <option>Kehribar</option><option>Oltu Taşı</option><option>Sedef</option>
                     <option>Sandal Ağacı</option><option>Gümüş 925</option><option>Akik</option>
                   </select>
                 </div>
               </div>
-              <div class="field"><label>Açıklama</label><textarea rows="5" placeholder="Ürünün üretim şekli, malzemesi ve özellikleri hakkında bilgi verin."></textarea></div>
+              <div class="field"><label>Açıklama</label><textarea name="description" rows="5" placeholder="Ürünün üretim şekli, malzemesi ve özellikleri hakkında bilgi verin."></textarea></div>
               <div class="field-row">
-                <div class="field"><label>Satış Fiyatı (TL)</label><input type="number" required placeholder="1450"></div>
-                <div class="field"><label>Stok Adedi</label><input type="number" required placeholder="20"></div>
+                <div class="field"><label>Satış Fiyatı (TL)</label><input type="number" name="price" required placeholder="1450"></div>
+                <div class="field"><label>Stok Adedi</label><input type="number" name="stock" required placeholder="20"></div>
               </div>
               <div class="field-row">
-                <div class="field"><label>Boncuk Sayısı / Ölçü</label><input type="text" placeholder="Örn. 33'lü ya da 18 numara"></div>
-                <div class="field"><label>Ağırlık (gram)</label><input type="number" placeholder="28"></div>
+                <div class="field"><label>Boncuk Sayısı / Ölçü</label><input type="text" name="size_info" placeholder="Örn. 33'lü ya da 18 numara"></div>
+                <div class="field"><label>Ağırlık (gram)</label><input type="number" name="weight_grams" placeholder="28"></div>
               </div>
               <div class="field-row">
                 <div class="field">
@@ -106,23 +106,17 @@
         <div>
           <div class="panel-card">
             <div class="panel-card-body">
-              <h3 style="font-size:15px; margin-bottom:16px;">Ürün Görselleri</h3>
-              <div class="upload-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
-                <span class="upload-box-text">Görsel yüklemek için tıklayın</span>
-              </div>
-              <div class="thumb-row">
-                <div class="p-thumb"><img src="../../assets/img/illus-tesbih.svg" style="width:60%;"></div>
-                <div class="p-thumb"><img src="../../assets/img/illus-tesbih.svg" style="width:60%; opacity:.8;"></div>
-              </div>
+              <h3 style="font-size:15px; margin-bottom:16px;">Ürün Görseli</h3>
+              <div class="field"><label>Görsel Bağlantısı (URL)</label><input type="url" name="image_url" placeholder="https://... (boş bırakılırsa varsayılan görsel kullanılır)"></div>
+              <p class="field-hint">Dosya yükleme henüz desteklenmiyor — bir görsel adresi yapıştırın.</p>
             </div>
           </div>
 
           <div class="panel-card">
             <div class="panel-card-body">
               <h3 style="font-size:15px; margin-bottom:10px;">Yayın Durumu</h3>
-              <label class="filter-option" style="margin-bottom:10px;"><input type="radio" name="pub" checked> Onaya Gönder</label>
-              <label class="filter-option"><input type="radio" name="pub"> Taslak Olarak Kaydet</label>
+              <label class="filter-option" style="margin-bottom:10px;"><input type="radio" name="pub" value="published" checked> Yayınla</label>
+              <label class="filter-option"><input type="radio" name="pub" value="draft"> Taslak Olarak Kaydet</label>
             </div>
           </div>
 
@@ -133,6 +127,75 @@
   </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../assets/js/supabase-client.js"></script>
+<script src="../../assets/js/seller-guard.js"></script>
+<script src="../../assets/js/main.js"></script>
 <script src="../../assets/js/panel.js"></script>
+<script>
+  const form = document.getElementById('apply-form');
+  const editId = new URLSearchParams(location.search).get('id');
+
+  window.addEventListener('danedane:seller-ready', async () => {
+    if (!editId) return;
+    try {
+      const products = await DB.fetchMyProducts();
+      const p = products.find(x => x.id === editId);
+      if (!p) { IMAME.toast('Ürün bulunamadı.'); return; }
+      document.querySelector('h1').textContent = 'Ürünü Düzenle';
+      form.name.value = p.name;
+      form.category.value = p.category;
+      form.material.value = p.material || '';
+      form.description.value = p.description || '';
+      form.price.value = p.price;
+      form.stock.value = p.stock;
+      form.size_info.value = p.size_info || '';
+      form.weight_grams.value = p.weight_grams || '';
+      document.getElementById('shipping-option').value = p.shipping_option;
+      document.getElementById('shipping-option').dispatchEvent(new Event('change'));
+      document.getElementById('shipping-fee').value = p.shipping_fee || '';
+      form.image_url.value = p.image_url || '';
+      form.pub.value = p.status === 'draft' ? 'draft' : 'published';
+      form.querySelector('[type=submit]').textContent = 'Ürünü Güncelle';
+    } catch (err) {
+      console.error('[Danedane] Ürün yüklenemedi:', err);
+    }
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = form.querySelector('[type=submit]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Kaydediliyor…';
+    try {
+      const shippingOption = document.getElementById('shipping-option').value;
+      const shippingFee = document.getElementById('shipping-fee').value;
+      const fields = {
+        name: form.name.value.trim(),
+        category: form.category.value,
+        material: form.material.value,
+        description: form.description.value.trim(),
+        price: parseFloat(form.price.value),
+        stock: parseInt(form.stock.value, 10),
+        size_info: form.size_info.value.trim() || null,
+        weight_grams: form.weight_grams.value ? parseFloat(form.weight_grams.value) : null,
+        shipping_option: shippingOption,
+        shipping_fee: shippingOption === 'alici' ? parseFloat(shippingFee || '0') : 0,
+        image_url: form.image_url.value.trim() || null,
+        status: form.pub.value,
+      };
+      if (editId) await DB.updateProduct(editId, fields);
+      else await DB.createProduct(fields);
+      const note = document.querySelector('[data-save-note]');
+      if (note) { note.hidden = false; note.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      setTimeout(() => { window.location.href = 'urunler.html'; }, 1200);
+    } catch (err) {
+      console.error('[Danedane] Ürün kaydedilemedi:', err);
+      IMAME.toast('Ürün kaydedilemedi: ' + (err.message || 'bilinmeyen hata.'));
+      submitBtn.disabled = false;
+      submitBtn.textContent = editId ? 'Ürünü Güncelle' : 'Ürünü Kaydet';
+    }
+  });
+</script>
 </body>
 </html>

@@ -86,8 +86,8 @@
 <div class="page-header">
   <div class="container">
     <div class="breadcrumb"><a href="index.html">Anasayfa</a><span>/</span>Hesap Panelim</div>
-    <h1>Hoş geldiniz, Ayşe</h1>
-    <p class="muted">Siparişlerinizi, adreslerinizi ve favorilerinizi buradan yönetin.</p>
+    <h1 id="welcome-heading">Hoş geldiniz</h1>
+    <p class="muted">Siparişlerinizi, adreslerinizi ve favorilerinizi buradan yönetin. <a href="#" id="signout-link" style="color:var(--gold);">Çıkış Yap</a></p>
   </div>
 </div>
 
@@ -101,39 +101,7 @@
     </div>
 
     <div class="acc-panel active" id="acc-siparisler">
-      <div class="order-card">
-        <div class="order-card-head">
-          <div><strong>#DND-482913</strong><small>22 Temmuz 2026</small></div>
-          <span class="status-pill wait">Hazırlanıyor</span>
-        </div>
-        <p class="order-items">Kehribar Sultani Tesbih × 1</p>
-        <div class="order-card-foot">
-          <span class="price">1.450 TL</span>
-          <a href="kargo-takip.html?no=DND-482913" class="btn btn-ghost btn-sm">Kargomu Takip Et</a>
-        </div>
-      </div>
-      <div class="order-card">
-        <div class="order-card-head">
-          <div><strong>#DND-482788</strong><small>21 Temmuz 2026</small></div>
-          <span class="status-pill info">Kargoya Verildi</span>
-        </div>
-        <p class="order-items">Oltu Taşı Yüzük × 1</p>
-        <div class="order-card-foot">
-          <span class="price">690 TL</span>
-          <a href="kargo-takip.html?no=DND-482788" class="btn btn-ghost btn-sm">Kargomu Takip Et</a>
-        </div>
-      </div>
-      <div class="order-card">
-        <div class="order-card-head">
-          <div><strong>#DND-482701</strong><small>19 Temmuz 2026</small></div>
-          <span class="status-pill ok">Teslim Edildi</span>
-        </div>
-        <p class="order-items">Sedef İşlemeli Tesbih × 1, Zeytin Yaprağı Yüzük × 1</p>
-        <div class="order-card-foot">
-          <span class="price">1.600 TL</span>
-          <a href="#" class="btn btn-ghost btn-sm" data-reorder>Tekrar Sipariş Ver</a>
-        </div>
-      </div>
+      <p class="muted">Yükleniyor…</p>
     </div>
 
     <div class="acc-panel" id="acc-adresler">
@@ -177,13 +145,13 @@
         <h3 style="margin-bottom:22px;">Hesap Bilgilerim</h3>
         <form id="account-form">
           <div class="field-row">
-            <div class="field"><label>Ad</label><input type="text" value="Ayşe"></div>
-            <div class="field"><label>Soyad</label><input type="text" value="Yıldız"></div>
+            <div class="field"><label>Ad</label><input type="text" id="acc-ad"></div>
+            <div class="field"><label>Soyad</label><input type="text" id="acc-soyad"></div>
           </div>
-          <div class="field"><label>E-posta</label><input type="email" value="ayse.yildiz@ornek.com"></div>
-          <div class="field"><label>Telefon</label><input type="tel" value="0532 000 00 00"></div>
+          <div class="field"><label>E-posta</label><input type="email" id="acc-email" disabled></div>
+          <div class="field"><label>Telefon</label><input type="tel" id="acc-telefon"></div>
           <hr class="hairline" style="margin:26px 0;">
-          <div class="field"><label>Yeni Şifre</label><input type="password" placeholder="Değiştirmek istemiyorsanız boş bırakın"></div>
+          <div class="field"><label>Yeni Şifre</label><input type="password" id="acc-password" placeholder="Değiştirmek istemiyorsanız boş bırakın"></div>
           <button type="submit" class="btn btn-solid">Bilgileri Kaydet</button>
         </form>
       </div>
@@ -203,8 +171,18 @@
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.45 1.29 4.9L2 22l5.29-1.39c1.39.76 2.98 1.19 4.75 1.19 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.6 14.15c-.24.67-1.19 1.23-1.94 1.39-.51.11-1.18.19-3.45-.73-2.9-1.19-4.79-4.12-4.94-4.31-.14-.19-1.18-1.57-1.18-2.99 0-1.42.74-2.11 1-2.4.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.82 2 .89 2.14.07.14.11.31.02.5-.09.19-.14.3-.28.46-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.17-.19.71-.83.9-1.11.19-.28.38-.24.64-.14.26.09 1.66.78 1.94.92.28.14.47.21.53.33.07.12.07.68-.17 1.35z"/></svg>
 </a>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase-client.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
+  DB.getUser().then(user => { if (!user) window.location.href = 'hesabim.html'; });
+
+  document.getElementById('signout-link').addEventListener('click', async (e) => {
+    e.preventDefault();
+    await DB.signOut();
+    window.location.href = 'hesabim.html';
+  });
+
   function activateTab(name) {
     document.querySelectorAll('.acc-tab').forEach(t => t.classList.toggle('active', t.dataset.accTab === name));
     document.querySelectorAll('.acc-panel').forEach(p => p.classList.toggle('active', p.id === 'acc-' + name));
@@ -254,9 +232,96 @@
   }
   document.addEventListener('DOMContentLoaded', renderWishlist);
 
+  /* ---------- Sipariş geçmişi ---------- */
+  function statusMeta(status) {
+    const map = {
+      hazirlaniyor: ["wait", "Hazırlanıyor"],
+      kargoda: ["info", "Kargoya Verildi"],
+      teslim: ["ok", "Teslim Edildi"],
+      iptal: ["warn", "İptal Edildi"],
+    };
+    return map[status] || ["info", status];
+  }
+  let ordersCache = [];
+  async function renderOrders() {
+    const wrap = document.getElementById('acc-siparisler');
+    try {
+      ordersCache = await DB.fetchMyOrders();
+    } catch (err) {
+      console.error('[Danedane] Siparişler yüklenemedi:', err);
+      wrap.innerHTML = '<p class="muted">Siparişler yüklenirken bir sorun oluştu.</p>';
+      return;
+    }
+    if (!ordersCache.length) {
+      wrap.innerHTML = `<div class="empty-state">
+        <h3>Henüz siparişiniz yok</h3>
+        <p>Verdiğiniz siparişler burada görünecek.</p>
+        <a href="tesbih.html" class="btn btn-solid">Koleksiyonu Keşfet</a>
+      </div>`;
+      return;
+    }
+    wrap.innerHTML = ordersCache.map(o => {
+      const [cls, label] = statusMeta(o.status);
+      const itemsText = o.order_items.map(it => `${it.name} × ${it.qty}`).join(', ');
+      const orderNo = 'DND-' + o.id.slice(0, 8).toUpperCase();
+      const date = new Date(o.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+      const footAction = o.status === 'teslim'
+        ? `<a href="#" class="btn btn-ghost btn-sm" data-reorder="${o.id}">Tekrar Sipariş Ver</a>`
+        : `<a href="kargo-takip.html?no=${orderNo}" class="btn btn-ghost btn-sm">Kargomu Takip Et</a>`;
+      return `
+        <div class="order-card">
+          <div class="order-card-head">
+            <div><strong>#${orderNo}</strong><small>${date}</small></div>
+            <span class="status-pill ${cls}">${label}</span>
+          </div>
+          <p class="order-items">${IMAME.escapeHtml(itemsText)}</p>
+          <div class="order-card-foot">
+            <span class="price">${IMAME.formatTL(o.total)}</span>
+            ${footAction}
+          </div>
+        </div>`;
+    }).join('');
+    wrap.querySelectorAll('[data-reorder]').forEach(el => el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const order = ordersCache.find(o => o.id === el.dataset.reorder);
+      if (!order) return;
+      order.order_items.forEach(it => IMAME.addToCart({ id: it.product_id, name: it.name, price: it.price, cat: '', img: it.image_url, qty: it.qty }));
+      IMAME.toast('Ürünler sepetinize eklendi.');
+    }));
+  }
+  renderOrders();
+
+  /* ---------- Hesap bilgileri ---------- */
+  async function loadAccountInfo() {
+    const user = await DB.getUser();
+    if (!user) return;
+    const profile = await DB.getMyProfile().catch(() => null);
+    const fullName = (profile && profile.full_name) || user.user_metadata?.full_name || '';
+    const [ad, ...rest] = fullName.split(' ');
+    document.getElementById('welcome-heading').textContent = 'Hoş geldiniz' + (ad ? ', ' + ad : '');
+    document.getElementById('acc-ad').value = ad || '';
+    document.getElementById('acc-soyad').value = rest.join(' ');
+    document.getElementById('acc-email').value = user.email || '';
+    document.getElementById('acc-telefon').value = (profile && profile.phone) || '';
+  }
+  loadAccountInfo();
+
   document.getElementById('add-address').addEventListener('click', () => IMAME.toast('Bu bir örnek arayüzdür — adres formu simüle edildi.'));
-  document.getElementById('account-form').addEventListener('submit', (e) => { e.preventDefault(); IMAME.toast('Bilgileriniz güncellendi.'); });
-  document.querySelectorAll('[data-reorder]').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); IMAME.toast('Ürünler sepetinize eklendi.'); }));
+  document.getElementById('account-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fullName = `${document.getElementById('acc-ad').value.trim()} ${document.getElementById('acc-soyad').value.trim()}`.trim();
+    const phone = document.getElementById('acc-telefon').value.trim();
+    const newPassword = document.getElementById('acc-password').value;
+    try {
+      await DB.updateMyProfile({ full_name: fullName, phone });
+      if (newPassword) await DB.updatePassword(newPassword);
+      IMAME.toast('Bilgileriniz güncellendi.');
+      document.getElementById('acc-password').value = '';
+      loadAccountInfo();
+    } catch (err) {
+      IMAME.toast('Güncelleme başarısız: ' + (err.message || 'bilinmeyen hata.'));
+    }
+  });
 </script>
 </body>
 </html>

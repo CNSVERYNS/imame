@@ -1,25 +1,5 @@
 /* Danedane — mağaza ön yüz davranışları (sepet, menü, filtre, bildirimler) */
 
-/* Site genelinde arama için ürün kataloğu */
-const DANEDANE_PRODUCTS = [
-  { id: "p1", name: "Kehribar Sultani Tesbih", cat: "Tesbih", material: "Kehribar", price: 1450, rating: 5, img: "illus-tesbih.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
-  { id: "p2", name: "Oltu Taşı 33'lü Tesbih", cat: "Tesbih", material: "Oltu Taşı", price: 890, rating: 5, img: "illus-tesbih.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
-  { id: "p5", name: "Sedef İşlemeli Tesbih", cat: "Tesbih", material: "Sedef", price: 1120, rating: 5, img: "illus-tesbih.svg", seller: "Sedefkar Atölyesi", url: "urun-detay.html" },
-  { id: "p6", name: "Sandal Ağacı Tesbih", cat: "Tesbih", material: "Sandal Ağacı", price: 640, rating: 4, img: "illus-tesbih.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
-  { id: "p7", name: "Kehribar 99'lu Tesbih", cat: "Tesbih", material: "Kehribar", price: 2100, rating: 5, img: "illus-tesbih.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
-  { id: "p8", name: "Oltu Taşı Şeffaf Tesbih", cat: "Tesbih", material: "Oltu Taşı", price: 950, rating: 4, img: "illus-tesbih.svg", seller: "Erzurum Oltu Sanatları", url: "urun-detay.html" },
-  { id: "p9", name: "Ceviz Ağacı Tesbih", cat: "Tesbih", material: "Ceviz Ağacı", price: 380, rating: 4, img: "illus-tesbih.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
-  { id: "p10", name: "Sedef Beyaz Tesbih", cat: "Tesbih", material: "Sedef", price: 990, rating: 5, img: "illus-tesbih.svg", seller: "Sedefkar Atölyesi", url: "urun-detay.html" },
-  { id: "r1", name: "Akik Taşlı Gümüş Yüzük", cat: "Yüzük", material: "Akik", price: 780, rating: 5, img: "illus-yuzuk.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
-  { id: "r2", name: "Oltu Taşı Yüzük", cat: "Yüzük", material: "Oltu Taşı", price: 690, rating: 4, img: "illus-yuzuk.svg", seller: "Erzurum Oltu Sanatları", url: "urun-detay.html" },
-  { id: "r3", name: "Zümrüt Kesim Yüzük", cat: "Yüzük", material: "Zümrüt Kesim", price: 1290, rating: 5, img: "illus-yuzuk.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
-  { id: "r4", name: "Sade Hat Yüzük", cat: "Yüzük", material: "Taşsız", price: 520, rating: 5, img: "illus-yuzuk.svg", seller: "Trabzon Gümüş Atölyesi", url: "urun-detay.html" },
-  { id: "r5", name: "Yakut Taşlı Yüzük", cat: "Yüzük", material: "Yakut", price: 1450, rating: 5, img: "illus-yuzuk.svg", seller: "Trabzon Gümüş Atölyesi", url: "urun-detay.html" },
-  { id: "r6", name: "Akik Kelebek Kesim Yüzük", cat: "Yüzük", material: "Akik", price: 850, rating: 4, img: "illus-yuzuk.svg", seller: "Trabzon Gümüş Atölyesi", url: "urun-detay.html" },
-  { id: "r7", name: "Oval Oltu Yüzük", cat: "Yüzük", material: "Oltu Taşı", price: 610, rating: 4, img: "illus-yuzuk.svg", seller: "Erzurum Oltu Sanatları", url: "urun-detay.html" },
-  { id: "r8", name: "Zeytin Yaprağı Yüzük", cat: "Yüzük", material: "Taşsız", price: 480, rating: 5, img: "illus-yuzuk.svg", seller: "Trabzon Gümüş Atölyesi", url: "urun-detay.html" },
-];
-
 const IMAME = (() => {
   const CART_KEY = "imame_cart";
   const WISHLIST_KEY = "danedane_wishlist";
@@ -142,6 +122,152 @@ const IMAME = (() => {
       entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("is-visible"); io.unobserve(en.target); } });
     }, { threshold: 0.15 });
     items.forEach(i => io.observe(i));
+  }
+
+  /* ---------- Supabase ürün kataloğu ---------- */
+  const MATERIAL_SLUG = {
+    "Kehribar": "kehribar", "Oltu Taşı": "oltu", "Sedef": "sedef",
+    "Sandal Ağacı": "sandal", "Ceviz Ağacı": "ceviz", "Akik": "akik",
+    "Zümrüt Kesim": "zumrut", "Yakut": "yakut", "Taşsız": "sade",
+  };
+  function materialSlug(material) {
+    return MATERIAL_SLUG[material] || (material || "").toLocaleLowerCase("tr").replace(/[^a-z0-9]+/g, "-");
+  }
+  function escapeHtml(str) {
+    return String(str ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+  }
+  function starsHtml(rating) {
+    const r = Math.round(rating || 0);
+    return "★".repeat(r) + "☆".repeat(5 - r);
+  }
+  function fallbackImg(category) {
+    return category === "Yüzük" ? "assets/img/illus-yuzuk.svg" : "assets/img/illus-tesbih.svg";
+  }
+  function productCardHtml(p) {
+    const isNew = p.created_at && (Date.now() - new Date(p.created_at).getTime()) < 14 * 24 * 3600 * 1000;
+    const img = p.image_url || fallbackImg(p.category);
+    const sellerName = (p.sellers && p.sellers.store_name) || "Danedane Satıcısı";
+    const badge = p.featured
+      ? '<span class="product-badge">Öne Çıkan</span>'
+      : (isNew ? '<span class="product-badge product-badge--new">Yeni</span>' : "");
+    return `
+      <div class="product-card fade-in" data-product-item data-material="${materialSlug(p.material)}" data-rating="${p.rating || 0}" data-shipping="${p.shipping_option}"${p.featured ? ' data-bestseller="true"' : ""}${isNew ? ' data-new="true"' : ""}>
+        <div class="product-media">
+          ${badge}
+          <button type="button" class="product-wish" aria-label="Favorilere ekle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></button>
+          <img src="${escapeHtml(img)}" alt="${escapeHtml(p.name)}" loading="lazy">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">${escapeHtml(p.material || p.category || "")}${p.size_info ? " · " + escapeHtml(p.size_info) : ""}</span>
+          <span class="product-seller">Satıcı: <a href="magaza.html">${escapeHtml(sellerName)}</a></span>
+          <h3 class="product-name"><a href="urun-detay.html?id=${p.id}">${escapeHtml(p.name)}</a></h3>
+          <div class="product-meta"><span class="stars">${starsHtml(p.rating)}</span></div>
+          <div class="product-row">
+            <span class="price">${formatTL(p.price)}</span>
+            <button class="add-btn" aria-label="Sepete ekle" data-add-cart data-id="${p.id}" data-name="${escapeHtml(p.name)}" data-price="${p.price}" data-cat="${escapeHtml(p.category)}" data-img="${escapeHtml(img)}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>`;
+  }
+  async function initDynamicCatalog() {
+    const grid = document.querySelector("[data-dynamic-grid]");
+    if (!grid || typeof DB === "undefined") return;
+    const category = grid.dataset.category || undefined;
+    try {
+      const products = await DB.fetchProducts({ category });
+      grid.innerHTML = products.length
+        ? products.map(productCardHtml).join("")
+        : '<p class="muted">Bu kategoride henüz ürün yok.</p>';
+    } catch (err) {
+      console.error("[Danedane] Ürünler yüklenemedi:", err);
+      grid.innerHTML = '<p class="muted">Ürünler yüklenirken bir sorun oluştu.</p>';
+    }
+  }
+
+  /* ---------- Supabase ürün detay sayfası ---------- */
+  async function initProductDetail() {
+    const root = document.querySelector("[data-product-detail]");
+    if (!root || typeof DB === "undefined") return;
+    const id = new URLSearchParams(location.search).get("id");
+    if (!id) { root.innerHTML = '<p class="muted">Ürün bulunamadı.</p>'; return; }
+
+    let p;
+    try {
+      p = await DB.fetchProductById(id);
+    } catch (err) {
+      console.error("[Danedane] Ürün yüklenemedi:", err);
+      root.innerHTML = '<p class="muted">Ürün bulunamadı ya da yayından kaldırılmış.</p>';
+      return;
+    }
+
+    const img = p.image_url || fallbackImg(p.category);
+    const sellerName = (p.sellers && p.sellers.store_name) || "Danedane Satıcısı";
+    const set = (id2, text) => { const el = document.getElementById(id2); if (el) el.textContent = text; };
+
+    document.title = `${p.name} — Danedane`;
+    const catLink = document.getElementById("pd-breadcrumb-cat");
+    if (catLink) { catLink.href = p.category === "Yüzük" ? "yuzuk.html" : "tesbih.html"; catLink.textContent = p.category; }
+    set("pd-breadcrumb-name", p.name);
+    set("pd-cat", `${p.category} · ${p.material || ""}`);
+    set("pd-title", p.name);
+    set("pd-stars", starsHtml(p.rating));
+    set("pd-stock", p.stock > 0 ? "Stokta var" : "Stokta yok");
+    const stockEl = document.getElementById("pd-stock");
+    if (stockEl) stockEl.style.color = p.stock > 0 ? "var(--ok)" : "var(--oxblood-bright)";
+    set("pd-price", formatTL(p.price));
+    set("pd-desc", p.description || "");
+    set("pd-desc-full", p.description || "Bu ürün için henüz açıklama eklenmedi.");
+    set("pd-seller-name", sellerName);
+    set("pd-seller-avatar", sellerName.charAt(0).toUpperCase() + ".");
+    set("pd-stock-note", p.stock > 0 && p.stock <= 10 ? `Son ${p.stock} adet kaldı` : "");
+
+    const mainImg = document.getElementById("pd-main-img");
+    if (mainImg) { mainImg.src = img; mainImg.alt = p.name; }
+
+    const addBtn = document.getElementById("pd-add-cart");
+    if (addBtn) {
+      if (p.stock <= 0) { addBtn.disabled = true; addBtn.textContent = "Stokta Yok"; }
+    }
+
+    const specBody = document.getElementById("pd-specs");
+    if (specBody) {
+      const rows = [
+        ["Kategori", p.category],
+        ["Malzeme", p.material || "-"],
+        p.size_info ? ["Ölçü / Boncuk Sayısı", p.size_info] : null,
+        p.weight_grams ? ["Ağırlık", `${p.weight_grams} gram`] : null,
+        ["Stok", `${p.stock} adet`],
+      ].filter(Boolean);
+      specBody.innerHTML = rows.map(([k, v]) => `<tr><td>${escapeHtml(k)}</td><td>${escapeHtml(String(v))}</td></tr>`).join("");
+    }
+
+    const ld = document.getElementById("product-jsonld");
+    if (ld) {
+      ld.textContent = JSON.stringify({
+        "@context": "https://schema.org", "@type": "Product", name: p.name, description: p.description || "",
+        image: location.origin + "/" + img, brand: { "@type": "Brand", name: "Danedane" },
+        offers: {
+          "@type": "Offer", url: location.href, priceCurrency: "TRY", price: String(p.price),
+          availability: p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+          seller: { "@type": "Organization", name: sellerName },
+        },
+      });
+    }
+
+    const similarGrid = document.querySelector("[data-similar-grid]");
+    if (similarGrid) {
+      try {
+        const similar = await DB.fetchProducts({ category: p.category, excludeId: p.id, limit: 4 });
+        similarGrid.innerHTML = similar.length ? similar.map(productCardHtml).join("") : "";
+        if (!similar.length) document.getElementById("pd-similar-wrap").style.display = "none";
+      } catch (err) {
+        console.error("[Danedane] Benzer ürünler yüklenemedi:", err);
+      }
+    }
+
+    window.dispatchEvent(new CustomEvent("danedane:product-loaded", { detail: p }));
   }
 
   /* ---------- Filtre çipleri + kenar çubuğu filtreleri (kargo, puan, öne çıkanlar) ---------- */
@@ -358,9 +484,11 @@ const IMAME = (() => {
     });
   }
 
-  function init() {
+  async function init() {
     updateCartCount();
     initMobileNav();
+    await initDynamicCatalog();
+    await initProductDetail();
     initAddToCart();
     initFadeIn();
     initFilterChips();
@@ -376,5 +504,6 @@ const IMAME = (() => {
   return {
     getCart, saveCart, addToCart, removeFromCart, setQty, clearCart, cartTotal, cartCount, formatTL, toast,
     getWishlist, saveWishlist, isInWishlist, toggleWishlist, removeFromWishlist,
+    productCardHtml, escapeHtml, starsHtml, fallbackImg, materialSlug,
   };
 })();

@@ -66,75 +66,8 @@
     <div class="panel-card">
       <table class="p-table">
         <thead><tr><th>Sipariş</th><th>Alıcı</th><th>Tutar</th><th>Kargo Firması</th><th>Takip No</th><th>Durum</th><th>Tarih</th></tr></thead>
-        <tbody>
-          <tr data-order-status="hazirlaniyor">
-            <td><strong style="color:var(--ivory);">#DND-482913</strong></td>
-            <td>Mehmet A.</td>
-            <td>1.450 TL</td>
-            <td>
-              <select class="status-select-inline">
-                <option>Sabır Kargo</option><option>Vefa Kargo</option><option>Nur Ekspres</option>
-              </select>
-            </td>
-            <td><input class="track-input-inline" placeholder="Takip no girin" value="TRK994211"></td>
-            <td>
-              <span class="status-pill wait">Hazırlanıyor</span>
-              <select data-status-select style="display:none;"><option value="hazirlaniyor" selected>Hazırlanıyor</option><option value="kargoda">Kargoya Verildi</option><option value="teslim">Teslim Edildi</option><option value="iptal">İptal</option></select>
-            </td>
-            <td>22 Tem 2026</td>
-          </tr>
-          <tr data-order-status="kargoda">
-            <td><strong style="color:var(--ivory);">#DND-482788</strong></td>
-            <td>Sena K.</td>
-            <td>690 TL</td>
-            <td>
-              <select class="status-select-inline">
-                <option>Vefa Kargo</option><option>Sabır Kargo</option><option>Nur Ekspres</option>
-              </select>
-            </td>
-            <td><input class="track-input-inline" placeholder="Takip no girin" value="TRK994187"></td>
-            <td><span class="status-pill info">Kargoya Verildi</span></td>
-            <td>21 Tem 2026</td>
-          </tr>
-          <tr data-order-status="teslim">
-            <td><strong style="color:var(--ivory);">#DND-482701</strong></td>
-            <td>Yusuf D.</td>
-            <td>1.120 TL</td>
-            <td>
-              <select class="status-select-inline">
-                <option>Nur Ekspres</option><option>Sabır Kargo</option><option>Vefa Kargo</option>
-              </select>
-            </td>
-            <td><input class="track-input-inline" placeholder="Takip no girin" value="TRK993950"></td>
-            <td><span class="status-pill ok">Teslim Edildi</span></td>
-            <td>19 Tem 2026</td>
-          </tr>
-          <tr data-order-status="hazirlaniyor">
-            <td><strong style="color:var(--ivory);">#DND-482650</strong></td>
-            <td>Aylin T.</td>
-            <td>1.290 TL</td>
-            <td>
-              <select class="status-select-inline">
-                <option>Sabır Kargo</option><option>Vefa Kargo</option><option>Nur Ekspres</option>
-              </select>
-            </td>
-            <td><input class="track-input-inline" placeholder="Henüz girilmedi"></td>
-            <td><span class="status-pill wait">Hazırlanıyor</span></td>
-            <td>18 Tem 2026</td>
-          </tr>
-          <tr data-order-status="teslim">
-            <td><strong style="color:var(--ivory);">#DND-482544</strong></td>
-            <td>Betül C.</td>
-            <td>520 TL</td>
-            <td>
-              <select class="status-select-inline">
-                <option>Vefa Kargo</option><option>Sabır Kargo</option><option>Nur Ekspres</option>
-              </select>
-            </td>
-            <td><input class="track-input-inline" placeholder="Takip no girin" value="TRK993820"></td>
-            <td><span class="status-pill ok">Teslim Edildi</span></td>
-            <td>16 Tem 2026</td>
-          </tr>
+        <tbody id="siparisler-tbody">
+          <tr><td colspan="7" class="muted">Yükleniyor…</td></tr>
         </tbody>
       </table>
     </div>
@@ -145,10 +78,83 @@
   </main>
 </div>
 
-<script src="../../assets/js/panel.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../assets/js/supabase-client.js"></script>
+<script src="../../assets/js/seller-guard.js"></script>
 <script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/panel.js"></script>
 <script>
-  document.getElementById('save-tracking').addEventListener('click', () => IMAME.toast('Kargo bilgileri güncellendi, alıcıya anında yansıtıldı.'));
+  const CARRIERS = ['Sabır Kargo', 'Vefa Kargo', 'Nur Ekspres'];
+  const STATUS_LABEL = { hazirlaniyor: 'Hazırlanıyor', kargoda: 'Kargoya Verildi', teslim: 'Teslim Edildi', iptal: 'İptal Edildi' };
+  const STATUS_CLASS = { hazirlaniyor: 'wait', kargoda: 'info', teslim: 'ok', iptal: 'warn' };
+  let sellerOrders = [];
+
+  function renderOrders() {
+    const tbody = document.getElementById('siparisler-tbody');
+    if (!sellerOrders.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="muted">Henüz siparişiniz yok.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = sellerOrders.map(o => {
+      const myTotal = o.order_items.filter(it => it.seller_id === window.CURRENT_SELLER.id).reduce((s, it) => s + it.price * it.qty, 0);
+      const orderNo = 'DND-' + o.id.slice(0, 8).toUpperCase();
+      const date = new Date(o.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' });
+      const carrierOptions = CARRIERS.map(c => `<option ${o.carrier === c ? 'selected' : ''}>${c}</option>`).join('');
+      const statusOptions = Object.keys(STATUS_LABEL).map(s => `<option value="${s}" ${o.status === s ? 'selected' : ''}>${STATUS_LABEL[s]}</option>`).join('');
+      return `
+        <tr data-order-status="${o.status}" data-order-row="${o.id}">
+          <td><strong style="color:var(--ivory);">#${orderNo}</strong></td>
+          <td>${IMAME.escapeHtml(o.full_name)}</td>
+          <td>${IMAME.formatTL(myTotal)}</td>
+          <td><select class="status-select-inline" data-carrier-select>${carrierOptions}</select></td>
+          <td><input class="track-input-inline" data-tracking-input placeholder="Takip no girin" value="${IMAME.escapeHtml(o.tracking_number || '')}"></td>
+          <td>
+            <span class="status-pill ${STATUS_CLASS[o.status]}" data-status-pill>${STATUS_LABEL[o.status]}</span>
+            <select data-status-select style="display:none;">${statusOptions}</select>
+          </td>
+          <td>${date}</td>
+        </tr>`;
+    }).join('');
+
+    tbody.querySelectorAll('[data-status-select]').forEach(sel => {
+      sel.addEventListener('change', () => {
+        const row = sel.closest('tr');
+        const pill = row.querySelector('[data-status-pill]');
+        pill.className = 'status-pill ' + STATUS_CLASS[sel.value];
+        pill.textContent = STATUS_LABEL[sel.value];
+        row.dataset.orderStatus = sel.value;
+      });
+    });
+
+    document.querySelectorAll('#order-filter-bar .chip.active')[0]?.click();
+  }
+
+  window.addEventListener('danedane:seller-ready', async () => {
+    try {
+      sellerOrders = await DB.fetchSellerOrders();
+      renderOrders();
+    } catch (err) {
+      console.error('[Danedane] Siparişler yüklenemedi:', err);
+      document.getElementById('siparisler-tbody').innerHTML = '<tr><td colspan="7" class="muted">Siparişler yüklenirken bir sorun oluştu.</td></tr>';
+    }
+  });
+
+  document.getElementById('save-tracking').addEventListener('click', async () => {
+    const rows = Array.from(document.querySelectorAll('[data-order-row]'));
+    if (!rows.length) return;
+    try {
+      await Promise.all(rows.map(row => {
+        const id = row.dataset.orderRow;
+        const carrier = row.querySelector('[data-carrier-select]').value;
+        const tracking_number = row.querySelector('[data-tracking-input]').value.trim();
+        const status = row.querySelector('[data-status-select]').value;
+        return DB.updateOrderStatus(id, { carrier, tracking_number: tracking_number || null, status });
+      }));
+      IMAME.toast('Kargo bilgileri güncellendi, alıcıya anında yansıtıldı.');
+    } catch (err) {
+      IMAME.toast('Güncellenemedi: ' + (err.message || 'bilinmeyen hata.'));
+    }
+  });
 
   document.querySelectorAll('#order-filter-bar .chip').forEach(chip => {
     chip.addEventListener('click', () => {

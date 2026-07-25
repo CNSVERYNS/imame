@@ -52,27 +52,29 @@
           <h3>Kişisel Bilgiler</h3>
           <p class="muted" style="font-size:13px; margin-bottom:22px;">Bu bilgiler sadece kimlik doğrulama ve ödeme için kullanılır.</p>
           <div class="field-row">
-            <div class="field"><label>Ad</label><input type="text" required></div>
-            <div class="field"><label>Soyad</label><input type="text" required></div>
+            <div class="field"><label>Ad</label><input type="text" name="ad" required></div>
+            <div class="field"><label>Soyad</label><input type="text" name="soyad" required></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>T.C. Kimlik No</label><input type="text" required maxlength="11" placeholder="11 haneli"></div>
-            <div class="field"><label>Doğum Tarihi</label><input type="date" required></div>
+            <div class="field"><label>T.C. Kimlik No</label><input type="text" name="tc_no" required maxlength="11" placeholder="11 haneli"></div>
+            <div class="field"><label>Doğum Tarihi</label><input type="date" name="dogum_tarihi" required></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Telefon</label><input type="tel" required placeholder="05xx xxx xx xx"></div>
-            <div class="field"><label>E-posta</label><input type="email" required placeholder="ornek@eposta.com"></div>
+            <div class="field"><label>Telefon</label><input type="tel" name="telefon" required placeholder="05xx xxx xx xx"></div>
+            <div class="field"><label>E-posta</label><input type="email" name="email" required placeholder="ornek@eposta.com"></div>
           </div>
+          <div class="field"><label>Şifre</label><input type="password" name="sifre" required placeholder="En az 8 karakter" minlength="8"></div>
+          <p class="field-hint">Zaten bir Danedane hesabınız varsa önce <a href="../hesabim.html" style="color:var(--panel-accent-bright);">giriş yapın</a>, ardından bu sayfaya dönüp başvurun.</p>
         </div>
 
         <div class="panel-box" style="margin-bottom:24px;">
           <h3>Mağaza Bilgileri</h3>
           <p class="muted" style="font-size:13px; margin-bottom:22px;">Şirket kurma zorunluluğu yoktur; bireysel satıcı olarak da başvurabilirsiniz.</p>
-          <div class="field"><label>Mağaza Adı</label><input type="text" required placeholder="Örn. Konya El Sanatları"></div>
+          <div class="field"><label>Mağaza Adı</label><input type="text" name="magaza_adi" required placeholder="Örn. Konya El Sanatları"></div>
           <div class="field-row">
             <div class="field">
               <label>Ürün Kategorisi</label>
-              <select>
+              <select name="kategori">
                 <option>Tesbih</option>
                 <option>Yüzük</option>
                 <option>Her İkisi</option>
@@ -80,21 +82,21 @@
             </div>
             <div class="field">
               <label>İşletme Türü</label>
-              <select>
+              <select name="isletme_turu">
                 <option>Bireysel Satıcı</option>
                 <option>Şahıs Şirketi</option>
                 <option>Limited / Anonim Şirket</option>
               </select>
             </div>
           </div>
-          <div class="field"><label>Kısa Tanıtım</label><textarea rows="4" placeholder="Ürünleriniz hakkında birkaç cümle yazın."></textarea></div>
+          <div class="field"><label>Kısa Tanıtım</label><textarea name="tanitim" rows="4" placeholder="Ürünleriniz hakkında birkaç cümle yazın."></textarea></div>
         </div>
 
         <div class="panel-box" style="margin-bottom:24px;">
           <h3>Ödeme Bilgileri</h3>
           <div class="field-row">
-            <div class="field"><label>IBAN</label><input type="text" required placeholder="TR00 0000 0000 0000 0000 0000 00"></div>
-            <div class="field"><label>Banka</label><input type="text" required placeholder="Banka adı"></div>
+            <div class="field"><label>IBAN</label><input type="text" name="iban" required placeholder="TR00 0000 0000 0000 0000 0000 00"></div>
+            <div class="field"><label>Banka</label><input type="text" name="banka" required placeholder="Banka adı"></div>
           </div>
         </div>
 
@@ -146,13 +148,66 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-client.js"></script>
 <script src="../assets/js/main.js"></script>
 <script>
-  document.getElementById('apply-form').addEventListener('submit', (e) => {
+  const form = document.getElementById('apply-form');
+  let existingUser = null;
+
+  DB.getUser().then(async (user) => {
+    existingUser = user;
+    if (!user) return;
+    form.sifre.required = false;
+    form.sifre.closest('.field').style.display = 'none';
+    form.email.value = user.email;
+    form.email.disabled = true;
+    const existingSeller = await DB.getMySeller();
+    if (existingSeller) {
+      document.getElementById('form-view').hidden = true;
+      document.getElementById('success-view').hidden = false;
+      document.querySelector('#success-view h2').textContent = existingSeller.status === 'approved' ? 'Zaten Onaylı Satıcısınız' : 'Başvurunuz Zaten Alındı';
+    }
+  });
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    document.getElementById('form-view').hidden = true;
-    document.getElementById('success-view').hidden = false;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const submitBtn = form.querySelector('[type=submit]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Gönderiliyor…';
+
+    try {
+      let user = existingUser;
+      if (!user) {
+        const fullName = `${form.ad.value.trim()} ${form.soyad.value.trim()}`.trim();
+        const { data, error } = await DB.signUp(form.email.value.trim(), form.sifre.value, fullName);
+        if (error) throw error;
+        if (!data.session) throw new Error('Hesabınız oluşturuldu ama giriş için e-posta doğrulaması gerekiyor. Doğruladıktan sonra tekrar başvurun.');
+        user = data.user;
+      }
+
+      await DB.applyAsSeller({
+        store_name: form.magaza_adi.value.trim(),
+        owner_name: `${form.ad.value.trim()} ${form.soyad.value.trim()}`.trim(),
+        phone: form.telefon.value.trim(),
+        tc_no: form.tc_no.value.trim(),
+        birth_date: form.dogum_tarihi.value || null,
+        business_type: form.isletme_turu.value,
+        category_pref: form.kategori.value,
+        iban: form.iban.value.trim(),
+        bank_name: form.banka.value.trim(),
+        bio: form.tanitim.value.trim(),
+      });
+
+      document.getElementById('form-view').hidden = true;
+      document.getElementById('success-view').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error('[Danedane] Satıcı başvurusu başarısız:', err);
+      IMAME.toast('Başvuru gönderilemedi: ' + (err.message || 'bilinmeyen hata.'));
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Başvuruyu Gönder';
+    }
   });
 </script>
 </body>

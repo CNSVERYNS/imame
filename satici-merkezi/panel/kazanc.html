@@ -52,20 +52,20 @@
 
     <div style="display:grid; grid-template-columns: 1fr 2fr; gap:22px; margin-bottom:26px; align-items:stretch;">
       <div class="payout-highlight">
-        <div class="stat-label">Ödenecek Bakiye</div>
-        <div class="stat-value">3.240,00 TL</div>
-        <p class="muted" style="font-size:12px; margin-top:8px;">Bir sonraki ödeme: 30 Temmuz 2026</p>
+        <div class="stat-label">Toplam Kazanç</div>
+        <div class="stat-value" id="kz-toplam">—</div>
+        <p class="muted" style="font-size:12px; margin-top:8px;">İptal edilenler hariç, komisyon düşülmeden brüt tutar.</p>
       </div>
       <div class="stat-grid" style="margin-bottom:0; grid-template-columns:repeat(3,1fr);">
         <div class="stat-card">
           <div class="stat-label">Bu Ay Kazanç</div>
-          <div class="stat-value">12.480 TL</div>
-          <div class="stat-delta up">▲ %18</div>
+          <div class="stat-value" id="kz-bu-ay">—</div>
+          <div class="stat-delta">Bu ay tamamlanan siparişler</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">Toplam Kazanç</div>
-          <div class="stat-value">147.430 TL</div>
-          <div class="stat-delta">Katılımdan bu yana</div>
+          <div class="stat-label">Bekleyen Sipariş Tutarı</div>
+          <div class="stat-value" id="kz-bekleyen">—</div>
+          <div class="stat-delta" style="color:var(--gold-bright);">Henüz teslim edilmedi</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Komisyon Oranı</div>
@@ -78,33 +78,67 @@
     <div class="panel-card">
       <div class="panel-card-head">
         <h3>Ödeme Geçmişi</h3>
-        <span class="muted" style="font-size:12.5px;">IBAN: TR•• •••• •••• •••• •••• 42</span>
       </div>
-      <table class="p-table">
-        <thead><tr><th>Tarih</th><th>Açıklama</th><th>Tutar</th><th>Yöntem</th><th>Durum</th></tr></thead>
-        <tbody>
-          <tr><td>23 Tem 2026</td><td>Haftalık ödeme — 14 sipariş</td><td>2.910,00 TL</td><td>Banka Havalesi</td><td><span class="status-pill ok">Ödendi</span></td></tr>
-          <tr><td>16 Tem 2026</td><td>Haftalık ödeme — 11 sipariş</td><td>2.340,00 TL</td><td>Banka Havalesi</td><td><span class="status-pill ok">Ödendi</span></td></tr>
-          <tr><td>9 Tem 2026</td><td>Haftalık ödeme — 9 sipariş</td><td>1.870,00 TL</td><td>Banka Havalesi</td><td><span class="status-pill ok">Ödendi</span></td></tr>
-          <tr><td>2 Tem 2026</td><td>Haftalık ödeme — 16 sipariş</td><td>3.120,00 TL</td><td>Banka Havalesi</td><td><span class="status-pill ok">Ödendi</span></td></tr>
-          <tr><td>30 Tem 2026</td><td>Bu haftanın ödemesi — 17 sipariş</td><td>3.240,00 TL</td><td>Banka Havalesi</td><td><span class="status-pill wait">Bekliyor</span></td></tr>
-        </tbody>
-      </table>
+      <div class="panel-card-body">
+        <p class="muted">Otomatik ödeme altyapısı henüz kurulmadı — ödemeler şimdilik aşağıdaki IBAN'a manuel olarak gönderilir. Bir işlem geçmişi görüntülemek için önce bir ödeme sağlayıcı entegrasyonu gerekir.</p>
+      </div>
     </div>
 
     <div class="panel-card">
       <div class="panel-card-body">
         <h3 style="font-size:16px; margin-bottom:16px;">Ödeme Bilgileri</h3>
-        <div class="field-row">
-          <div class="field"><label>IBAN</label><input type="text" value="TR12 3456 7890 1234 5678 9012 42"></div>
-          <div class="field"><label>Banka</label><input type="text" value="Kuveyt Türk Katılım Bankası"></div>
-        </div>
-        <button class="btn btn-sm">Bilgileri Güncelle</button>
+        <form id="payout-form">
+          <div class="field-row">
+            <div class="field"><label>IBAN</label><input type="text" name="iban"></div>
+            <div class="field"><label>Banka</label><input type="text" name="bank_name"></div>
+          </div>
+          <button type="submit" class="btn btn-sm">Bilgileri Güncelle</button>
+        </form>
       </div>
     </div>
   </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../assets/js/supabase-client.js"></script>
+<script src="../../assets/js/seller-guard.js"></script>
+<script src="../../assets/js/main.js"></script>
 <script src="../../assets/js/panel.js"></script>
+<script>
+  window.addEventListener('danedane:seller-ready', async (e) => {
+    const seller = e.detail;
+    document.getElementById('payout-form').iban.value = seller.iban || '';
+    document.getElementById('payout-form').bank_name.value = seller.bank_name || '';
+
+    try {
+      const orders = await DB.fetchSellerOrders();
+      const now = new Date();
+      let total = 0, thisMonth = 0, pending = 0;
+      orders.forEach(o => {
+        if (o.status === 'iptal') return;
+        const mine = o.order_items.filter(it => it.seller_id === seller.id).reduce((s, it) => s + it.price * it.qty, 0);
+        total += mine;
+        const created = new Date(o.created_at);
+        if (created.getFullYear() === now.getFullYear() && created.getMonth() === now.getMonth()) thisMonth += mine;
+        if (o.status !== 'teslim') pending += mine;
+      });
+      document.getElementById('kz-toplam').textContent = IMAME.formatTL(total);
+      document.getElementById('kz-bu-ay').textContent = IMAME.formatTL(thisMonth);
+      document.getElementById('kz-bekleyen').textContent = IMAME.formatTL(pending);
+    } catch (err) {
+      console.error('[Danedane] Kazanç bilgileri yüklenemedi:', err);
+    }
+  });
+
+  document.getElementById('payout-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      await DB.updateMySeller({ iban: e.target.iban.value.trim(), bank_name: e.target.bank_name.value.trim() });
+      IMAME.toast('Ödeme bilgileriniz güncellendi.');
+    } catch (err) {
+      IMAME.toast('Güncellenemedi: ' + (err.message || 'bilinmeyen hata.'));
+    }
+  });
+</script>
 </body>
 </html>

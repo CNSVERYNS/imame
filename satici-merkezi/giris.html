@@ -42,8 +42,8 @@
 
     <div class="auth-card">
       <form id="seller-login">
-        <div class="field"><label>E-posta</label><input type="email" required placeholder="ornek@eposta.com" value="ahmet@konyaelsanatlari.com"></div>
-        <div class="field"><label>Şifre</label><input type="password" required placeholder="••••••••" value="demo1234"></div>
+        <div class="field"><label>E-posta</label><input type="email" name="email" required placeholder="ornek@eposta.com"></div>
+        <div class="field"><label>Şifre</label><input type="password" name="sifre" required placeholder="••••••••"></div>
         <div class="auth-alt-row">
           <label class="checkbox-row" style="align-items:center;"><input type="checkbox"> Beni hatırla</label>
           <a href="#">Şifremi unuttum</a>
@@ -72,10 +72,29 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-client.js"></script>
 <script src="../assets/js/main.js"></script>
 <script>
-  document.getElementById('seller-login').addEventListener('submit', (e) => {
+  const form = document.getElementById('seller-login');
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const submitBtn = form.querySelector('[type=submit]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Lütfen bekleyin…';
+    const { error } = await DB.signIn(form.email.value.trim(), form.sifre.value);
+    if (error) {
+      IMAME.toast('Giriş başarısız: ' + (error.message || 'e-posta veya şifre hatalı.'));
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Panele Giriş Yap';
+      return;
+    }
+    const seller = await DB.getMySeller();
+    if (!seller) {
+      IMAME.toast('Bu hesapla henüz satıcı başvurunuz yok.');
+      window.location.href = 'basvuru.html';
+      return;
+    }
     window.location.href = 'panel/index.html';
   });
 </script>

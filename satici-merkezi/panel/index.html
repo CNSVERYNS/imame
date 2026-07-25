@@ -45,7 +45,7 @@
     <div class="panel-topbar">
       <button class="panel-menu-toggle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
       <div>
-        <h1>Hoş geldin, Ahmet</h1>
+        <h1 id="dash-welcome">Hoş geldiniz</h1>
         <p>İşte mağazanızın bugünkü özeti.</p>
       </div>
       <div class="panel-actions">
@@ -58,26 +58,23 @@
       <div class="stat-card">
         <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 7a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/><path d="M16 12h2"/></svg></div>
         <div class="stat-label">Bu Ay Satış</div>
-        <div class="stat-value">12.480 TL</div>
-        <div class="stat-delta up">▲ %18 geçen aya göre</div>
+        <div class="stat-value" id="stat-bu-ay">—</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 7h11v8H3z"/><path d="M14 11h4l3 3v1h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg></div>
         <div class="stat-label">Bekleyen Sipariş</div>
-        <div class="stat-value">6</div>
+        <div class="stat-value" id="stat-bekleyen">—</div>
         <div class="stat-delta" style="color:var(--gold-bright);">Kargoya vermeniz gerekiyor</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg></div>
         <div class="stat-label">Toplam Ürün</div>
-        <div class="stat-value">24</div>
-        <div class="stat-delta up">3 tanesi bu ay eklendi</div>
+        <div class="stat-value" id="stat-urun">—</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2l3 6.5L22 9l-5.5 5 1.5 8-6-4-6 4 1.5-8L2 9l7-.5z"/></svg></div>
         <div class="stat-label">Ortalama Puan</div>
-        <div class="stat-value">4.8</div>
-        <div class="stat-delta">128 değerlendirme</div>
+        <div class="stat-value" id="stat-puan">—</div>
       </div>
     </div>
 
@@ -87,37 +84,8 @@
         <a href="siparisler.html" class="btn btn-ghost btn-sm">Tümünü Gör</a>
       </div>
       <table class="p-table">
-        <thead><tr><th>Ürün</th><th>Alıcı</th><th>Tutar</th><th>Durum</th><th>Tarih</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><div class="p-cell-main"><div class="p-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/></svg></div><div><strong>Kehribar Sultani Tesbih</strong><small>#DND-482913</small></div></div></td>
-            <td>Mehmet A.</td>
-            <td>1.450 TL</td>
-            <td><span class="status-pill wait">Hazırlanıyor</span></td>
-            <td>22 Tem 2026</td>
-          </tr>
-          <tr>
-            <td><div class="p-cell-main"><div class="p-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/></svg></div><div><strong>Oltu Taşı Yüzük</strong><small>#DND-482788</small></div></div></td>
-            <td>Sena K.</td>
-            <td>690 TL</td>
-            <td><span class="status-pill info">Kargoya Verildi</span></td>
-            <td>21 Tem 2026</td>
-          </tr>
-          <tr>
-            <td><div class="p-cell-main"><div class="p-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/></svg></div><div><strong>Sedef İşlemeli Tesbih</strong><small>#DND-482701</small></div></div></td>
-            <td>Yusuf D.</td>
-            <td>1.120 TL</td>
-            <td><span class="status-pill ok">Teslim Edildi</span></td>
-            <td>19 Tem 2026</td>
-          </tr>
-          <tr>
-            <td><div class="p-cell-main"><div class="p-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/></svg></div><div><strong>Zümrüt Kesim Yüzük</strong><small>#DND-482650</small></div></div></td>
-            <td>Aylin T.</td>
-            <td>1.290 TL</td>
-            <td><span class="status-pill wait">Hazırlanıyor</span></td>
-            <td>18 Tem 2026</td>
-          </tr>
-        </tbody>
+        <thead><tr><th>Alıcı</th><th>Tutar</th><th>Durum</th><th>Tarih</th></tr></thead>
+        <tbody id="dash-orders"><tr><td colspan="4" class="muted">Yükleniyor…</td></tr></tbody>
       </table>
     </div>
 
@@ -127,26 +95,81 @@
         <a href="urunler.html" class="btn btn-ghost btn-sm">Ürünlerimi Yönet</a>
       </div>
       <table class="p-table">
-        <thead><tr><th>Ürün</th><th>Satış Adedi</th><th>Toplam Kazanç</th><th>Puan</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><div class="p-cell-main"><div class="p-thumb"><img src="../../assets/img/illus-tesbih.svg" style="width:60%;"></div><strong>Kehribar Sultani Tesbih</strong></div></td>
-            <td>86</td>
-            <td>110.170 TL</td>
-            <td><span class="stars">★★★★★</span></td>
-          </tr>
-          <tr>
-            <td><div class="p-cell-main"><div class="p-thumb"><img src="../../assets/img/illus-yuzuk.svg" style="width:60%;"></div><strong>Oltu Taşı Yüzük</strong></div></td>
-            <td>54</td>
-            <td>37.260 TL</td>
-            <td><span class="stars">★★★★☆</span></td>
-          </tr>
-        </tbody>
+        <thead><tr><th>Ürün</th><th>Satış Adedi</th><th>Toplam Kazanç</th></tr></thead>
+        <tbody id="dash-top-products"><tr><td colspan="3" class="muted">Yükleniyor…</td></tr></tbody>
       </table>
     </div>
   </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../assets/js/supabase-client.js"></script>
+<script src="../../assets/js/seller-guard.js"></script>
+<script src="../../assets/js/main.js"></script>
 <script src="../../assets/js/panel.js"></script>
+<script>
+  const STATUS_LABEL = { hazirlaniyor: 'Hazırlanıyor', kargoda: 'Kargoya Verildi', teslim: 'Teslim Edildi', iptal: 'İptal Edildi' };
+  const STATUS_CLASS = { hazirlaniyor: 'wait', kargoda: 'info', teslim: 'ok', iptal: 'warn' };
+
+  window.addEventListener('danedane:seller-ready', async (e) => {
+    const seller = e.detail;
+    document.getElementById('dash-welcome').textContent = 'Hoş geldin, ' + (seller.owner_name || '').split(' ')[0];
+
+    try {
+      const [products, orders] = await Promise.all([DB.fetchMyProducts(), DB.fetchSellerOrders()]);
+
+      document.getElementById('stat-urun').textContent = products.length;
+      const avgRating = products.length ? (products.reduce((s, p) => s + (p.rating || 0), 0) / products.length).toFixed(1) : '—';
+      document.getElementById('stat-puan').textContent = avgRating;
+
+      const now = new Date();
+      let monthTotal = 0, pendingCount = 0;
+      orders.forEach(o => {
+        const mine = o.order_items.filter(it => it.seller_id === seller.id);
+        const mineTotal = mine.reduce((s, it) => s + it.price * it.qty, 0);
+        const created = new Date(o.created_at);
+        if (o.status !== 'iptal' && created.getFullYear() === now.getFullYear() && created.getMonth() === now.getMonth()) monthTotal += mineTotal;
+        if (o.status === 'hazirlaniyor') pendingCount++;
+      });
+      document.getElementById('stat-bu-ay').textContent = IMAME.formatTL(monthTotal);
+      document.getElementById('stat-bekleyen').textContent = pendingCount;
+
+      const recentOrders = orders.slice(0, 5);
+      document.getElementById('dash-orders').innerHTML = recentOrders.length
+        ? recentOrders.map(o => {
+            const mineTotal = o.order_items.filter(it => it.seller_id === seller.id).reduce((s, it) => s + it.price * it.qty, 0);
+            const date = new Date(o.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' });
+            return `<tr>
+              <td>${IMAME.escapeHtml(o.full_name)}</td>
+              <td>${IMAME.formatTL(mineTotal)}</td>
+              <td><span class="status-pill ${STATUS_CLASS[o.status]}">${STATUS_LABEL[o.status] || o.status}</span></td>
+              <td>${date}</td>
+            </tr>`;
+          }).join('')
+        : '<tr><td colspan="4" class="muted">Henüz siparişiniz yok.</td></tr>';
+
+      const salesByProduct = {};
+      orders.forEach(o => {
+        if (o.status === 'iptal') return;
+        o.order_items.filter(it => it.seller_id === seller.id).forEach(it => {
+          const key = it.product_id || it.name;
+          if (!salesByProduct[key]) salesByProduct[key] = { name: it.name, qty: 0, total: 0 };
+          salesByProduct[key].qty += it.qty;
+          salesByProduct[key].total += it.price * it.qty;
+        });
+      });
+      const topProducts = Object.values(salesByProduct).sort((a, b) => b.qty - a.qty).slice(0, 5);
+      document.getElementById('dash-top-products').innerHTML = topProducts.length
+        ? topProducts.map(p => `<tr>
+            <td><strong>${IMAME.escapeHtml(p.name)}</strong></td>
+            <td>${p.qty}</td>
+            <td>${IMAME.formatTL(p.total)}</td>
+          </tr>`).join('')
+        : '<tr><td colspan="3" class="muted">Henüz satış yok.</td></tr>';
+    } catch (err) {
+      console.error('[Danedane] Panel verileri yüklenemedi:', err);
+    }
+  });
+</script>
 </body>
 </html>

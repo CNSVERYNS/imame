@@ -49,17 +49,17 @@
             <h3>Teslimat Adresi</h3>
             <p class="muted" style="font-size:13px; margin-bottom:22px;">Kargonuz bu adrese gönderilecek ve canlı takip bu bilgilerle eşleştirilecektir.</p>
             <div class="field-row">
-              <div class="field"><label>Ad</label><input type="text" required placeholder="Adınız"></div>
-              <div class="field"><label>Soyad</label><input type="text" required placeholder="Soyadınız"></div>
+              <div class="field"><label>Ad</label><input type="text" name="ad" required placeholder="Adınız"></div>
+              <div class="field"><label>Soyad</label><input type="text" name="soyad" required placeholder="Soyadınız"></div>
             </div>
             <div class="field-row">
-              <div class="field"><label>E-posta</label><input type="email" required placeholder="ornek@eposta.com"></div>
-              <div class="field"><label>Telefon</label><input type="tel" required placeholder="05xx xxx xx xx"></div>
+              <div class="field"><label>E-posta</label><input type="email" name="email" required placeholder="ornek@eposta.com"></div>
+              <div class="field"><label>Telefon</label><input type="tel" name="telefon" required placeholder="05xx xxx xx xx"></div>
             </div>
-            <div class="field"><label>Adres</label><textarea rows="3" required placeholder="Mahalle, cadde, sokak, no, daire"></textarea></div>
+            <div class="field"><label>Adres</label><textarea rows="3" name="adres" required placeholder="Mahalle, cadde, sokak, no, daire"></textarea></div>
             <div class="field-row">
-              <div class="field"><label>İl</label><input type="text" required placeholder="İl"></div>
-              <div class="field"><label>İlçe</label><input type="text" required placeholder="İlçe"></div>
+              <div class="field"><label>İl</label><input type="text" name="il" required placeholder="İl"></div>
+              <div class="field"><label>İlçe</label><input type="text" name="ilce" required placeholder="İlçe"></div>
             </div>
           </div>
 
@@ -67,12 +67,12 @@
             <h3>Kargo Seçimi</h3>
             <p class="muted" style="font-size:13px; margin-bottom:22px;">Kargo ücreti satıcıya göre değişir. Anlaşmalı kargo firmalarımızla, sipariş sonrası canlı takip bağlantısı otomatik oluşturulur.</p>
             <label class="pay-method selected">
-              <input type="radio" name="shipping" data-price="79.90" checked>
+              <input type="radio" name="shipping" value="Standart Kargo" data-price="79.90" checked>
               <span style="flex:1;">Standart Kargo <small>2-4 iş günü</small></span>
               <strong>79,90 TL</strong>
             </label>
             <label class="pay-method">
-              <input type="radio" name="shipping" data-price="139.90">
+              <input type="radio" name="shipping" value="Hızlı Teslimat" data-price="139.90">
               <span style="flex:1;">Hızlı Teslimat <small>1-2 iş günü</small></span>
               <strong>139,90 TL</strong>
             </label>
@@ -82,7 +82,7 @@
             <h3>Ödeme Yöntemi</h3>
             <p class="muted" style="font-size:13px; margin-bottom:22px;">Bu bir örnek arayüzdür; gerçek kart bilgisi işlenmez.</p>
             <label class="pay-method selected">
-              <input type="radio" name="pay" checked>
+              <input type="radio" name="pay" value="Kredi/Banka Kartı" checked>
               <span>Kredi / Banka Kartı</span>
             </label>
             <div class="field-row" style="margin-top:18px;">
@@ -94,7 +94,7 @@
               <div class="field"><label>CVC</label><input type="text" placeholder="•••"></div>
             </div>
             <label class="pay-method" style="margin-top:6px;">
-              <input type="radio" name="pay">
+              <input type="radio" name="pay" value="Kapıda Ödeme">
               <span>Kapıda Ödeme</span>
             </label>
           </div>
@@ -134,8 +134,12 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase-client.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
+  DB.getUser().then(user => { if (!user) window.location.href = 'hesabim.html?redirect=odeme.html'; });
+
   function renderSummary() {
     const cart = IMAME.getCart();
     const itemsEl = document.getElementById('co-items');
@@ -162,15 +166,69 @@
     });
   });
 
-  document.getElementById('checkout-form').addEventListener('submit', (e) => {
+  document.getElementById('checkout-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const orderNo = 'DND-' + Math.floor(100000 + Math.random() * 900000);
-    document.getElementById('order-number').textContent = 'Sipariş No: ' + orderNo;
-    document.getElementById('track-link').href = 'kargo-takip.html?no=' + orderNo;
-    document.getElementById('checkout-view').hidden = true;
-    document.getElementById('success-view').hidden = false;
-    IMAME.clearCart();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const cart = IMAME.getCart();
+    if (!cart.length) { IMAME.toast('Sepetiniz boş.'); return; }
+
+    const form = e.target;
+    const submitBtn = document.querySelector('#checkout-view [type=submit]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sipariş oluşturuluyor…';
+
+    try {
+      // Fiyat ve satıcı bilgisini sepetten değil, güncel ürün kaydından al
+      const freshProducts = await Promise.all(cart.map(async (item) => {
+        try { return await DB.fetchProductById(item.id); }
+        catch (err) { return null; }
+      }));
+
+      const orderItems = [];
+      const missing = [];
+      cart.forEach((item, i) => {
+        const fresh = freshProducts[i];
+        if (!fresh || fresh.stock <= 0) { missing.push(item.name); return; }
+        orderItems.push({
+          id: fresh.id, seller_id: fresh.seller_id, name: fresh.name,
+          price: fresh.price, qty: Math.min(item.qty, fresh.stock), img: fresh.image_url,
+        });
+      });
+
+      if (missing.length) IMAME.toast(`Stokta yok, sepetten çıkarıldı: ${missing.join(', ')}`);
+      if (!orderItems.length) { submitBtn.disabled = false; submitBtn.textContent = 'Siparişi Tamamla'; return; }
+
+      const subtotal = orderItems.reduce((s, it) => s + it.price * it.qty, 0);
+      const selectedShipping = document.querySelector('input[name=shipping]:checked');
+      const shippingFee = selectedShipping ? parseFloat(selectedShipping.dataset.price) : 0;
+      const shippingMethod = selectedShipping ? selectedShipping.value : 'Standart Kargo';
+      const payMethod = document.querySelector('input[name=pay]:checked')?.value || 'Kredi/Banka Kartı';
+
+      const order = await DB.createOrder({
+        full_name: `${form.ad.value.trim()} ${form.soyad.value.trim()}`.trim(),
+        email: form.email.value.trim(),
+        phone: form.telefon.value.trim(),
+        address: form.adres.value.trim(),
+        city: form.il.value.trim(),
+        district: form.ilce.value.trim(),
+        shipping_method: shippingMethod,
+        shipping_fee: shippingFee,
+        payment_method: payMethod,
+        total: subtotal + shippingFee,
+      }, orderItems);
+
+      const orderNo = 'DND-' + order.id.slice(0, 8).toUpperCase();
+      document.getElementById('order-number').textContent = 'Sipariş No: ' + orderNo;
+      document.getElementById('track-link').href = 'kargo-takip.html?no=' + orderNo;
+      document.getElementById('checkout-view').hidden = true;
+      document.getElementById('success-view').hidden = false;
+      IMAME.clearCart();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error('[Danedane] Sipariş oluşturulamadı:', err);
+      IMAME.toast('Sipariş oluşturulamadı: ' + (err.message || 'bilinmeyen hata.'));
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Siparişi Tamamla';
+    }
   });
 </script>
 </body>
