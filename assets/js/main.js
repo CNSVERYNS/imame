@@ -146,19 +146,22 @@ const IMAME = (() => {
   /* ---------- Filtre çipleri + kenar çubuğu filtreleri (kargo, puan, öne çıkanlar) ---------- */
   function initFilterChips() {
     const chipGroup = document.querySelector("[data-filter-group]");
-    const cards = document.querySelectorAll("[data-product-item]");
+    const cards = Array.from(document.querySelectorAll("[data-product-item]"));
     if (!chipGroup || !cards.length) return;
 
+    const PAGE_SIZE = 6;
     const chips = chipGroup.querySelectorAll(".chip");
     const sideInputs = document.querySelectorAll("[data-filter-input]");
     const applyBtn = document.querySelector(".filter-side .btn-block");
+    const pager = document.getElementById("pagination");
+    let currentPage = 1;
 
     function activeMaterial() {
       const active = chipGroup.querySelector(".chip.active");
       return active ? active.dataset.filter : "all";
     }
 
-    function applyFilters() {
+    function matchingCards() {
       const material = activeMaterial();
       const wantFreeShipping = document.querySelector('[data-filter-input="shipping-free"]')?.checked;
       const wantNew = document.querySelector('[data-filter-input="new"]')?.checked;
@@ -167,17 +170,50 @@ const IMAME = (() => {
         .map(el => parseFloat(el.value));
       const minRating = checkedRatings.length ? Math.min(...checkedRatings) : null;
 
-      let visibleCount = 0;
-      cards.forEach(card => {
+      return cards.filter(card => {
         let show = material === "all" || card.dataset.material === material;
         if (show && wantFreeShipping) show = card.dataset.shipping === "ucretsiz";
         if (show && wantNew) show = card.dataset.new === "true";
         if (show && wantBestseller) show = card.dataset.bestseller === "true";
         if (show && minRating !== null) show = parseFloat(card.dataset.rating || "0") >= minRating;
-        card.style.display = show ? "" : "none";
-        if (show) visibleCount++;
+        return show;
       });
-      return visibleCount;
+    }
+
+    function renderPagination(totalPages) {
+      if (!pager) return;
+      if (totalPages <= 1) { pager.innerHTML = ""; return; }
+      let html = `<button class="pg-arrow" data-pg="prev" ${currentPage === 1 ? "disabled" : ""}>‹</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button data-pg="${i}" class="${i === currentPage ? "active" : ""}">${i}</button>`;
+      }
+      html += `<button class="pg-arrow" data-pg="next" ${currentPage === totalPages ? "disabled" : ""}>›</button>`;
+      pager.innerHTML = html;
+      pager.querySelectorAll("[data-pg]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const val = btn.dataset.pg;
+          if (val === "prev") currentPage = Math.max(1, currentPage - 1);
+          else if (val === "next") currentPage = Math.min(totalPages, currentPage + 1);
+          else currentPage = parseInt(val, 10);
+          renderPage();
+          document.querySelector(".filter-bar")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+    }
+
+    function renderPage() {
+      const matches = matchingCards();
+      const totalPages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE));
+      currentPage = Math.min(currentPage, totalPages);
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const pageSet = new Set(matches.slice(start, start + PAGE_SIZE));
+      cards.forEach(card => { card.style.display = pageSet.has(card) ? "" : "none"; });
+      renderPagination(totalPages);
+    }
+
+    function applyFilters() {
+      currentPage = 1;
+      renderPage();
     }
 
     chips.forEach(chip => {

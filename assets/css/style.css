@@ -585,6 +585,17 @@ input, select, textarea { font-family: inherit; }
 .status-pill.warn { background: rgba(163,50,63,0.14); color: var(--oxblood-bright); }
 .status-pill.info { background: rgba(168,160,138,0.12); color: var(--ivory-dim); }
 
+/* ---------- Sayfalama ---------- */
+.pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 54px; }
+.pagination button {
+  min-width: 38px; height: 38px; padding: 0 8px; border: 1px solid var(--gold-line-strong); background: transparent;
+  color: var(--ivory-dim); font-size: 13px; border-radius: var(--radius); cursor: pointer; transition: all .2s ease;
+}
+.pagination button:hover:not(:disabled) { border-color: var(--gold); color: var(--gold-bright); }
+.pagination button.active { background: var(--gold); border-color: var(--gold); color: #0b0d09; }
+.pagination button:disabled { opacity: .35; cursor: not-allowed; }
+.pagination .pg-arrow { font-size: 15px; }
+
 /* ---------- Arama ---------- */
 .search-overlay {
   position: fixed; inset: 0; z-index: 250; background: rgba(11,13,9,0.97);
