@@ -585,6 +585,23 @@ input, select, textarea { font-family: inherit; }
 .status-pill.warn { background: rgba(163,50,63,0.14); color: var(--oxblood-bright); }
 .status-pill.info { background: rgba(168,160,138,0.12); color: var(--ivory-dim); }
 
+/* ---------- Arama ---------- */
+.search-overlay {
+  position: fixed; inset: 0; z-index: 250; background: rgba(11,13,9,0.97);
+  display: none; padding: 120px 24px 40px;
+}
+.search-overlay.open { display: block; }
+.search-overlay-inner { max-width: 640px; margin: 0 auto; }
+.search-overlay form { display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--gold-line-strong); padding-bottom: 18px; }
+.search-overlay input { flex: 1; background: none; border: none; color: var(--ivory); font-family: var(--font-display); font-size: 26px; outline: none; }
+.search-overlay input::placeholder { color: var(--ivory-faint); }
+.search-overlay-close { width: 40px; height: 40px; border: 1px solid var(--gold-line-strong); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ivory-dim); flex-shrink: 0; }
+.search-overlay-close:hover { color: var(--gold-bright); border-color: var(--gold); }
+.search-suggest { margin-top: 26px; }
+.search-suggest .lbl { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ivory-faint); margin-bottom: 14px; }
+.search-suggest-list a { display: block; padding: 12px 0; border-bottom: 1px solid var(--gold-line); font-size: 14px; color: var(--ivory-dim); }
+.search-suggest-list a:hover { color: var(--gold-bright); }
+
 /* ---------- Hesap Panelim ---------- */
 .acc-tabs { display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid var(--gold-line); margin-bottom: 40px; }
 .acc-tab { padding: 13px 20px; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ivory-faint); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }

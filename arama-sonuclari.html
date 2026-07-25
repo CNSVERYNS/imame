@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arama Sonuçları — Danedane</title>
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#0b0d09">
+<link rel="manifest" href="assets/manifest.json">
+<link rel="apple-touch-icon" href="assets/img/logo-mark.svg">
+<link rel="icon" href="assets/img/logo-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <img src="assets/img/logo-mark.svg" alt="Danedane">
+      <span>
+        <span class="brand-name">DANE<em>DANE</em></span>
+        <span class="brand-sub">Tesbih &amp; Yüzük Koleksiyonu</span>
+      </span>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html">Anasayfa</a>
+      <a href="tesbih.html">Tesbih</a>
+      <a href="yuzuk.html">Yüzük</a>
+      <a href="hakkimizda.html">Hikayemiz</a>
+      <a href="iletisim.html">İletişim</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" aria-label="Ara" data-search-toggle type="button" style="background:none; border:none; padding:0; cursor:pointer;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </button>
+      <a href="hesap-panelim.html#favoriler" class="icon-btn" aria-label="Favorilerim">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg>
+        <span class="cart-count" data-wishlist-count>0</span>
+      </a>
+      <a href="sepet.html" class="icon-btn" aria-label="Sepetim">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+      <a href="satici-merkezi/index.html" class="btn btn-sm">Satıcı Ol</a>
+      <button class="nav-toggle" aria-label="Menü">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav">
+  <div class="mobile-nav-close">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </div>
+  <a href="index.html">Anasayfa</a>
+  <a href="tesbih.html">Tesbih</a>
+  <a href="yuzuk.html">Yüzük</a>
+  <a href="hakkimizda.html">Hikayemiz</a>
+  <a href="iletisim.html">İletişim</a>
+  <a href="kargo-takip.html">Kargo Takip</a>
+  <a href="hesabim.html">Hesabım</a>
+  <a href="sepet.html">Sepetim</a>
+  <a href="satici-merkezi/index.html">Satıcı Merkezi</a>
+</div>
+
+<div class="search-overlay" id="search-overlay">
+  <div class="search-overlay-inner">
+    <form action="arama-sonuclari.html" method="get">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="search" name="q" placeholder="Tesbih, yüzük, malzeme ara..." autocomplete="off">
+      <div class="search-overlay-close" id="search-overlay-close">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </div>
+    </form>
+    <div class="search-suggest">
+      <div class="lbl">Popüler Aramalar</div>
+      <div class="search-suggest-list">
+        <a href="arama-sonuclari.html?q=kehribar">Kehribar Tesbih</a>
+        <a href="arama-sonuclari.html?q=gümüş">Gümüş Yüzük</a>
+        <a href="arama-sonuclari.html?q=oltu">Oltu Taşı</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Anasayfa</a><span>/</span>Arama Sonuçları</div>
+    <h1 id="search-title">Arama Sonuçları</h1>
+    <p class="muted" id="search-subtitle"></p>
+  </div>
+</div>
+
+<section class="section section--tight">
+  <div class="container">
+    <div style="max-width:520px; margin:0 auto 50px;">
+      <form id="search-form-page" style="display:flex; gap:10px;">
+        <input type="search" id="search-input-page" name="q" placeholder="Tesbih, yüzük, malzeme ara..." style="flex:1; background:var(--surface); border:1px solid var(--gold-line-strong); color:var(--ivory); padding:13px 16px; border-radius:var(--radius); font-size:14px;">
+        <button type="submit" class="btn btn-solid">Ara</button>
+      </form>
+    </div>
+
+    <div id="search-results" class="product-grid"></div>
+
+    <div id="search-empty" class="empty-state" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <h3>Sonuç bulunamadı</h3>
+      <p>Farklı bir anahtar kelime deneyin — "kehribar", "gümüş" ya da "oltu" gibi.</p>
+      <a href="tesbih.html" class="btn btn-solid">Koleksiyonu Keşfet</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none; padding-top:30px;">
+      <span>© 2026 Danedane. Tüm hakları saklıdır.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+  function runSearch() {
+    const params = new URLSearchParams(location.search);
+    const q = (params.get('q') || '').trim().toLocaleLowerCase('tr');
+    document.getElementById('search-input-page').value = q;
+    const titleEl = document.getElementById('search-title');
+    const subEl = document.getElementById('search-subtitle');
+    const resultsEl = document.getElementById('search-results');
+    const emptyEl = document.getElementById('search-empty');
+
+    if (!q) {
+      titleEl.textContent = 'Ne Aramıştınız?';
+      subEl.textContent = 'Yukarıdan bir arama yapın.';
+      resultsEl.innerHTML = '';
+      emptyEl.hidden = true;
+      return;
+    }
+
+    const results = DANEDANE_PRODUCTS.filter(p => {
+      const hay = (p.name + ' ' + p.cat + ' ' + p.material + ' ' + p.seller).toLocaleLowerCase('tr');
+      return hay.includes(q);
+    });
+
+    titleEl.textContent = '"' + params.get('q') + '" için Sonuçlar';
+    subEl.textContent = results.length + ' ürün bulundu';
+
+    if (!results.length) {
+      resultsEl.innerHTML = '';
+      emptyEl.hidden = false;
+      return;
+    }
+    emptyEl.hidden = true;
+    resultsEl.innerHTML = results.map(p => `
+      <div class="product-card fade-in">
+        <div class="product-media">
+          <div class="product-wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></div>
+          <img src="assets/img/${p.img}" alt="${p.name}" loading="lazy">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">${p.cat} · ${p.material}</span>
+          <span class="product-seller">Satıcı: <a href="magaza.html">${p.seller}</a></span>
+          <h3 class="product-name"><a href="${p.url}">${p.name}</a></h3>
+          <div class="product-meta"><span class="stars">${'★'.repeat(p.rating)}${'☆'.repeat(5 - p.rating)}</span></div>
+          <div class="product-row">
+            <span class="price">${IMAME.formatTL(p.price)}</span>
+            <button class="add-btn" data-add-cart data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-cat="${p.cat}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>`).join('');
+
+    // Yeni oluşturulan kartlardaki sepet ve favori butonlarını etkinleştir
+    resultsEl.querySelectorAll("[data-add-cart]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const { id, name, price, cat } = btn.dataset;
+        IMAME.addToCart({ id, name, price: parseFloat(price), cat });
+        IMAME.toast(`"${name}" sepete eklendi`);
+      });
+    });
+    resultsEl.querySelectorAll(".product-card").forEach(card => {
+      const wishBtn = card.querySelector(".product-wish");
+      const addBtn = card.querySelector("[data-add-cart]");
+      if (!wishBtn || !addBtn) return;
+      const { id, name, price, cat } = addBtn.dataset;
+      if (IMAME.isInWishlist(id)) wishBtn.classList.add("active");
+      wishBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const added = IMAME.toggleWishlist({ id, name, price: parseFloat(price), cat });
+        wishBtn.classList.toggle("active", added);
+        IMAME.toast(added ? `"${name}" favorilere eklendi` : `"${name}" favorilerden çıkarıldı`);
+      });
+    });
+  }
+
+  document.getElementById('search-form-page').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const q = document.getElementById('search-input-page').value.trim();
+    window.location.href = 'arama-sonuclari.html' + (q ? '?q=' + encodeURIComponent(q) : '');
+  });
+
+  document.addEventListener('DOMContentLoaded', runSearch);
+</script>
+</body>
+</html>

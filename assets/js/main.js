@@ -1,5 +1,25 @@
 /* Danedane — mağaza ön yüz davranışları (sepet, menü, filtre, bildirimler) */
 
+/* Site genelinde arama için ürün kataloğu */
+const DANEDANE_PRODUCTS = [
+  { id: "p1", name: "Kehribar Sultani Tesbih", cat: "Tesbih", material: "Kehribar", price: 1450, rating: 5, img: "illus-tesbih.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
+  { id: "p2", name: "Oltu Taşı 33'lü Tesbih", cat: "Tesbih", material: "Oltu Taşı", price: 890, rating: 5, img: "illus-tesbih.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
+  { id: "p5", name: "Sedef İşlemeli Tesbih", cat: "Tesbih", material: "Sedef", price: 1120, rating: 5, img: "illus-tesbih.svg", seller: "Sedefkar Atölyesi", url: "urun-detay.html" },
+  { id: "p6", name: "Sandal Ağacı Tesbih", cat: "Tesbih", material: "Sandal Ağacı", price: 640, rating: 4, img: "illus-tesbih.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
+  { id: "p7", name: "Kehribar 99'lu Tesbih", cat: "Tesbih", material: "Kehribar", price: 2100, rating: 5, img: "illus-tesbih.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
+  { id: "p8", name: "Oltu Taşı Şeffaf Tesbih", cat: "Tesbih", material: "Oltu Taşı", price: 950, rating: 4, img: "illus-tesbih.svg", seller: "Erzurum Oltu Sanatları", url: "urun-detay.html" },
+  { id: "p9", name: "Ceviz Ağacı Tesbih", cat: "Tesbih", material: "Ceviz Ağacı", price: 380, rating: 4, img: "illus-tesbih.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
+  { id: "p10", name: "Sedef Beyaz Tesbih", cat: "Tesbih", material: "Sedef", price: 990, rating: 5, img: "illus-tesbih.svg", seller: "Sedefkar Atölyesi", url: "urun-detay.html" },
+  { id: "r1", name: "Akik Taşlı Gümüş Yüzük", cat: "Yüzük", material: "Akik", price: 780, rating: 5, img: "illus-yuzuk.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
+  { id: "r2", name: "Oltu Taşı Yüzük", cat: "Yüzük", material: "Oltu Taşı", price: 690, rating: 4, img: "illus-yuzuk.svg", seller: "Erzurum Oltu Sanatları", url: "urun-detay.html" },
+  { id: "r3", name: "Zümrüt Kesim Yüzük", cat: "Yüzük", material: "Zümrüt Kesim", price: 1290, rating: 5, img: "illus-yuzuk.svg", seller: "Konya El Sanatları", url: "urun-detay.html" },
+  { id: "r4", name: "Sade Hat Yüzük", cat: "Yüzük", material: "Taşsız", price: 520, rating: 5, img: "illus-yuzuk.svg", seller: "Trabzon Gümüş Atölyesi", url: "urun-detay.html" },
+  { id: "r5", name: "Yakut Taşlı Yüzük", cat: "Yüzük", material: "Yakut", price: 1450, rating: 5, img: "illus-yuzuk.svg", seller: "Trabzon Gümüş Atölyesi", url: "urun-detay.html" },
+  { id: "r6", name: "Akik Kelebek Kesim Yüzük", cat: "Yüzük", material: "Akik", price: 850, rating: 4, img: "illus-yuzuk.svg", seller: "Trabzon Gümüş Atölyesi", url: "urun-detay.html" },
+  { id: "r7", name: "Oval Oltu Yüzük", cat: "Yüzük", material: "Oltu Taşı", price: 610, rating: 4, img: "illus-yuzuk.svg", seller: "Erzurum Oltu Sanatları", url: "urun-detay.html" },
+  { id: "r8", name: "Zeytin Yaprağı Yüzük", cat: "Yüzük", material: "Taşsız", price: 480, rating: 5, img: "illus-yuzuk.svg", seller: "Trabzon Gümüş Atölyesi", url: "urun-detay.html" },
+];
+
 const IMAME = (() => {
   const CART_KEY = "imame_cart";
   const WISHLIST_KEY = "danedane_wishlist";
@@ -174,6 +194,20 @@ const IMAME = (() => {
     applyFilters();
   }
 
+  /* ---------- Arama kutusu ---------- */
+  function initSearchOverlay() {
+    const overlay = document.getElementById("search-overlay");
+    const toggle = document.querySelector("[data-search-toggle]");
+    if (!overlay || !toggle) return;
+    const input = overlay.querySelector("input[name=q]");
+    const close = document.getElementById("search-overlay-close");
+    const open = () => { overlay.classList.add("open"); setTimeout(() => input && input.focus(), 50); };
+    const shut = () => overlay.classList.remove("open");
+    toggle.addEventListener("click", open);
+    close && close.addEventListener("click", shut);
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") shut(); });
+  }
+
   /* ---------- Favori (kalp) butonları ---------- */
   function initWishlistButtons() {
     document.querySelectorAll(".product-card").forEach(card => {
@@ -236,6 +270,7 @@ const IMAME = (() => {
     initNewsletter();
     initCookieBar();
     initWishlistButtons();
+    initSearchOverlay();
   }
 
   document.addEventListener("DOMContentLoaded", init);
