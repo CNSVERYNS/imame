@@ -74,6 +74,61 @@
       </div>
     </div>
 
+    <div class="panel-card" id="report-card">
+      <div class="panel-card-head">
+        <h3>Satış Raporu</h3>
+      </div>
+      <div class="panel-card-body">
+        <div class="print-only">
+          <h2 style="font-family:var(--font-display); font-size:22px; margin-bottom:4px;">TesbihYol — Satış Raporu</h2>
+          <p id="report-print-meta" style="font-size:12px; color:#444;"></p>
+        </div>
+
+        <div class="report-controls">
+          <div class="report-presets" id="report-presets">
+            <button type="button" class="chip" data-range="today">Bugün</button>
+            <button type="button" class="chip" data-range="week">Bu Hafta</button>
+            <button type="button" class="chip active" data-range="month">Bu Ay</button>
+            <button type="button" class="chip" data-range="year">Bu Yıl</button>
+            <button type="button" class="chip" data-range="custom">Özel Aralık</button>
+          </div>
+          <div class="report-custom-range" id="report-custom-range" style="display:none;">
+            <input type="date" id="report-start" aria-label="Başlangıç tarihi">
+            <span class="muted">—</span>
+            <input type="date" id="report-end" aria-label="Bitiş tarihi">
+            <button type="button" class="btn btn-sm" id="report-apply-custom">Uygula</button>
+          </div>
+          <button type="button" class="btn btn-sm btn-ghost" id="report-print" style="margin-left:auto;">PDF Olarak İndir</button>
+        </div>
+
+        <p class="report-period-label" id="report-period-label"></p>
+
+        <div class="report-summary">
+          <div class="stat-card">
+            <div class="stat-label">Sipariş Adedi</div>
+            <div class="stat-value" id="report-count" style="font-size:24px;">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Toplam Satış</div>
+            <div class="stat-value" id="report-total" style="font-size:24px;">—</div>
+            <div class="stat-delta">İptal edilenler hariç, brüt tutar</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Alınan Ödeme</div>
+            <div class="stat-value" id="report-received" style="font-size:24px;">—</div>
+            <div class="stat-delta">Yalnızca teslim edilen siparişler</div>
+          </div>
+        </div>
+
+        <div class="p-table-wrap" style="overflow-x:auto;">
+          <table class="p-table">
+            <thead><tr><th>Tarih</th><th>Sipariş No</th><th>Ürünler</th><th>Durum</th><th>Tutar</th></tr></thead>
+            <tbody id="report-tbody"><tr><td colspan="5" class="muted">Yükleniyor…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <div class="panel-card">
       <div class="panel-card-head">
         <h3>Ödeme Geçmişi</h3>
@@ -104,6 +159,100 @@
 <script src="../../assets/js/main.js"></script>
 <script src="../../assets/js/panel.js"></script>
 <script>
+  const STATUS_LABEL = { hazirlaniyor: 'Hazırlanıyor', kargoda: 'Kargoya Verildi', teslim: 'Teslim Edildi', iptal: 'İptal Edildi' };
+  const STATUS_CLASS = { hazirlaniyor: 'wait', kargoda: 'info', teslim: 'ok', iptal: 'warn' };
+
+  let reportOrders = [];
+  let reportSeller = null;
+  let activeRange = 'month';
+  let customStart = null, customEnd = null;
+
+  function getRangeBounds(range) {
+    const now = new Date();
+    if (range === 'today') {
+      return { start: new Date(now.getFullYear(), now.getMonth(), now.getDate()), end: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999) };
+    }
+    if (range === 'week') {
+      const dayOffset = (now.getDay() + 6) % 7; // Pazartesi = 0
+      const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dayOffset);
+      return { start, end: new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6, 23, 59, 59, 999) };
+    }
+    if (range === 'year') {
+      return { start: new Date(now.getFullYear(), 0, 1), end: new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999) };
+    }
+    if (range === 'custom') {
+      return {
+        start: customStart ? new Date(customStart + 'T00:00:00') : new Date(0),
+        end: customEnd ? new Date(customEnd + 'T23:59:59') : new Date(),
+      };
+    }
+    // month (varsayılan)
+    return { start: new Date(now.getFullYear(), now.getMonth(), 1), end: new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999) };
+  }
+
+  function renderReport() {
+    if (!reportSeller) return;
+    const { start, end } = getRangeBounds(activeRange);
+    const fmtDay = (d) => d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+    document.getElementById('report-period-label').textContent = `${fmtDay(start)} — ${fmtDay(end)}`;
+
+    let orderCount = 0, totalSales = 0, received = 0;
+    const rows = [];
+    reportOrders.forEach(o => {
+      const created = new Date(o.created_at);
+      if (created < start || created > end) return;
+      const myItems = o.order_items.filter(it => it.seller_id === reportSeller.id);
+      if (!myItems.length) return;
+      const amount = myItems.reduce((s, it) => s + it.price * it.qty, 0);
+      if (o.status !== 'iptal') {
+        orderCount++;
+        totalSales += amount;
+        if (o.status === 'teslim') received += amount;
+      }
+      rows.push({ o, amount, items: myItems });
+    });
+    rows.sort((a, b) => new Date(b.o.created_at) - new Date(a.o.created_at));
+
+    document.getElementById('report-count').textContent = String(orderCount);
+    document.getElementById('report-total').textContent = IMAME.formatTL(totalSales);
+    document.getElementById('report-received').textContent = IMAME.formatTL(received);
+
+    const tbody = document.getElementById('report-tbody');
+    tbody.innerHTML = rows.length ? rows.map(({ o, amount, items }) => {
+      const orderNo = 'TY-' + o.id.slice(0, 8).toUpperCase();
+      const date = new Date(o.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' });
+      const itemsText = items.map(it => `${it.name} × ${it.qty}`).join(', ');
+      return `<tr>
+        <td>${date}</td>
+        <td>${orderNo}</td>
+        <td>${IMAME.escapeHtml(itemsText)}</td>
+        <td><span class="status-pill ${STATUS_CLASS[o.status]}">${STATUS_LABEL[o.status]}</span></td>
+        <td>${IMAME.formatTL(amount)}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="5" class="muted">Bu tarih aralığında sipariş bulunmuyor.</td></tr>';
+
+    const meta = document.getElementById('report-print-meta');
+    if (meta) meta.textContent = `${reportSeller.store_name} · ${fmtDay(start)} — ${fmtDay(end)} · Oluşturulma: ${new Date().toLocaleString('tr-TR')}`;
+  }
+
+  document.querySelectorAll('#report-presets .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#report-presets .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeRange = chip.dataset.range;
+      document.getElementById('report-custom-range').style.display = activeRange === 'custom' ? 'flex' : 'none';
+      if (activeRange !== 'custom') renderReport();
+    });
+  });
+  document.getElementById('report-apply-custom').addEventListener('click', () => {
+    customStart = document.getElementById('report-start').value;
+    customEnd = document.getElementById('report-end').value;
+    if (!customStart || !customEnd) { IMAME.toast('Lütfen başlangıç ve bitiş tarihi seçin.'); return; }
+    if (customStart > customEnd) { IMAME.toast('Başlangıç tarihi bitiş tarihinden sonra olamaz.'); return; }
+    renderReport();
+  });
+  document.getElementById('report-print').addEventListener('click', () => window.print());
+
   window.addEventListener('tesbihyol:seller-ready', async (e) => {
     const seller = e.detail;
     document.getElementById('payout-form').iban.value = seller.iban || '';
@@ -124,6 +273,10 @@
       document.getElementById('kz-toplam').textContent = IMAME.formatTL(total);
       document.getElementById('kz-bu-ay').textContent = IMAME.formatTL(thisMonth);
       document.getElementById('kz-bekleyen').textContent = IMAME.formatTL(pending);
+
+      reportOrders = orders;
+      reportSeller = seller;
+      renderReport();
     } catch (err) {
       console.error('[TesbihYol] Kazanç bilgileri yüklenemedi:', err);
     }
