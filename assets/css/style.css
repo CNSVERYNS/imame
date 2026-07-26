@@ -205,6 +205,7 @@ input, select, textarea { font-family: inherit; }
   display: flex; align-items: center; justify-content: center; font-family: var(--font-body);
 }
 .nav-toggle { display: none; background: none; border: 1px solid var(--gold-line-strong); color: var(--ivory); width: 40px; height: 40px; border-radius: var(--radius); cursor: pointer; align-items: center; justify-content: center; }
+.nav-toggle svg { width: 18px; height: 18px; flex-shrink: 0; }
 
 /* ---------- Hero ---------- */
 .hero {
