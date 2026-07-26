@@ -225,6 +225,20 @@ const DB = (() => {
     return data;
   }
 
+  /* ---------- Değerlendirmeler (sipariş numarasıyla doğrulanmış) ---------- */
+  async function fetchProductReviews(productId) {
+    const { data, error } = await sb.from("product_reviews").select("*").eq("product_id", productId);
+    if (error) throw error;
+    return data;
+  }
+  async function submitReview({ orderCode, productId, rating, comment }) {
+    const { data, error } = await sb.rpc("submit_review", {
+      p_order_code: orderCode, p_product_id: productId, p_rating: rating, p_comment: comment || null,
+    });
+    if (error) throw error;
+    return data;
+  }
+
   /* ---------- Admin ---------- */
   async function fetchAllSellers() {
     const { data, error } = await sb.from("sellers").select("*").order("created_at", { ascending: false });
@@ -251,6 +265,7 @@ const DB = (() => {
     fetchMyProducts, createProduct, updateProduct, deleteProduct,
     createOrder, fetchMyOrders,
     fetchSellerOrderItems, fetchSellerOrders, updateOrderStatus,
+    fetchProductReviews, submitReview,
     fetchAllSellers, setSellerStatus, grantAdminByEmail,
   };
 })();

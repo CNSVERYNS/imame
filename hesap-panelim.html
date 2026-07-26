@@ -259,7 +259,7 @@
     wrap.innerHTML = ordersCache.map(o => {
       const [cls, label] = statusMeta(o.status);
       const itemsText = o.order_items.map(it => `${it.name} × ${it.qty}`).join(', ');
-      const orderNo = 'DND-' + o.id.slice(0, 8).toUpperCase();
+      const orderNo = 'TY-' + o.id.slice(0, 8).toUpperCase();
       const date = new Date(o.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
       const footAction = o.status === 'teslim'
         ? `<a href="#" class="btn btn-ghost btn-sm" data-reorder="${o.id}">Tekrar Sipariş Ver</a>`

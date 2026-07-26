@@ -447,6 +447,27 @@ input, select, textarea { font-family: inherit; }
 .spec-table td { padding: 12px 0; border-bottom: 1px solid var(--gold-line); font-size: 13.5px; }
 .spec-table td:first-child { color: var(--ivory-faint); width: 200px; }
 
+/* ---------- Ürün değerlendirmeleri ---------- */
+.pd-reviews-summary { display: flex; align-items: center; gap: 14px; margin-bottom: 30px; }
+.pd-reviews-summary .score { font-family: var(--font-display); font-size: 34px; color: var(--ivory); }
+.pd-reviews-summary .stars { font-size: 16px; }
+.pd-reviews-summary .count { font-size: 13px; color: var(--ivory-faint); }
+.review-item { border-bottom: 1px solid var(--gold-line); padding: 18px 0; }
+.review-item:first-child { padding-top: 0; }
+.review-item-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.review-item-name { color: var(--ivory); font-size: 13.5px; font-weight: 500; }
+.review-item-date { font-size: 11.5px; color: var(--ivory-faint); }
+.review-item p { margin: 0; font-size: 13.5px; }
+.pd-review-form-wrap { border-top: 1px solid var(--gold-line); margin-top: 34px; padding-top: 34px; }
+.pd-review-form-wrap h4 { font-family: var(--font-body); font-weight: 500; font-size: 15px; color: var(--ivory); margin-bottom: 6px; text-transform: none; letter-spacing: 0; }
+.star-input { display: flex; gap: 6px; }
+.star-input button {
+  background: none; border: none; cursor: pointer; font-size: 24px; line-height: 1; padding: 4px;
+  color: var(--ivory-faint); transition: color .15s ease;
+}
+.star-input button.active, .star-input button:hover { color: var(--gold); }
+.pd-review-login-notice a { color: var(--gold-bright); text-decoration: underline; }
+
 /* ---------- Satıcı Merkezi (tanıtım) ---------- */
 .seller-hero { background: radial-gradient(ellipse at 15% 20%, rgba(63,133,103,0.12), transparent 55%), var(--bg); }
 .badge-line { display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border: 1px solid var(--panel-accent-line, rgba(63,133,103,.3)); border-radius: 20px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--panel-accent-bright, #6cb894); margin-bottom: 20px; }

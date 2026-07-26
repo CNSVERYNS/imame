@@ -283,7 +283,101 @@ const IMAME = (() => {
       }
     }
 
+    await initProductReviews(p);
+
     window.dispatchEvent(new CustomEvent("tesbihyol:product-loaded", { detail: p }));
+  }
+
+  /* ---------- Sipariş numarasıyla doğrulanan değerlendirme (ürün detay) ---------- */
+  async function initProductReviews(p) {
+    const summaryEl = document.getElementById("pd-reviews-summary");
+    const listEl = document.getElementById("pd-reviews-list");
+    const form = document.getElementById("pd-review-form");
+    if (!listEl || !form || typeof DB === "undefined") return;
+
+    async function renderReviews() {
+      let reviews = [];
+      try {
+        reviews = await DB.fetchProductReviews(p.id);
+      } catch (err) {
+        console.error("[TesbihYol] Değerlendirmeler yüklenemedi:", err);
+      }
+      const avg = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
+      if (summaryEl) {
+        summaryEl.innerHTML = reviews.length
+          ? `<div class="pd-reviews-summary"><span class="score">${avg.toFixed(1)}</span><span class="stars">${starsHtml(avg)}</span><span class="count">${reviews.length} değerlendirme</span></div>`
+          : "";
+      }
+      listEl.innerHTML = reviews.length
+        ? reviews.map(r => `
+          <div class="review-item">
+            <div class="review-item-head">
+              <span class="review-item-name">${escapeHtml(r.reviewer_name)}</span>
+              <span class="review-item-date">${new Date(r.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</span>
+            </div>
+            <div class="stars" style="margin-bottom:6px;">${starsHtml(r.rating)}</div>
+            ${r.comment ? `<p>${escapeHtml(r.comment)}</p>` : ""}
+          </div>`).join("")
+        : '<p class="muted">Bu ürün için henüz değerlendirme yapılmadı.</p>';
+    }
+
+    await renderReviews();
+
+    const loginNotice = document.getElementById("pd-review-login-notice");
+    const user = await DB.getUser();
+    if (!user) {
+      form.style.display = "none";
+      if (loginNotice) loginNotice.style.display = "block";
+      return;
+    }
+
+    const starWrap = document.getElementById("pd-review-stars");
+    let selectedRating = 0;
+    if (starWrap) {
+      const starBtns = Array.from(starWrap.querySelectorAll("button"));
+      const paintStars = (val) => starBtns.forEach(b => b.classList.toggle("active", parseInt(b.dataset.star, 10) <= val));
+      starBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          selectedRating = parseInt(btn.dataset.star, 10);
+          paintStars(selectedRating);
+        });
+        btn.addEventListener("mouseenter", () => paintStars(parseInt(btn.dataset.star, 10)));
+      });
+      starWrap.addEventListener("mouseleave", () => paintStars(selectedRating));
+    }
+
+    const errorEl = document.getElementById("pd-review-error");
+    const successEl = document.getElementById("pd-review-success");
+    const submitBtn = document.getElementById("pd-review-submit");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (errorEl) errorEl.style.display = "none";
+      if (successEl) successEl.style.display = "none";
+      const orderCode = form.order_code.value.trim();
+      const comment = form.comment.value.trim();
+      if (!orderCode) {
+        if (errorEl) { errorEl.textContent = "Sipariş numaranızı girin."; errorEl.style.display = "block"; }
+        return;
+      }
+      if (!selectedRating) {
+        if (errorEl) { errorEl.textContent = "Lütfen bir puan seçin."; errorEl.style.display = "block"; }
+        return;
+      }
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Gönderiliyor…"; }
+      try {
+        await DB.submitReview({ orderCode, productId: p.id, rating: selectedRating, comment });
+        if (successEl) { successEl.textContent = "Değerlendirmeniz için teşekkürler!"; successEl.style.display = "block"; }
+        form.reset();
+        selectedRating = 0;
+        if (starWrap) starWrap.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+        await renderReviews();
+      } catch (err) {
+        if (errorEl) { errorEl.textContent = err.message || "Değerlendirme gönderilemedi."; errorEl.style.display = "block"; }
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Değerlendirmeyi Gönder"; }
+      }
+    });
   }
 
   /* ---------- Supabase satıcı mağaza vitrini (magaza.html?seller=) ---------- */

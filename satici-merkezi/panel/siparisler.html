@@ -96,7 +96,7 @@
     }
     tbody.innerHTML = sellerOrders.map(o => {
       const myTotal = o.order_items.filter(it => it.seller_id === window.CURRENT_SELLER.id).reduce((s, it) => s + it.price * it.qty, 0);
-      const orderNo = 'DND-' + o.id.slice(0, 8).toUpperCase();
+      const orderNo = 'TY-' + o.id.slice(0, 8).toUpperCase();
       const date = new Date(o.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' });
       const carrierOptions = CARRIERS.map(c => `<option ${o.carrier === c ? 'selected' : ''}>${c}</option>`).join('');
       const statusOptions = Object.keys(STATUS_LABEL).map(s => `<option value="${s}" ${o.status === s ? 'selected' : ''}>${STATUS_LABEL[s]}</option>`).join('');

@@ -173,7 +173,39 @@
       <table class="spec-table" id="pd-specs"></table>
     </div>
     <div class="pd-tab-panel" id="tab-degerlendirme">
-      <p class="muted">Bu ürün için henüz değerlendirme yapılmadı.</p>
+      <div id="pd-reviews-summary"></div>
+      <div id="pd-reviews-list"><p class="muted">Bu ürün için henüz değerlendirme yapılmadı.</p></div>
+
+      <div class="pd-review-form-wrap">
+        <h4>Değerlendirme Yaz</h4>
+        <p class="field-hint" style="margin:0 0 18px;">Yalnızca bu ürünü satın alıp teslim almış müşteriler değerlendirme yazabilir. Sipariş numaranızı "Hesabım &gt; Siparişlerim" bölümünde bulabilirsiniz (ör. TY-3FA1C2D4). Her sipariş numarası yalnızca bir kez değerlendirme için kullanılabilir.</p>
+        <form id="pd-review-form">
+          <div class="field-row">
+            <div class="field">
+              <label for="pd-review-order">Sipariş Numarası</label>
+              <input type="text" id="pd-review-order" name="order_code" placeholder="ör. TY-3FA1C2D4" required>
+            </div>
+            <div class="field">
+              <label>Puanınız</label>
+              <div class="star-input" id="pd-review-stars" data-value="0">
+                <button type="button" data-star="1" aria-label="1 yıldız">★</button>
+                <button type="button" data-star="2" aria-label="2 yıldız">★</button>
+                <button type="button" data-star="3" aria-label="3 yıldız">★</button>
+                <button type="button" data-star="4" aria-label="4 yıldız">★</button>
+                <button type="button" data-star="5" aria-label="5 yıldız">★</button>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="pd-review-comment">Yorumunuz (opsiyonel)</label>
+            <textarea id="pd-review-comment" name="comment" rows="3" placeholder="Ürün hakkındaki deneyiminizi paylaşın..."></textarea>
+          </div>
+          <div class="field-error" id="pd-review-error" style="display:none;"></div>
+          <p id="pd-review-success" style="display:none; color:var(--ok); font-size:13px; margin-bottom:14px;"></p>
+          <button type="submit" class="btn btn-solid btn-sm" id="pd-review-submit">Değerlendirmeyi Gönder</button>
+        </form>
+        <p class="muted pd-review-login-notice" id="pd-review-login-notice" style="display:none;">Değerlendirme yazmak için <a href="hesabim.html">giriş yapmalısınız</a>.</p>
+      </div>
     </div>
 
     <div style="margin-top:90px;" id="pd-similar-wrap">

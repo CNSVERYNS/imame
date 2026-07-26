@@ -212,7 +212,7 @@
         total: subtotal + shippingFee,
       }, orderItems);
 
-      const orderNo = 'DND-' + order.id.slice(0, 8).toUpperCase();
+      const orderNo = 'TY-' + order.id.slice(0, 8).toUpperCase();
       document.getElementById('order-number').textContent = 'Sipariş No: ' + orderNo;
       document.getElementById('track-link').href = 'kargo-takip.html?no=' + orderNo;
       document.getElementById('checkout-view').hidden = true;
