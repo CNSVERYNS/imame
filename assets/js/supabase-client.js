@@ -61,6 +61,14 @@ const DB = (() => {
   }
 
   /* ---------- Ürünler (alıcı tarafı, herkese açık) ---------- */
+  async function withSalesCounts(products) {
+    if (!products.length) return products;
+    const ids = products.map(p => p.id);
+    const { data, error } = await sb.from("product_sales_counts").select("product_id, total_sold").in("product_id", ids);
+    if (error || !data) return products.map(p => ({ ...p, total_sold: 0 }));
+    const counts = new Map(data.map(row => [row.product_id, row.total_sold]));
+    return products.map(p => ({ ...p, total_sold: counts.get(p.id) || 0 }));
+  }
   async function fetchProducts({ category, material, excludeId, sellerId, limit } = {}) {
     let q = sb.from("products").select("*, sellers(store_name)").eq("status", "published").order("created_at", { ascending: false });
     if (category) q = q.eq("category", category);
@@ -70,7 +78,7 @@ const DB = (() => {
     if (limit) q = q.limit(limit);
     const { data, error } = await q;
     if (error) throw error;
-    return data;
+    return withSalesCounts(data);
   }
   async function fetchSellerStorefront(sellerId) {
     const { data, error } = await sb.from("seller_storefronts").select("*").eq("id", sellerId).single();
@@ -85,7 +93,7 @@ const DB = (() => {
       .or(`name.ilike.%${term}%,material.ilike.%${term}%,category.ilike.%${term}%`)
       .order("created_at", { ascending: false });
     if (error) throw error;
-    return data;
+    return withSalesCounts(data);
   }
   async function fetchProductById(id) {
     const { data, error } = await sb.from("products").select("*, sellers(store_name)").eq("id", id).single();

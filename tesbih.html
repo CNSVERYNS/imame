@@ -142,30 +142,16 @@
         <button class="chip" data-filter="ceviz">Ceviz Ağacı</button>
       </div>
       <select class="sort-select">
-        <option>Önerilen Sıralama</option>
-        <option>Fiyat: Artan</option>
-        <option>Fiyat: Azalan</option>
-        <option>En Yeniler</option>
-        <option>En Çok Beğenilen</option>
+        <option value="recommended">Önerilen Sıralama</option>
+        <option value="price-asc">Fiyat: Artan</option>
+        <option value="price-desc">Fiyat: Azalan</option>
+        <option value="newest">En Yeniler</option>
+        <option value="top-rated">En Çok Beğenilen</option>
       </select>
     </div>
 
     <div class="filter-layout">
       <aside class="filter-side">
-        <div class="filter-group">
-          <h4>Malzeme</h4>
-          <label class="filter-option"><input type="checkbox" checked> Kehribar</label>
-          <label class="filter-option"><input type="checkbox" checked> Oltu Taşı</label>
-          <label class="filter-option"><input type="checkbox" checked> Sedef</label>
-          <label class="filter-option"><input type="checkbox" checked> Sandal Ağacı</label>
-          <label class="filter-option"><input type="checkbox" checked> Ceviz Ağacı</label>
-          <label class="filter-option"><input type="checkbox" checked> Pirinç</label>
-        </div>
-        <div class="filter-group">
-          <h4>Boncuk Sayısı</h4>
-          <label class="filter-option"><input type="checkbox" checked> 33'lü</label>
-          <label class="filter-option"><input type="checkbox" checked> 99'lu</label>
-        </div>
         <div class="filter-group">
           <h4>Kargo</h4>
           <label class="filter-option"><input type="checkbox" data-filter-input="shipping-free"> Sadece Ücretsiz Kargo</label>
@@ -182,8 +168,11 @@
         </div>
         <div class="filter-group">
           <h4>Fiyat Aralığı</h4>
-          <input type="range" min="300" max="2500" value="2500" style="width:100%; accent-color:var(--gold);">
-          <div class="field-hint">300 TL — 2.500 TL</div>
+          <div class="price-range-row">
+            <input type="number" inputmode="numeric" min="0" placeholder="Min TL" aria-label="Minimum fiyat" data-filter-input="price-min">
+            <span class="price-range-sep">—</span>
+            <input type="number" inputmode="numeric" min="0" placeholder="Maks TL" aria-label="Maksimum fiyat" data-filter-input="price-max">
+          </div>
         </div>
         <div class="filter-group">
           <h4>Renk Tonu</h4>

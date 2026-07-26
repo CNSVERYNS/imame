@@ -145,13 +145,14 @@ const IMAME = (() => {
   }
   function productCardHtml(p) {
     const isNew = p.created_at && (Date.now() - new Date(p.created_at).getTime()) < 14 * 24 * 3600 * 1000;
+    const isBestseller = (p.total_sold || 0) >= 3;
     const img = p.image_url || fallbackImg(p.category);
     const sellerName = (p.sellers && p.sellers.store_name) || "TesbihYol Satıcısı";
     const badge = p.featured
       ? '<span class="product-badge">Öne Çıkan</span>'
-      : (isNew ? '<span class="product-badge product-badge--new">Yeni</span>' : "");
+      : (isBestseller ? '<span class="product-badge">Çok Satan</span>' : (isNew ? '<span class="product-badge product-badge--new">Yeni</span>' : ""));
     return `
-      <div class="product-card fade-in" data-product-item data-material="${materialSlug(p.material)}" data-rating="${p.rating || 0}" data-shipping="${p.shipping_option}"${p.featured ? ' data-bestseller="true"' : ""}${isNew ? ' data-new="true"' : ""}>
+      <div class="product-card fade-in" data-product-item data-material="${materialSlug(p.material)}" data-rating="${p.rating || 0}" data-shipping="${p.shipping_option}" data-price="${p.price}" data-created="${p.created_at || ""}" data-sold="${p.total_sold || 0}"${p.featured ? ' data-featured="true"' : ""}${isBestseller ? ' data-bestseller="true"' : ""}${isNew ? ' data-new="true"' : ""}>
         <div class="product-media">
           ${badge}
           <button type="button" class="product-wish" aria-label="Favorilere ekle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2 0 4 1.5 6 4 2-2.5 4-4 6-4 4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg></button>
@@ -341,12 +342,41 @@ const IMAME = (() => {
     const chips = chipGroup.querySelectorAll(".chip");
     const sideInputs = document.querySelectorAll("[data-filter-input]");
     const applyBtn = document.querySelector(".filter-side .btn-block");
+    const sortSelect = document.querySelector(".sort-select");
     const pager = document.getElementById("pagination");
     let currentPage = 1;
 
     function activeMaterial() {
       const active = chipGroup.querySelector(".chip.active");
       return active ? active.dataset.filter : "all";
+    }
+
+    /* Sponsorlu (öne çıkan) ürünler, gerçek satış adedi ve puan bir arada
+       ağırlıklandırılır; yorum sistemi devreye girdikçe puan bileşeni daha
+       belirleyici hale gelecek. */
+    function recommendedScore(card) {
+      const featured = card.dataset.featured === "true";
+      const bestseller = card.dataset.bestseller === "true";
+      const rating = parseFloat(card.dataset.rating || "0");
+      const isNewItem = card.dataset.new === "true";
+      return (featured ? 3 : 0) + (bestseller ? 1.5 : 0) + rating * 0.6 + (isNewItem ? 0.4 : 0);
+    }
+
+    function sortCards(list) {
+      const mode = sortSelect ? sortSelect.value : "recommended";
+      const sorted = list.slice();
+      if (mode === "price-asc") {
+        sorted.sort((a, b) => parseFloat(a.dataset.price || "0") - parseFloat(b.dataset.price || "0"));
+      } else if (mode === "price-desc") {
+        sorted.sort((a, b) => parseFloat(b.dataset.price || "0") - parseFloat(a.dataset.price || "0"));
+      } else if (mode === "newest") {
+        sorted.sort((a, b) => new Date(b.dataset.created || 0) - new Date(a.dataset.created || 0));
+      } else if (mode === "top-rated") {
+        sorted.sort((a, b) => parseFloat(b.dataset.rating || "0") - parseFloat(a.dataset.rating || "0"));
+      } else {
+        sorted.sort((a, b) => recommendedScore(b) - recommendedScore(a));
+      }
+      return sorted;
     }
 
     function matchingCards() {
@@ -357,15 +387,22 @@ const IMAME = (() => {
       const checkedRatings = Array.from(document.querySelectorAll('[data-filter-input="rating"]:checked'))
         .map(el => parseFloat(el.value));
       const minRating = checkedRatings.length ? Math.min(...checkedRatings) : null;
+      const priceMinRaw = document.querySelector('[data-filter-input="price-min"]')?.value;
+      const priceMaxRaw = document.querySelector('[data-filter-input="price-max"]')?.value;
+      const priceMin = priceMinRaw ? parseFloat(priceMinRaw) : null;
+      const priceMax = priceMaxRaw ? parseFloat(priceMaxRaw) : null;
 
-      return cards.filter(card => {
+      const filtered = cards.filter(card => {
         let show = material === "all" || card.dataset.material === material;
         if (show && wantFreeShipping) show = card.dataset.shipping === "ucretsiz";
         if (show && wantNew) show = card.dataset.new === "true";
         if (show && wantBestseller) show = card.dataset.bestseller === "true";
         if (show && minRating !== null) show = parseFloat(card.dataset.rating || "0") >= minRating;
+        if (show && priceMin !== null) show = parseFloat(card.dataset.price || "0") >= priceMin;
+        if (show && priceMax !== null) show = parseFloat(card.dataset.price || "0") <= priceMax;
         return show;
       });
+      return sortCards(filtered);
     }
 
     function renderPagination(totalPages) {
@@ -394,8 +431,11 @@ const IMAME = (() => {
       const totalPages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE));
       currentPage = Math.min(currentPage, totalPages);
       const start = (currentPage - 1) * PAGE_SIZE;
-      const pageSet = new Set(matches.slice(start, start + PAGE_SIZE));
+      const pageItems = matches.slice(start, start + PAGE_SIZE);
+      const pageSet = new Set(pageItems);
       cards.forEach(card => { card.style.display = pageSet.has(card) ? "" : "none"; });
+      const grid = cards[0] && cards[0].parentElement;
+      if (grid) pageItems.forEach(card => grid.appendChild(card));
       renderPagination(totalPages);
     }
 
@@ -413,6 +453,7 @@ const IMAME = (() => {
     });
 
     sideInputs.forEach(input => input.addEventListener("change", applyFilters));
+    if (sortSelect) sortSelect.addEventListener("change", applyFilters);
     if (applyBtn) applyBtn.addEventListener("click", (e) => { e.preventDefault(); applyFilters(); });
 
     applyFilters();

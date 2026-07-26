@@ -316,6 +316,14 @@ input, select, textarea { font-family: inherit; }
 .filter-option { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--ivory-dim); margin-bottom: 10px; cursor: pointer; }
 .filter-option input { accent-color: var(--gold); }
 .filter-option:hover { color: var(--ivory); }
+.price-range-row { display: flex; align-items: center; gap: 8px; }
+.price-range-row input {
+  width: 0; flex: 1 1 0; background: var(--surface); border: 1px solid var(--gold-line-strong); color: var(--ivory);
+  padding: 9px 10px; font-size: 13px; border-radius: var(--radius); transition: border-color .2s ease;
+}
+.price-range-row input::placeholder { color: var(--ivory-faint); }
+.price-range-row input:focus { outline: none; border-color: var(--gold); }
+.price-range-sep { color: var(--ivory-faint); font-size: 13px; flex-shrink: 0; }
 .swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .swatch { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--gold-line-strong); cursor: pointer; }
 
