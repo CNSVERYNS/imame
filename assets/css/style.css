@@ -324,8 +324,6 @@ input, select, textarea { font-family: inherit; }
 .price-range-row input::placeholder { color: var(--ivory-faint); }
 .price-range-row input:focus { outline: none; border-color: var(--gold); }
 .price-range-sep { color: var(--ivory-faint); font-size: 13px; flex-shrink: 0; }
-.swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.swatch { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--gold-line-strong); cursor: pointer; }
 
 /* ---------- Panel/testimonial/trust ---------- */
 .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
