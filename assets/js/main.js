@@ -125,10 +125,17 @@ const IMAME = (() => {
   }
 
   /* ---------- Supabase ürün kataloğu ---------- */
+  const MATERIALS_BY_CATEGORY = {
+    "Tesbih": ["Kehribar", "Oltu Taşı", "Sedef", "Sandal Ağacı", "Ceviz Ağacı", "Pirinç", "Akik", "Kaplan Gözü", "Lületaşı", "Zeytin Ağacı", "Gümüş"],
+    "Yüzük": ["Akik", "Oltu Taşı", "Zümrüt Kesim", "Yakut", "Firuze", "Oniks", "Gümüş 925", "Altın", "Sade"],
+  };
   const MATERIAL_SLUG = {
     "Kehribar": "kehribar", "Oltu Taşı": "oltu", "Sedef": "sedef",
     "Sandal Ağacı": "sandal", "Ceviz Ağacı": "ceviz", "Akik": "akik",
-    "Zümrüt Kesim": "zumrut", "Yakut": "yakut", "Taşsız": "sade",
+    "Zümrüt Kesim": "zumrut", "Yakut": "yakut", "Taşsız": "sade", "Sade": "sade",
+    "Pirinç": "pirinc", "Kaplan Gözü": "kaplan-gozu", "Lületaşı": "luletasi",
+    "Zeytin Ağacı": "zeytin", "Gümüş": "gumus", "Gümüş 925": "gumus",
+    "Firuze": "firuze", "Oniks": "oniks", "Altın": "altin",
   };
   function materialSlug(material) {
     return MATERIAL_SLUG[material] || (material || "").toLocaleLowerCase("tr").replace(/[^a-z0-9]+/g, "-");
@@ -701,6 +708,6 @@ const IMAME = (() => {
   return {
     getCart, saveCart, addToCart, removeFromCart, setQty, clearCart, cartTotal, cartCount, formatTL, toast,
     getWishlist, saveWishlist, isInWishlist, toggleWishlist, removeFromWishlist,
-    productCardHtml, escapeHtml, starsHtml, fallbackImg, materialSlug,
+    productCardHtml, escapeHtml, starsHtml, fallbackImg, materialSlug, MATERIALS_BY_CATEGORY,
   };
 })();

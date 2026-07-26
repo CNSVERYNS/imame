@@ -69,10 +69,7 @@
                 </div>
                 <div class="field">
                   <label>Malzeme</label>
-                  <select name="material">
-                    <option>Kehribar</option><option>Oltu Taşı</option><option>Sedef</option>
-                    <option>Sandal Ağacı</option><option>Gümüş 925</option><option>Akik</option>
-                  </select>
+                  <select name="material" id="material-select"></select>
                 </div>
               </div>
               <div class="field"><label>Açıklama</label><textarea name="description" rows="5" placeholder="Ürünün üretim şekli, malzemesi ve özellikleri hakkında bilgi verin."></textarea></div>
@@ -134,6 +131,14 @@
 <script>
   const form = document.getElementById('apply-form');
   const editId = new URLSearchParams(location.search).get('id');
+  const materialSelect = document.getElementById('material-select');
+
+  function updateMaterialOptions(category, selected) {
+    const options = IMAME.MATERIALS_BY_CATEGORY[category] || IMAME.MATERIALS_BY_CATEGORY['Tesbih'];
+    materialSelect.innerHTML = options.map(m => `<option ${m === selected ? 'selected' : ''}>${m}</option>`).join('');
+  }
+  updateMaterialOptions(form.category.value);
+  form.category.addEventListener('change', () => updateMaterialOptions(form.category.value));
 
   window.addEventListener('tesbihyol:seller-ready', async () => {
     if (!editId) return;
@@ -144,7 +149,7 @@
       document.querySelector('h1').textContent = 'Ürünü Düzenle';
       form.name.value = p.name;
       form.category.value = p.category;
-      form.material.value = p.material || '';
+      updateMaterialOptions(p.category, p.material);
       form.description.value = p.description || '';
       form.price.value = p.price;
       form.stock.value = p.stock;
