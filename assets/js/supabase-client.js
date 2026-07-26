@@ -61,13 +61,19 @@ const DB = (() => {
   }
 
   /* ---------- Ürünler (alıcı tarafı, herkese açık) ---------- */
-  async function fetchProducts({ category, material, excludeId, limit } = {}) {
+  async function fetchProducts({ category, material, excludeId, sellerId, limit } = {}) {
     let q = sb.from("products").select("*, sellers(store_name)").eq("status", "published").order("created_at", { ascending: false });
     if (category) q = q.eq("category", category);
     if (material) q = q.eq("material", material);
     if (excludeId) q = q.neq("id", excludeId);
+    if (sellerId) q = q.eq("seller_id", sellerId);
     if (limit) q = q.limit(limit);
     const { data, error } = await q;
+    if (error) throw error;
+    return data;
+  }
+  async function fetchSellerStorefront(sellerId) {
+    const { data, error } = await sb.from("seller_storefronts").select("*").eq("id", sellerId).single();
     if (error) throw error;
     return data;
   }
@@ -232,7 +238,7 @@ const DB = (() => {
   return {
     signUp, signIn, signOut, getUser, onAuthStateChange, getMyProfile, updateMyProfile, updatePassword,
     verifySignupOtp, resendSignupOtp, isAdmin,
-    fetchProducts, searchProducts, fetchProductById,
+    fetchProducts, searchProducts, fetchProductById, fetchSellerStorefront,
     applyAsSeller, getMySeller, updateMySeller, uploadIdDocument, getSignedIdDocumentUrl,
     fetchMyProducts, createProduct, updateProduct, deleteProduct,
     createOrder, fetchMyOrders,

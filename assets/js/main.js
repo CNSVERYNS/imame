@@ -159,7 +159,7 @@ const IMAME = (() => {
         </div>
         <div class="product-info">
           <span class="product-cat">${escapeHtml(p.material || p.category || "")}${p.size_info ? " · " + escapeHtml(p.size_info) : ""}</span>
-          <span class="product-seller">Satıcı: <a href="magaza.html">${escapeHtml(sellerName)}</a></span>
+          <span class="product-seller">Satıcı: <a href="magaza.html?seller=${p.seller_id}">${escapeHtml(sellerName)}</a></span>
           <h3 class="product-name"><a href="urun-detay.html?id=${p.id}">${escapeHtml(p.name)}</a></h3>
           <div class="product-meta"><span class="stars">${starsHtml(p.rating)}</span></div>
           <div class="product-row">
@@ -175,8 +175,9 @@ const IMAME = (() => {
     const grid = document.querySelector("[data-dynamic-grid]");
     if (!grid || typeof DB === "undefined") return;
     const category = grid.dataset.category || undefined;
+    const limit = grid.dataset.limit ? parseInt(grid.dataset.limit, 10) : undefined;
     try {
-      const products = await DB.fetchProducts({ category });
+      const products = await DB.fetchProducts({ category, limit });
       grid.innerHTML = products.length
         ? products.map(productCardHtml).join("")
         : '<p class="muted">Bu kategoride henüz ürün yok.</p>';
@@ -221,6 +222,8 @@ const IMAME = (() => {
     set("pd-desc-full", p.description || "Bu ürün için henüz açıklama eklenmedi.");
     set("pd-seller-name", sellerName);
     set("pd-seller-avatar", sellerName.charAt(0).toUpperCase() + ".");
+    const sellerLink = document.getElementById("pd-seller-link");
+    if (sellerLink) sellerLink.href = `magaza.html?seller=${p.seller_id}`;
     set("pd-stock-note", p.stock > 0 && p.stock <= 10 ? `Son ${p.stock} adet kaldı` : "");
 
     const mainImg = document.getElementById("pd-main-img");
@@ -280,6 +283,52 @@ const IMAME = (() => {
     }
 
     window.dispatchEvent(new CustomEvent("tesbihyol:product-loaded", { detail: p }));
+  }
+
+  /* ---------- Supabase satıcı mağaza vitrini (magaza.html?seller=) ---------- */
+  async function initSellerStorefront() {
+    const root = document.querySelector("[data-seller-storefront]");
+    if (!root || typeof DB === "undefined") return;
+    const sellerId = new URLSearchParams(location.search).get("seller");
+    if (!sellerId) { root.innerHTML = '<p class="muted">Mağaza bulunamadı.</p>'; return; }
+
+    let seller, products;
+    try {
+      seller = await DB.fetchSellerStorefront(sellerId);
+      products = await DB.fetchProducts({ sellerId, limit: 100 });
+    } catch (err) {
+      console.error("[TesbihYol] Mağaza yüklenemedi:", err);
+      root.innerHTML = '<p class="muted">Mağaza bulunamadı ya da henüz onaylanmadı.</p>';
+      return;
+    }
+
+    document.title = `${seller.store_name} — TesbihYol Satıcısı`;
+    const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+
+    set("seller-breadcrumb-name", seller.store_name);
+    set("seller-avatar", seller.store_name.charAt(0).toUpperCase() + ".");
+    set("seller-name", seller.store_name);
+    set("seller-since", `TesbihYol'da ${new Date(seller.created_at).getFullYear()}'den beri satış yapıyor`);
+    set("seller-bio", seller.bio || `${seller.store_name}, TesbihYol üzerinde el yapımı tesbih ve yüzük satan bağımsız bir satıcıdır.`);
+    set("seller-product-count", String(products.length));
+
+    const grid = document.getElementById("seller-product-grid");
+    if (grid) {
+      grid.innerHTML = products.length
+        ? products.map(productCardHtml).join("")
+        : '<p class="muted">Bu satıcının henüz yayınlanmış ürünü yok.</p>';
+    }
+
+    const ld = document.getElementById("seller-jsonld");
+    if (ld) {
+      ld.textContent = JSON.stringify({
+        "@context": "https://schema.org", "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Anasayfa", item: location.origin + "/index.html" },
+          { "@type": "ListItem", position: 2, name: seller.store_name, item: location.href },
+        ],
+      });
+    }
   }
 
   /* ---------- Filtre çipleri + kenar çubuğu filtreleri (kargo, puan, öne çıkanlar) ---------- */
@@ -501,6 +550,7 @@ const IMAME = (() => {
     initMobileNav();
     await initDynamicCatalog();
     await initProductDetail();
+    await initSellerStorefront();
     initAddToCart();
     initFadeIn();
     initFilterChips();
