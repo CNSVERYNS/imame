@@ -77,7 +77,7 @@
 
   (async () => {
     const user = await DB.getUser();
-    if (!user) { window.location.href = '../hesabim.html?redirect=admin/index.html'; return; }
+    if (!user) { window.location.href = '/hesabim.html?redirect=admin/index.html'; return; }
     const admin = await DB.isAdmin();
     if (!admin) {
       document.querySelector('.panel-main').innerHTML = '<div class="panel-box"><strong>Bu sayfaya erişim yetkiniz yok.</strong></div>';
@@ -86,7 +86,7 @@
     document.getElementById('signout-link').addEventListener('click', async (e) => {
       e.preventDefault();
       await DB.signOut();
-      window.location.href = '../hesabim.html';
+      window.location.href = '/hesabim.html';
     });
     loadSellers();
   })();
