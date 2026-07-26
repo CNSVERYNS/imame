@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panelim — Danedane Satıcı Merkezi</title>
+<title>Panelim — TesbihYol Satıcı Merkezi</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0b0d09">
 <link rel="manifest" href="../../assets/manifest.json">
@@ -20,7 +20,7 @@
   <aside class="panel-sidebar">
     <a href="index.html" class="panel-brand">
       <img src="../../assets/img/logo-mark.svg" alt="">
-      <div><strong>DANEDANE</strong><small>Satıcı Merkezi</small></div>
+      <div><strong>TESBİHYOL</strong><small>Satıcı Merkezi</small></div>
     </a>
     <nav class="panel-nav">
       <div class="panel-nav-label">Genel</div>
@@ -111,7 +111,7 @@
   const STATUS_LABEL = { hazirlaniyor: 'Hazırlanıyor', kargoda: 'Kargoya Verildi', teslim: 'Teslim Edildi', iptal: 'İptal Edildi' };
   const STATUS_CLASS = { hazirlaniyor: 'wait', kargoda: 'info', teslim: 'ok', iptal: 'warn' };
 
-  window.addEventListener('danedane:seller-ready', async (e) => {
+  window.addEventListener('tesbihyol:seller-ready', async (e) => {
     const seller = e.detail;
     document.getElementById('dash-welcome').textContent = 'Hoş geldin, ' + (seller.owner_name || '').split(' ')[0];
 
@@ -167,7 +167,7 @@
           </tr>`).join('')
         : '<tr><td colspan="3" class="muted">Henüz satış yok.</td></tr>';
     } catch (err) {
-      console.error('[Danedane] Panel verileri yüklenemedi:', err);
+      console.error('[TesbihYol] Panel verileri yüklenemedi:', err);
     }
   });
 </script>

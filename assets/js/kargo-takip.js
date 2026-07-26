@@ -1,4 +1,4 @@
-/* Danedane — canlı kargo takibi (örnek/mock veri motoru) */
+/* TesbihYol — canlı kargo takibi (örnek/mock veri motoru) */
 
 (() => {
   const form = document.querySelector("#tracking-form");

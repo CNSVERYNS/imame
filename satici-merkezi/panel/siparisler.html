@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Siparişler — Danedane Satıcı Merkezi</title>
+<title>Siparişler — TesbihYol Satıcı Merkezi</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0b0d09">
 <link rel="manifest" href="../../assets/manifest.json">
@@ -24,7 +24,7 @@
   <aside class="panel-sidebar">
     <a href="index.html" class="panel-brand">
       <img src="../../assets/img/logo-mark.svg" alt="">
-      <div><strong>DANEDANE</strong><small>Satıcı Merkezi</small></div>
+      <div><strong>TESBİHYOL</strong><small>Satıcı Merkezi</small></div>
     </a>
     <nav class="panel-nav">
       <div class="panel-nav-label">Genel</div>
@@ -129,12 +129,12 @@
     document.querySelectorAll('#order-filter-bar .chip.active')[0]?.click();
   }
 
-  window.addEventListener('danedane:seller-ready', async () => {
+  window.addEventListener('tesbihyol:seller-ready', async () => {
     try {
       sellerOrders = await DB.fetchSellerOrders();
       renderOrders();
     } catch (err) {
-      console.error('[Danedane] Siparişler yüklenemedi:', err);
+      console.error('[TesbihYol] Siparişler yüklenemedi:', err);
       document.getElementById('siparisler-tbody').innerHTML = '<tr><td colspan="7" class="muted">Siparişler yüklenirken bir sorun oluştu.</td></tr>';
     }
   });

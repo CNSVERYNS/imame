@@ -1,4 +1,4 @@
-/* Danedane Satıcı Merkezi — panel sayfaları için ortak oturum/başvuru koruması.
+/* TesbihYol Satıcı Merkezi — panel sayfaları için ortak oturum/başvuru koruması.
    Her panel sayfasında supabase-client.js'ten SONRA yüklenmelidir. */
 (async () => {
   const user = await DB.getUser();
@@ -41,5 +41,5 @@
     }
   });
 
-  window.dispatchEvent(new CustomEvent("danedane:seller-ready", { detail: seller }));
+  window.dispatchEvent(new CustomEvent("tesbihyol:seller-ready", { detail: seller }));
 })();

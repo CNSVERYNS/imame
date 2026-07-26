@@ -1,4 +1,4 @@
-/* Danedane Satıcı Merkezi — panel davranışları */
+/* TesbihYol Satıcı Merkezi — panel davranışları */
 
 (() => {
   function initSidebar() {

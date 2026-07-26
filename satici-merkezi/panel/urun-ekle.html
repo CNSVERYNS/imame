@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yeni Ürün Ekle — Danedane Satıcı Merkezi</title>
+<title>Yeni Ürün Ekle — TesbihYol Satıcı Merkezi</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0b0d09">
 <link rel="manifest" href="../../assets/manifest.json">
@@ -20,7 +20,7 @@
   <aside class="panel-sidebar">
     <a href="index.html" class="panel-brand">
       <img src="../../assets/img/logo-mark.svg" alt="">
-      <div><strong>DANEDANE</strong><small>Satıcı Merkezi</small></div>
+      <div><strong>TESBİHYOL</strong><small>Satıcı Merkezi</small></div>
     </a>
     <nav class="panel-nav">
       <div class="panel-nav-label">Genel</div>
@@ -136,7 +136,7 @@
   const form = document.getElementById('apply-form');
   const editId = new URLSearchParams(location.search).get('id');
 
-  window.addEventListener('danedane:seller-ready', async () => {
+  window.addEventListener('tesbihyol:seller-ready', async () => {
     if (!editId) return;
     try {
       const products = await DB.fetchMyProducts();
@@ -158,7 +158,7 @@
       form.pub.value = p.status === 'draft' ? 'draft' : 'published';
       form.querySelector('[type=submit]').textContent = 'Ürünü Güncelle';
     } catch (err) {
-      console.error('[Danedane] Ürün yüklenemedi:', err);
+      console.error('[TesbihYol] Ürün yüklenemedi:', err);
     }
   });
 
@@ -190,7 +190,7 @@
       if (note) { note.hidden = false; note.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
       setTimeout(() => { window.location.href = 'urunler.html'; }, 1200);
     } catch (err) {
-      console.error('[Danedane] Ürün kaydedilemedi:', err);
+      console.error('[TesbihYol] Ürün kaydedilemedi:', err);
       IMAME.toast('Ürün kaydedilemedi: ' + (err.message || 'bilinmeyen hata.'));
       submitBtn.disabled = false;
       submitBtn.textContent = editId ? 'Ürünü Güncelle' : 'Ürünü Kaydet';

@@ -1,8 +1,8 @@
-/* Danedane — mağaza ön yüz davranışları (sepet, menü, filtre, bildirimler) */
+/* TesbihYol — mağaza ön yüz davranışları (sepet, menü, filtre, bildirimler) */
 
 const IMAME = (() => {
   const CART_KEY = "imame_cart";
-  const WISHLIST_KEY = "danedane_wishlist";
+  const WISHLIST_KEY = "tesbihyol_wishlist";
 
   /* ---------- Favoriler (wishlist) yardımcıları ---------- */
   function getWishlist() {
@@ -146,7 +146,7 @@ const IMAME = (() => {
   function productCardHtml(p) {
     const isNew = p.created_at && (Date.now() - new Date(p.created_at).getTime()) < 14 * 24 * 3600 * 1000;
     const img = p.image_url || fallbackImg(p.category);
-    const sellerName = (p.sellers && p.sellers.store_name) || "Danedane Satıcısı";
+    const sellerName = (p.sellers && p.sellers.store_name) || "TesbihYol Satıcısı";
     const badge = p.featured
       ? '<span class="product-badge">Öne Çıkan</span>'
       : (isNew ? '<span class="product-badge product-badge--new">Yeni</span>' : "");
@@ -181,7 +181,7 @@ const IMAME = (() => {
         ? products.map(productCardHtml).join("")
         : '<p class="muted">Bu kategoride henüz ürün yok.</p>';
     } catch (err) {
-      console.error("[Danedane] Ürünler yüklenemedi:", err);
+      console.error("[TesbihYol] Ürünler yüklenemedi:", err);
       grid.innerHTML = '<p class="muted">Ürünler yüklenirken bir sorun oluştu.</p>';
     }
   }
@@ -197,16 +197,16 @@ const IMAME = (() => {
     try {
       p = await DB.fetchProductById(id);
     } catch (err) {
-      console.error("[Danedane] Ürün yüklenemedi:", err);
+      console.error("[TesbihYol] Ürün yüklenemedi:", err);
       root.innerHTML = '<p class="muted">Ürün bulunamadı ya da yayından kaldırılmış.</p>';
       return;
     }
 
     const img = p.image_url || fallbackImg(p.category);
-    const sellerName = (p.sellers && p.sellers.store_name) || "Danedane Satıcısı";
+    const sellerName = (p.sellers && p.sellers.store_name) || "TesbihYol Satıcısı";
     const set = (id2, text) => { const el = document.getElementById(id2); if (el) el.textContent = text; };
 
-    document.title = `${p.name} — Danedane`;
+    document.title = `${p.name} — TesbihYol`;
     const catLink = document.getElementById("pd-breadcrumb-cat");
     if (catLink) { catLink.href = p.category === "Yüzük" ? "yuzuk.html" : "tesbih.html"; catLink.textContent = p.category; }
     set("pd-breadcrumb-name", p.name);
@@ -247,7 +247,7 @@ const IMAME = (() => {
     if (ld) {
       ld.textContent = JSON.stringify({
         "@context": "https://schema.org", "@type": "Product", name: p.name, description: p.description || "",
-        image: location.origin + "/" + img, brand: { "@type": "Brand", name: "Danedane" },
+        image: location.origin + "/" + img, brand: { "@type": "Brand", name: "TesbihYol" },
         offers: {
           "@type": "Offer", url: location.href, priceCurrency: "TRY", price: String(p.price),
           availability: p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
@@ -256,6 +256,18 @@ const IMAME = (() => {
       });
     }
 
+    const breadcrumbLd = document.createElement("script");
+    breadcrumbLd.type = "application/ld+json";
+    breadcrumbLd.textContent = JSON.stringify({
+      "@context": "https://schema.org", "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Anasayfa", item: location.origin + "/index.html" },
+        { "@type": "ListItem", position: 2, name: p.category, item: location.origin + "/" + (p.category === "Yüzük" ? "yuzuk.html" : "tesbih.html") },
+        { "@type": "ListItem", position: 3, name: p.name, item: location.href },
+      ],
+    });
+    document.head.appendChild(breadcrumbLd);
+
     const similarGrid = document.querySelector("[data-similar-grid]");
     if (similarGrid) {
       try {
@@ -263,11 +275,11 @@ const IMAME = (() => {
         similarGrid.innerHTML = similar.length ? similar.map(productCardHtml).join("") : "";
         if (!similar.length) document.getElementById("pd-similar-wrap").style.display = "none";
       } catch (err) {
-        console.error("[Danedane] Benzer ürünler yüklenemedi:", err);
+        console.error("[TesbihYol] Benzer ürünler yüklenemedi:", err);
       }
     }
 
-    window.dispatchEvent(new CustomEvent("danedane:product-loaded", { detail: p }));
+    window.dispatchEvent(new CustomEvent("tesbihyol:product-loaded", { detail: p }));
   }
 
   /* ---------- Filtre çipleri + kenar çubuğu filtreleri (kargo, puan, öne çıkanlar) ---------- */
@@ -463,7 +475,7 @@ const IMAME = (() => {
   function initCookieBar() {
     const bar = document.getElementById("cookie-bar");
     if (!bar) return;
-    const KEY = "danedane_cookie_consent";
+    const KEY = "tesbihyol_cookie_consent";
     if (!localStorage.getItem(KEY)) {
       setTimeout(() => bar.classList.add("show"), 700);
     }

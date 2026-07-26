@@ -4,5 +4,24 @@ Disallow: /sepet.html
 Disallow: /odeme.html
 Disallow: /hesap-panelim.html
 Disallow: /satici-merkezi/panel/
+Disallow: /admin/
 
-Sitemap: https://danedane.com/sitemap.xml
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+Sitemap: https://tesbihyol.com/sitemap.xml

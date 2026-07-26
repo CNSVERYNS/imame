@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ürünlerim — Danedane Satıcı Merkezi</title>
+<title>Ürünlerim — TesbihYol Satıcı Merkezi</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0b0d09">
 <link rel="manifest" href="../../assets/manifest.json">
@@ -20,7 +20,7 @@
   <aside class="panel-sidebar">
     <a href="index.html" class="panel-brand">
       <img src="../../assets/img/logo-mark.svg" alt="">
-      <div><strong>DANEDANE</strong><small>Satıcı Merkezi</small></div>
+      <div><strong>TESBİHYOL</strong><small>Satıcı Merkezi</small></div>
     </a>
     <nav class="panel-nav">
       <div class="panel-nav-label">Genel</div>
@@ -133,12 +133,12 @@
     }));
   }
 
-  window.addEventListener('danedane:seller-ready', async () => {
+  window.addEventListener('tesbihyol:seller-ready', async () => {
     try {
       allProducts = await DB.fetchMyProducts();
       renderProducts();
     } catch (err) {
-      console.error('[Danedane] Ürünler yüklenemedi:', err);
+      console.error('[TesbihYol] Ürünler yüklenemedi:', err);
       document.getElementById('urunler-tbody').innerHTML = '<tr><td colspan="6" class="muted">Ürünler yüklenirken bir sorun oluştu.</td></tr>';
     }
   });

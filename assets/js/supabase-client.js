@@ -1,4 +1,4 @@
-/* Danedane — Supabase bağlantısı ve veri erişim yardımcıları
+/* TesbihYol — Supabase bağlantısı ve veri erişim yardımcıları
    Kullanmadan önce: Supabase Dashboard → Settings → API'den
    Project URL ve anon public key değerlerini aşağıya yapıştır. */
 

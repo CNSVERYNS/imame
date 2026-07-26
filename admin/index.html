@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yönetim Paneli — Danedane</title>
+<title>Yönetim Paneli — TesbihYol</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0b0d09">
 <link rel="apple-touch-icon" href="../assets/img/logo-mark.svg">
@@ -19,7 +19,7 @@
   <aside class="panel-sidebar">
     <a href="index.html" class="panel-brand">
       <img src="../assets/img/logo-mark.svg" alt="">
-      <div><strong>DANEDANE</strong><small>Yönetim Paneli</small></div>
+      <div><strong>TESBİHYOL</strong><small>Yönetim Paneli</small></div>
     </a>
     <nav class="panel-nav">
       <div class="panel-nav-label">Genel</div>
@@ -97,7 +97,7 @@
       allSellers = await DB.fetchAllSellers();
       renderSellers();
     } catch (err) {
-      console.error('[Danedane] Satıcılar yüklenemedi:', err);
+      console.error('[TesbihYol] Satıcılar yüklenemedi:', err);
       document.getElementById('sellers-list').innerHTML = '<p class="muted">Yüklenirken bir sorun oluştu.</p>';
     }
   }
