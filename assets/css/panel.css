@@ -12,7 +12,7 @@
 body.panel-body { background: var(--bg); }
 
 /* ---------- Panel iskeleti ---------- */
-.panel-shell { display: grid; grid-template-columns: 264px 1fr; min-height: 100vh; }
+.panel-shell { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: 100vh; }
 
 .panel-sidebar {
   background: var(--bg-alt);
@@ -105,6 +105,8 @@ body.panel-body { background: var(--bg); }
 /* ---------- Komisyon / kazanç ---------- */
 .payout-highlight { border: 1px solid var(--panel-accent-line); background: linear-gradient(135deg, rgba(63,133,103,0.1), transparent); padding: 30px; text-align: center; }
 .payout-highlight .stat-value { font-size: 40px; color: var(--panel-accent-bright); }
+.payout-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 22px; margin-bottom: 26px; align-items: stretch; }
+.stat-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
 
 /* ---------- Satış raporu (tarih aralığı + PDF çıktısı) ---------- */
 .report-controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
@@ -150,16 +152,19 @@ body.panel-body { background: var(--bg); }
 /* ---------- Responsive ---------- */
 @media (max-width: 1080px) {
   .stat-grid { grid-template-columns: 1fr 1fr; }
+  .stat-grid-3 { grid-template-columns: 1fr 1fr; }
   .panel-form-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 900px) {
-  .panel-shell { grid-template-columns: 1fr; }
+  .panel-shell { grid-template-columns: minmax(0, 1fr); }
   .panel-sidebar { position: fixed; left: 0; top: 0; width: 264px; z-index: 90; transform: translateX(-100%); transition: transform .25s ease; }
   .panel-sidebar.open { transform: translateX(0); }
   .panel-menu-toggle { display: inline-flex; align-items:center; justify-content:center; width: 40px; height: 40px; border: 1px solid var(--gold-line-strong); border-radius: var(--radius); background: none; color: var(--ivory); cursor: pointer; }
   .panel-main { padding: 24px 20px 50px; }
+  .payout-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .stat-grid { grid-template-columns: 1fr; }
+  .stat-grid-3 { grid-template-columns: 1fr; }
   .p-table { display: block; overflow-x: auto; white-space: nowrap; }
 }
