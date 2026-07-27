@@ -2,7 +2,7 @@
   "name": "TesbihYol — Tesbih & Yüzük Koleksiyonu",
   "short_name": "TesbihYol",
   "description": "Kehribar, oltu taşı, sedef ve gümüş üzerine tesbih ve yüzük koleksiyonu.",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0b0d09",
   "theme_color": "#0b0d09",

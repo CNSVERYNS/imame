@@ -18,12 +18,12 @@ Tüm ürünler, kendi mağazasını yöneten bağımsız zanaatkarlar/satıcıla
 
 ## Önemli sayfalar
 
-- Anasayfa: https://tesbihyol.com/index.html
-- Tesbih Koleksiyonu: https://tesbihyol.com/tesbih.html
-- Yüzük Koleksiyonu: https://tesbihyol.com/yuzuk.html
-- Hikayemiz: https://tesbihyol.com/hakkimizda.html
-- İletişim ve Sıkça Sorulan Sorular: https://tesbihyol.com/iletisim.html
-- Satıcı Merkezi (satıcı olmak isteyenler için): https://tesbihyol.com/satici-merkezi/index.html
+- Anasayfa: https://tesbihyol.com/
+- Tesbih Koleksiyonu: https://tesbihyol.com/tesbih
+- Yüzük Koleksiyonu: https://tesbihyol.com/yuzuk
+- Hikayemiz: https://tesbihyol.com/hakkimizda
+- İletişim ve Sıkça Sorulan Sorular: https://tesbihyol.com/iletisim
+- Satıcı Merkezi (satıcı olmak isteyenler için): https://tesbihyol.com/satici-merkezi
 
 ## Satın alma ve satıcılık süreci
 
@@ -31,4 +31,4 @@ Alıcılar hesap oluşturup ürünü sepete ekleyerek sipariş verir; kargo ücr
 
 ## Notlar
 
-Bu bir dinamik pazar yeri olduğundan ürün listeleri ve fiyatlar sürekli güncellenir; kesin ve güncel stok/fiyat bilgisi için ilgili sayfayı ziyaret edin. Sorularınız için https://tesbihyol.com/iletisim.html üzerinden ulaşabilirsiniz.
+Bu bir dinamik pazar yeri olduğundan ürün listeleri ve fiyatlar sürekli güncellenir; kesin ve güncel stok/fiyat bilgisi için ilgili sayfayı ziyaret edin. Sorularınız için https://tesbihyol.com/iletisim üzerinden ulaşabilirsiniz.

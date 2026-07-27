@@ -17,15 +17,15 @@
 
 <div class="panel-shell">
   <aside class="panel-sidebar">
-    <a href="index.html" class="panel-brand">
+    <a href="/admin" class="panel-brand">
       <img src="../assets/img/logo-wordmark.png" alt="TesbihYol" class="brand-wordmark"><small>Yönetim Paneli</small>
     </a>
     <nav class="panel-nav">
       <div class="panel-nav-label">Genel</div>
-      <a href="index.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/></svg> Satıcı Başvuruları</a>
+      <a href="/admin" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/></svg> Satıcı Başvuruları</a>
     </nav>
     <div class="panel-sidebar-foot">
-      <a href="../index.html" class="btn btn-ghost btn-sm btn-block">Mağazaya Dön</a>
+      <a href="/" class="btn btn-ghost btn-sm btn-block">Mağazaya Dön</a>
       <a href="#" id="signout-link" class="btn btn-sm btn-block" style="margin-top:8px;">Çıkış Yap</a>
     </div>
   </aside>
@@ -77,7 +77,7 @@
 
   (async () => {
     const user = await DB.getUser();
-    if (!user) { window.location.href = '/hesabim.html?redirect=admin/index.html'; return; }
+    if (!user) { window.location.href = '/hesabim?redirect=/admin'; return; }
     const admin = await DB.isAdmin();
     if (!admin) {
       document.querySelector('.panel-main').innerHTML = '<div class="panel-box"><strong>Bu sayfaya erişim yetkiniz yok.</strong></div>';
@@ -86,7 +86,7 @@
     document.getElementById('signout-link').addEventListener('click', async (e) => {
       e.preventDefault();
       await DB.signOut();
-      window.location.href = '/hesabim.html';
+      window.location.href = '/hesabim';
     });
     loadSellers();
   })();

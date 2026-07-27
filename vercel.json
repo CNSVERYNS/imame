@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/satici-merkezi/index.html", "destination": "/satici-merkezi", "permanent": true },
+    { "source": "/satici-merkezi/panel/index.html", "destination": "/satici-merkezi/panel", "permanent": true },
+    { "source": "/admin/index.html", "destination": "/admin", "permanent": true }
+  ]
+}

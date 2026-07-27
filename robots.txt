@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
-Disallow: /sepet.html
-Disallow: /odeme.html
-Disallow: /hesap-panelim.html
+Disallow: /sepet
+Disallow: /odeme
+Disallow: /hesap-panelim
 Disallow: /satici-merkezi/panel/
 Disallow: /admin/
 

@@ -167,8 +167,8 @@ const IMAME = (() => {
         </div>
         <div class="product-info">
           <span class="product-cat">${escapeHtml(p.material || p.category || "")}${p.size_info ? " · " + escapeHtml(p.size_info) : ""}</span>
-          <span class="product-seller">Satıcı: <a href="magaza.html?seller=${p.seller_id}">${escapeHtml(sellerName)}</a></span>
-          <h3 class="product-name"><a href="urun-detay.html?id=${p.id}">${escapeHtml(p.name)}</a></h3>
+          <span class="product-seller">Satıcı: <a href="/magaza?seller=${p.seller_id}">${escapeHtml(sellerName)}</a></span>
+          <h3 class="product-name"><a href="/urun-detay?id=${p.id}">${escapeHtml(p.name)}</a></h3>
           <div class="product-meta"><span class="stars">${starsHtml(p.rating)}</span></div>
           <div class="product-row">
             <span class="price">${formatTL(p.price)}</span>
@@ -179,6 +179,41 @@ const IMAME = (() => {
         </div>
       </div>`;
   }
+  /* ---------- Anasayfa hero: çok satan ürünler slaytı ---------- */
+  async function initHeroBestsellerCarousel() {
+    const wrap = document.querySelector("[data-hero-bestseller]");
+    if (!wrap || typeof DB === "undefined") return;
+    let products;
+    try {
+      products = await DB.fetchBestsellers(6);
+    } catch (err) {
+      console.error("[TesbihYol] Çok satanlar yüklenemedi:", err);
+      return;
+    }
+    if (!products || !products.length) return;
+
+    wrap.innerHTML = products.map((p, i) => {
+      const img = p.image_url || fallbackImg(p.category);
+      return `<a href="/urun-detay?id=${p.id}" class="hero-bestseller-slide${i === 0 ? " active" : ""}">
+        <img src="${escapeHtml(img)}" alt="${escapeHtml(p.name)}" loading="${i === 0 ? "eager" : "lazy"}">
+        <div class="hero-bestseller-info">
+          <span class="hero-bestseller-badge">Çok Satan</span>
+          <strong>${escapeHtml(p.name)}</strong>
+          <span>${formatTL(p.price)}</span>
+        </div>
+      </a>`;
+    }).join("");
+
+    const slides = wrap.querySelectorAll(".hero-bestseller-slide");
+    if (slides.length <= 1) return;
+    let idx = 0;
+    setInterval(() => {
+      slides[idx].classList.remove("active");
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add("active");
+    }, 10000);
+  }
+
   async function initDynamicCatalog() {
     const grid = document.querySelector("[data-dynamic-grid]");
     if (!grid || typeof DB === "undefined") return;
@@ -265,9 +300,9 @@ const IMAME = (() => {
 
     document.title = `${p.name} — TesbihYol`;
     const catLink = document.getElementById("pd-breadcrumb-cat");
-    if (catLink) { catLink.href = p.category === "Yüzük" ? "yuzuk.html" : "tesbih.html"; catLink.textContent = p.category; }
+    if (catLink) { catLink.href = p.category === "Yüzük" ? "/yuzuk" : "/tesbih"; catLink.textContent = p.category; }
     document.querySelectorAll(".main-nav a").forEach(a => {
-      a.classList.toggle("active", a.getAttribute("href") === (p.category === "Yüzük" ? "yuzuk.html" : "tesbih.html"));
+      a.classList.toggle("active", a.getAttribute("href") === (p.category === "Yüzük" ? "/yuzuk" : "/tesbih"));
     });
     set("pd-breadcrumb-name", p.name);
     set("pd-cat", `${p.category} · ${p.material || ""}`);
@@ -282,7 +317,7 @@ const IMAME = (() => {
     set("pd-seller-name", sellerName);
     set("pd-seller-avatar", sellerName.charAt(0).toUpperCase() + ".");
     const sellerLink = document.getElementById("pd-seller-link");
-    if (sellerLink) sellerLink.href = `magaza.html?seller=${p.seller_id}`;
+    if (sellerLink) sellerLink.href = `/magaza?seller=${p.seller_id}`;
     set("pd-stock-note", p.stock > 0 && p.stock <= 10 ? `Son ${p.stock} adet kaldı` : "");
 
     initProductGallery(p, img);
@@ -322,8 +357,8 @@ const IMAME = (() => {
     breadcrumbLd.textContent = JSON.stringify({
       "@context": "https://schema.org", "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Anasayfa", item: location.origin + "/index.html" },
-        { "@type": "ListItem", position: 2, name: p.category, item: location.origin + "/" + (p.category === "Yüzük" ? "yuzuk.html" : "tesbih.html") },
+        { "@type": "ListItem", position: 1, name: "Anasayfa", item: location.origin + "/" },
+        { "@type": "ListItem", position: 2, name: p.category, item: location.origin + (p.category === "Yüzük" ? "/yuzuk" : "/tesbih") },
         { "@type": "ListItem", position: 3, name: p.name, item: location.href },
       ],
     });
@@ -437,7 +472,7 @@ const IMAME = (() => {
     });
   }
 
-  /* ---------- Supabase satıcı mağaza vitrini (magaza.html?seller=) ---------- */
+  /* ---------- Supabase satıcı mağaza vitrini (magaza?seller=) ---------- */
   async function initSellerStorefront() {
     const root = document.querySelector("[data-seller-storefront]");
     if (!root || typeof DB === "undefined") return;
@@ -476,7 +511,7 @@ const IMAME = (() => {
       ld.textContent = JSON.stringify({
         "@context": "https://schema.org", "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Anasayfa", item: location.origin + "/index.html" },
+          { "@type": "ListItem", position: 1, name: "Anasayfa", item: location.origin + "/" },
           { "@type": "ListItem", position: 2, name: seller.store_name, item: location.href },
         ],
       });
@@ -749,6 +784,7 @@ const IMAME = (() => {
   async function init() {
     updateCartCount();
     initMobileNav();
+    await initHeroBestsellerCarousel();
     await initDynamicCatalog();
     await initProductDetail();
     await initSellerStorefront();

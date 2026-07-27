@@ -93,6 +93,13 @@ const DB = (() => {
     if (error) throw error;
     return withSellerNames(await withSalesCounts(data));
   }
+  async function fetchBestsellers(limit = 6) {
+    const { data, error } = await sb.from("products").select("*").eq("status", "published").limit(200);
+    if (error) throw error;
+    const withCounts = await withSalesCounts(data);
+    withCounts.sort((a, b) => (b.total_sold || 0) - (a.total_sold || 0));
+    return withSellerNames(withCounts.slice(0, limit));
+  }
   async function fetchSellerStorefront(sellerId) {
     const { data, error } = await sb.from("seller_storefronts").select("*").eq("id", sellerId).single();
     if (error) throw error;
@@ -274,7 +281,7 @@ const DB = (() => {
   return {
     signUp, signIn, signOut, getUser, onAuthStateChange, getMyProfile, updateMyProfile, updatePassword,
     verifySignupOtp, resendSignupOtp, isAdmin,
-    fetchProducts, searchProducts, fetchProductById, fetchSellerStorefront,
+    fetchProducts, fetchBestsellers, searchProducts, fetchProductById, fetchSellerStorefront,
     applyAsSeller, getMySeller, updateMySeller, uploadIdDocument, getSignedIdDocumentUrl,
     fetchMyProducts, createProduct, updateProduct, deleteProduct,
     createOrder, fetchMyOrders,

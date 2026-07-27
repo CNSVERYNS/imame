@@ -246,7 +246,26 @@ select {
 }
 .hero-panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
 .hero-panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-.hero-panel-inner { background: var(--surface); aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.hero-panel-inner { background: var(--surface); aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+
+.hero-bestseller-slide {
+  position: absolute; inset: 0; display: block;
+  opacity: 0; visibility: hidden; transition: opacity .7s ease;
+}
+.hero-bestseller-slide.active { opacity: 1; visibility: visible; }
+.hero-bestseller-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-bestseller-info {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 24px 22px;
+  background: linear-gradient(to top, rgba(11,13,9,0.88), rgba(11,13,9,0.35) 65%, transparent);
+  display: flex; flex-direction: column; gap: 5px;
+}
+.hero-bestseller-badge {
+  align-self: flex-start; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold-bright); border: 1px solid var(--gold-line-strong); padding: 3px 10px; border-radius: 20px; margin-bottom: 3px;
+  background: rgba(11,13,9,0.5);
+}
+.hero-bestseller-info strong { font-family: var(--font-display); font-size: 21px; font-weight: 500; color: var(--ivory); line-height: 1.25; }
+.hero-bestseller-info span:last-of-type { font-size: 15.5px; color: var(--gold-bright); }
 
 /* ---------- Kategori kartları ---------- */
 .cat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }

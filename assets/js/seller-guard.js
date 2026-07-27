@@ -2,10 +2,10 @@
    Her panel sayfasında supabase-client.js'ten SONRA yüklenmelidir. */
 (async () => {
   const user = await DB.getUser();
-  if (!user) { window.location.href = "/satici-merkezi/giris.html"; return; }
+  if (!user) { window.location.href = "/satici-merkezi/giris"; return; }
 
   const seller = await DB.getMySeller();
-  if (!seller) { window.location.href = "/satici-merkezi/basvuru.html"; return; }
+  if (!seller) { window.location.href = "/satici-merkezi/basvuru"; return; }
 
   window.CURRENT_SELLER = seller;
 
@@ -31,12 +31,12 @@
     }
   }
 
-  document.querySelectorAll('a[href="/satici-merkezi/giris.html"]').forEach(el => {
+  document.querySelectorAll('a[href="/satici-merkezi/giris"]').forEach(el => {
     if (el.textContent.trim() === "Çıkış Yap") {
       el.addEventListener("click", async (e) => {
         e.preventDefault();
         await DB.signOut();
-        window.location.href = "/satici-merkezi/giris.html";
+        window.location.href = "/satici-merkezi/giris";
       });
     }
   });
