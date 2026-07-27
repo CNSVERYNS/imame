@@ -69,8 +69,21 @@ const DB = (() => {
     const counts = new Map(data.map(row => [row.product_id, row.total_sold]));
     return products.map(p => ({ ...p, total_sold: counts.get(p.id) || 0 }));
   }
+  // NOT: "sellers" tablosu RLS ile korunuyor (satıcı sadece kendi satırını
+  // okuyabilir), bu yüzden anonim ziyaretçiler için products.select("*, sellers(...)")
+  // her zaman null döner. Herkese açık mağaza adı seller_storefronts view'ından
+  // ayrıca çekilip birleştirilir.
+  async function withSellerNames(products) {
+    if (!products.length) return products;
+    const ids = [...new Set(products.map(p => p.seller_id).filter(Boolean))];
+    if (!ids.length) return products;
+    const { data, error } = await sb.from("seller_storefronts").select("id, store_name").in("id", ids);
+    if (error || !data) return products;
+    const names = new Map(data.map(row => [row.id, row.store_name]));
+    return products.map(p => ({ ...p, sellers: names.has(p.seller_id) ? { store_name: names.get(p.seller_id) } : p.sellers }));
+  }
   async function fetchProducts({ category, material, excludeId, sellerId, limit } = {}) {
-    let q = sb.from("products").select("*, sellers(store_name)").eq("status", "published").order("created_at", { ascending: false });
+    let q = sb.from("products").select("*").eq("status", "published").order("created_at", { ascending: false });
     if (category) q = q.eq("category", category);
     if (material) q = q.eq("material", material);
     if (excludeId) q = q.neq("id", excludeId);
@@ -78,7 +91,7 @@ const DB = (() => {
     if (limit) q = q.limit(limit);
     const { data, error } = await q;
     if (error) throw error;
-    return withSalesCounts(data);
+    return withSellerNames(await withSalesCounts(data));
   }
   async function fetchSellerStorefront(sellerId) {
     const { data, error } = await sb.from("seller_storefronts").select("*").eq("id", sellerId).single();
@@ -88,17 +101,18 @@ const DB = (() => {
   async function searchProducts(term) {
     const { data, error } = await sb
       .from("products")
-      .select("*, sellers(store_name)")
+      .select("*")
       .eq("status", "published")
       .or(`name.ilike.%${term}%,material.ilike.%${term}%,category.ilike.%${term}%`)
       .order("created_at", { ascending: false });
     if (error) throw error;
-    return withSalesCounts(data);
+    return withSellerNames(await withSalesCounts(data));
   }
   async function fetchProductById(id) {
-    const { data, error } = await sb.from("products").select("*, sellers(store_name)").eq("id", id).single();
+    const { data, error } = await sb.from("products").select("*").eq("id", id).single();
     if (error) throw error;
-    return data;
+    const [withName] = await withSellerNames([data]);
+    return withName;
   }
 
   /* ---------- Satıcı başvurusu / profili ---------- */
