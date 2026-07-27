@@ -48,7 +48,7 @@ body.panel-body { background: var(--bg); }
 .panel-menu-toggle { display: none; }
 
 /* ---------- İstatistik kartları ---------- */
-.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-bottom: 34px; }
+.stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; margin-bottom: 34px; }
 .stat-card { border: 1px solid var(--gold-line); background: var(--surface); padding: 24px; position: relative; overflow: hidden; }
 .stat-card .stat-icon { width: 34px; height: 34px; color: var(--panel-accent-bright); margin-bottom: 16px; }
 .stat-card .stat-icon svg { width: 100%; height: 100%; }
@@ -106,7 +106,7 @@ body.panel-body { background: var(--bg); }
 .payout-highlight { border: 1px solid var(--panel-accent-line); background: linear-gradient(135deg, rgba(63,133,103,0.1), transparent); padding: 30px; text-align: center; }
 .payout-highlight .stat-value { font-size: 40px; color: var(--panel-accent-bright); }
 .payout-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 22px; margin-bottom: 26px; align-items: stretch; }
-.stat-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.stat-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 
 /* ---------- Satış raporu (tarih aralığı + PDF çıktısı) ---------- */
 .report-controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
@@ -116,7 +116,7 @@ body.panel-body { background: var(--bg); }
   background: var(--surface); border: 1px solid var(--gold-line-strong); color: var(--ivory);
   padding: 8px 10px; font-size: 12.5px; border-radius: var(--radius); font-family: inherit;
 }
-.report-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 22px; }
+.report-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 22px; }
 .report-period-label { font-size: 12.5px; color: var(--ivory-faint); margin-bottom: 18px; }
 .print-only { display: none; }
 

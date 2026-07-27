@@ -60,6 +60,12 @@ button { font-family: inherit; }
 h1, h2, h3, h4, h5 { margin: 0; font-family: var(--font-display); font-weight: 500; color: var(--ivory); }
 p { margin: 0; }
 input, select, textarea { font-family: inherit; }
+select {
+  appearance: none; -webkit-appearance: none; -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c6a456' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; background-size: 13px;
+  padding-right: 38px !important;
+}
 
 ::selection { background: var(--gold-dim); color: #0b0d09; }
 
@@ -243,7 +249,7 @@ input, select, textarea { font-family: inherit; }
 .hero-panel-inner { background: var(--surface); aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 
 /* ---------- Kategori kartları ---------- */
-.cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+.cat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
 .cat-card {
   position: relative; height: 340px; border: 1px solid var(--gold-line); overflow: hidden;
   display: flex; align-items: flex-end; padding: 34px;
@@ -257,7 +263,7 @@ input, select, textarea { font-family: inherit; }
 .cat-card:hover { border-color: var(--gold-line-strong); }
 
 /* ---------- Ürün kartı / grid ---------- */
-.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+.product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; }
 .product-card { border: 1px solid var(--gold-line); background: var(--surface); transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; position: relative; }
 .product-card:hover { transform: translateY(-4px); border-color: var(--gold-line-strong); box-shadow: var(--shadow-soft); }
 .product-media { aspect-ratio: 1/1; background: var(--surface-2); position: relative; overflow: hidden; display:flex; align-items:center; justify-content:center; }
@@ -280,7 +286,7 @@ input, select, textarea { font-family: inherit; }
 .add-btn.active { color: var(--oxblood-bright); border-color: var(--oxblood-bright); }
 .add-btn.active svg { fill: currentColor; }
 .product-info { padding: 20px; }
-.product-cat { font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-dim); }
+.product-cat { display: block; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .product-name { font-family: var(--font-display); font-size: 19px; margin: 6px 0 8px; }
 .product-name a:hover { color: var(--gold-bright); }
 .product-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ivory-faint); margin-bottom: 12px; }
@@ -313,7 +319,7 @@ input, select, textarea { font-family: inherit; }
 .material-scroll::-webkit-scrollbar-thumb { background: var(--gold-line-strong); border-radius: 3px; }
 .chip--block { width: 100%; text-align: left; border-radius: var(--radius); flex-shrink: 0; }
 .sort-select {
-  background: var(--surface); border: 1px solid var(--gold-line-strong); color: var(--ivory-dim); padding: 10px 16px;
+  background-color: var(--surface); border: 1px solid var(--gold-line-strong); color: var(--ivory-dim); padding: 10px 16px;
   font-size: 12px; letter-spacing: 0.05em; border-radius: var(--radius);
 }
 .filter-layout { display: grid; grid-template-columns: 240px 1fr; gap: 44px; align-items: start; }
@@ -346,7 +352,7 @@ input, select, textarea { font-family: inherit; }
 .price-range-sep { color: var(--ivory-faint); font-size: 13px; flex-shrink: 0; }
 
 /* ---------- Panel/testimonial/trust ---------- */
-.trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+.trust-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; }
 .trust-item { text-align: center; padding: 10px; }
 .trust-item svg { width: 34px; height: 34px; margin: 0 auto 18px; color: var(--gold); }
 .trust-item h4 { font-size: 16px; margin-bottom: 8px; font-weight: 500; }
@@ -356,7 +362,7 @@ input, select, textarea { font-family: inherit; }
 .quote-block p { font-family: var(--font-display); font-size: 28px; font-style: italic; color: var(--ivory); line-height: 1.5; }
 .quote-block cite { display: block; margin-top: 20px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); font-style: normal; }
 
-.review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.review-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
 .review-card { border: 1px solid var(--gold-line); padding: 28px; background: var(--surface); }
 .review-card p { color: var(--ivory-dim); font-size: 14px; margin: 14px 0 18px; line-height: 1.7; }
 .review-who { display: flex; align-items: center; gap: 12px; }
@@ -380,8 +386,9 @@ input, select, textarea { font-family: inherit; }
 .payment-icons { display: flex; gap: 10px; opacity: .7; font-size: 11px; letter-spacing: .05em; }
 
 /* ---------- Sayfa başlığı (iç sayfalar) ---------- */
-.page-header { padding: 64px 0 48px; text-align: center; border-bottom: 1px solid var(--gold-line); background: var(--bg-alt); position: relative; }
-.page-header h1 { font-size: 42px; margin: 14px 0 10px; }
+.page-header { padding: 40px 0 32px; text-align: center; border-bottom: 1px solid var(--gold-line); background: var(--bg-alt); position: relative; }
+.page-header h1 { font-size: 36px; margin: 10px 0 8px; }
+.page-header .intro-text { max-width: 760px; margin: 14px auto 0; line-height: 1.8; }
 .breadcrumb { font-size: 12px; color: var(--ivory-faint); letter-spacing: .04em; }
 .breadcrumb a:hover { color: var(--gold-bright); }
 .breadcrumb span { margin: 0 8px; }
@@ -390,7 +397,7 @@ input, select, textarea { font-family: inherit; }
 .field { margin-bottom: 20px; }
 .field label { display: block; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ivory-dim); margin-bottom: 9px; }
 .field input, .field select, .field textarea {
-  width: 100%; background: var(--surface); border: 1px solid var(--gold-line-strong); color: var(--ivory);
+  width: 100%; background-color: var(--surface); border: 1px solid var(--gold-line-strong); color: var(--ivory);
   padding: 13px 16px; font-size: 14px; border-radius: var(--radius); transition: border-color .2s ease;
 }
 .field input::placeholder, .field textarea::placeholder { color: var(--ivory-faint); }
@@ -544,14 +551,14 @@ input, select, textarea { font-family: inherit; }
 .timeline-item strong { display: block; font-family: var(--font-display); font-size: 20px; color: var(--gold-bright); margin-bottom: 4px; }
 .timeline-item p { color: var(--ivory-dim); font-size: 13.5px; }
 
-.process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+.process-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; }
 .process-item { text-align: center; position: relative; padding: 10px; }
 .process-item .pnum { font-family: var(--font-display); font-size: 46px; color: var(--gold-line-strong); margin-bottom: 6px; }
 .process-item h4 { font-size: 16px; margin-bottom: 10px; }
 .process-item p { font-size: 13px; color: var(--ivory-dim); }
 
 /* ---------- Satıcı vitrini ---------- */
-.product-seller { font-size: 11.5px; color: var(--ivory-faint); margin-top: 3px; }
+.product-seller { display: block; font-size: 11.5px; color: var(--ivory-faint); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .product-seller a { color: var(--gold-dim); }
 .product-seller a:hover { color: var(--gold-bright); }
 
@@ -637,7 +644,7 @@ input, select, textarea { font-family: inherit; }
 }
 .track-form input::placeholder { color: var(--ivory-faint); }
 .track-form input:focus { outline: none; border-color: var(--gold); }
-.track-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 30px 0 34px; border-bottom: 1px solid var(--gold-line); margin-bottom: 34px; }
+.track-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding: 30px 0 34px; border-bottom: 1px solid var(--gold-line); margin-bottom: 34px; }
 .track-summary h3 { font-size: 19px; margin-top: 6px; }
 .track-steps { position: relative; padding-left: 8px; }
 .track-step { position: relative; padding: 0 0 34px 34px; border-left: 1px solid var(--gold-line-strong); }
@@ -775,8 +782,8 @@ input, select, textarea { font-family: inherit; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1080px) {
-  .product-grid { grid-template-columns: repeat(3, 1fr); }
-  .trust-grid { grid-template-columns: repeat(2, 1fr); }
+  .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .review-grid { grid-template-columns: 1fr 1fr; }
   .process-grid { grid-template-columns: 1fr 1fr; }
@@ -813,9 +820,9 @@ input, select, textarea { font-family: inherit; }
 }
 @media (max-width: 640px) {
   .container { padding: 0 20px; }
-  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
   .trust-grid { grid-template-columns: 1fr 1fr; }
-  .footer-grid { grid-template-columns: repeat(3, 1fr); gap: 28px 14px; }
+  .footer-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 14px; }
   .cart-table { display: block; overflow-x: auto; white-space: nowrap; }
   .footer-brand { grid-column: 1 / -1; }
   .footer-col:last-child { grid-column: 1 / -1; }

@@ -489,7 +489,7 @@ const IMAME = (() => {
     const cards = Array.from(document.querySelectorAll("[data-product-item]"));
     if (!chipGroup || !cards.length) return;
 
-    const PAGE_SIZE = 6;
+    const PAGE_SIZE = 40;
     const chips = chipGroup.querySelectorAll(".chip");
     const sideInputs = document.querySelectorAll("[data-filter-input]");
     const applyBtn = document.querySelector(".filter-side .btn-block");
