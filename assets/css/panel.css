@@ -91,11 +91,11 @@ body.panel-body { background: var(--bg); }
 /* ---------- Panel form ---------- */
 .panel-form-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 26px; align-items: start; }
 .upload-box {
-  border: 1.5px dashed var(--gold-line-strong); border-radius: var(--radius); padding: 40px 20px; text-align: center;
+  border: 1.5px dashed var(--gold-line-strong); border-radius: var(--radius); padding: 26px 20px; text-align: center;
   color: var(--ivory-faint); font-size: 13px; cursor: pointer; transition: border-color .2s ease;
 }
 .upload-box:hover { border-color: var(--gold); color: var(--ivory-dim); }
-.upload-box svg { width: 30px; height: 30px; margin: 0 auto 12px; color: var(--gold); }
+.upload-box svg { width: 26px; height: 26px; margin: 0 auto 10px; color: var(--gold); }
 .thumb-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
 .thumb-row .p-thumb { width: 56px; height: 56px; }
 

@@ -477,7 +477,8 @@ input, select, textarea { font-family: inherit; }
 /* ---------- Satıcı Merkezi (tanıtım) ---------- */
 .seller-hero { background: radial-gradient(ellipse at 15% 20%, rgba(63,133,103,0.12), transparent 55%), var(--bg); }
 .badge-line { display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border: 1px solid var(--panel-accent-line, rgba(63,133,103,.3)); border-radius: 20px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--panel-accent-bright, #6cb894); margin-bottom: 20px; }
-.commission-card { border: 1px solid var(--gold-line); background: var(--surface); padding: 40px; }
+.commission-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.commission-card { border: 1px solid var(--gold-line); background: var(--surface); padding: 40px; min-width: 0; }
 .commission-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--gold-line); font-size: 14px; color: var(--ivory-dim); }
 .commission-row.total { color: var(--ivory); font-size: 17px; border-bottom: none; padding-top: 20px; }
 .commission-row.total strong { color: var(--gold-bright); font-family: var(--font-display); font-size: 22px; }
@@ -602,7 +603,12 @@ input, select, textarea { font-family: inherit; }
 /* ---------- Kargo takip ---------- */
 .track-box { border: 1px solid var(--gold-line); background: var(--surface); padding: 44px; }
 .track-form { display: flex; gap: 14px; max-width: 560px; margin: 0 auto; }
-.track-form input { flex: 1; }
+.track-form input {
+  flex: 1; background: var(--surface-2); border: 1px solid var(--gold-line-strong); color: var(--ivory);
+  padding: 15px 18px; font-size: 15px; border-radius: var(--radius); min-width: 0;
+}
+.track-form input::placeholder { color: var(--ivory-faint); }
+.track-form input:focus { outline: none; border-color: var(--gold); }
 .track-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 30px 0 34px; border-bottom: 1px solid var(--gold-line); margin-bottom: 34px; }
 .track-summary h3 { font-size: 19px; margin-top: 6px; }
 .track-steps { position: relative; padding-left: 8px; }
@@ -745,6 +751,7 @@ input, select, textarea { font-family: inherit; }
   .trust-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .review-grid { grid-template-columns: 1fr 1fr; }
+  .process-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 900px) {
   .main-nav, .header-actions .btn { display: none; }
@@ -756,6 +763,7 @@ input, select, textarea { font-family: inherit; }
   .cat-grid { grid-template-columns: 1fr; }
   .legal-layout { grid-template-columns: 1fr; }
   .legal-toc { display: none; }
+  .commission-layout { grid-template-columns: 1fr; gap: 34px; }
 }
 @media (max-width: 640px) {
   .container { padding: 0 20px; }
@@ -765,8 +773,12 @@ input, select, textarea { font-family: inherit; }
   .footer-brand { grid-column: 1 / -1; }
   .footer-col:last-child { grid-column: 1 / -1; }
   .review-grid { grid-template-columns: 1fr; }
+  .process-grid { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
   .section { padding: 64px 0; }
   .hero { padding: 90px 0 60px; }
   .topbar-links { display: none; }
+  .track-box { padding: 26px 22px; }
+  .track-form { flex-direction: column; }
+  .track-form button { width: 100%; }
 }
