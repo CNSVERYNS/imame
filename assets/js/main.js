@@ -195,6 +195,40 @@ const IMAME = (() => {
     }
   }
 
+  /* ---------- Ürün detay galerisi (birden fazla görsel / slider) ---------- */
+  function initProductGallery(p, fallbackImgSrc) {
+    const images = ((p.images && p.images.length ? p.images : null) || [fallbackImgSrc]).filter(Boolean);
+    const mainImg = document.getElementById("pd-main-img");
+    const thumbsWrap = document.getElementById("pd-gallery-thumbs");
+    const prevBtn = document.getElementById("pd-gallery-prev");
+    const nextBtn = document.getElementById("pd-gallery-next");
+    let index = 0;
+
+    function show(i) {
+      index = (i + images.length) % images.length;
+      if (mainImg) { mainImg.src = images[index]; mainImg.alt = p.name; }
+      if (thumbsWrap) {
+        thumbsWrap.querySelectorAll(".pd-gallery-thumb").forEach((t, idx) => t.classList.toggle("active", idx === index));
+      }
+    }
+
+    if (thumbsWrap) {
+      thumbsWrap.innerHTML = images.length > 1
+        ? images.map((src, idx) => `<button type="button" class="pd-gallery-thumb${idx === 0 ? " active" : ""}" data-idx="${idx}"><img src="${escapeHtml(src)}" alt="${escapeHtml(p.name)} ${idx + 1}"></button>`).join("")
+        : "";
+      thumbsWrap.querySelectorAll(".pd-gallery-thumb").forEach(btn => {
+        btn.addEventListener("click", () => show(parseInt(btn.dataset.idx, 10)));
+      });
+    }
+    if (prevBtn && nextBtn && images.length > 1) {
+      prevBtn.hidden = false;
+      nextBtn.hidden = false;
+      prevBtn.addEventListener("click", () => show(index - 1));
+      nextBtn.addEventListener("click", () => show(index + 1));
+    }
+    show(0);
+  }
+
   /* ---------- Supabase ürün detay sayfası ---------- */
   async function initProductDetail() {
     const root = document.querySelector("[data-product-detail]");
@@ -234,8 +268,7 @@ const IMAME = (() => {
     if (sellerLink) sellerLink.href = `magaza.html?seller=${p.seller_id}`;
     set("pd-stock-note", p.stock > 0 && p.stock <= 10 ? `Son ${p.stock} adet kaldı` : "");
 
-    const mainImg = document.getElementById("pd-main-img");
-    if (mainImg) { mainImg.src = img; mainImg.alt = p.name; }
+    initProductGallery(p, img);
 
     const addBtn = document.getElementById("pd-add-cart");
     if (addBtn) {

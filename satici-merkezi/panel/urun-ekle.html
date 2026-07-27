@@ -102,9 +102,9 @@
         <div>
           <div class="panel-card">
             <div class="panel-card-body">
-              <h3 style="font-size:15px; margin-bottom:16px;">Ürün Görseli</h3>
-              <div class="field"><label>Görsel Bağlantısı (URL)</label><input type="url" name="image_url" placeholder="https://... (boş bırakılırsa varsayılan görsel kullanılır)"></div>
-              <p class="field-hint">Dosya yükleme henüz desteklenmiyor — bir görsel adresi yapıştırın.</p>
+              <h3 style="font-size:15px; margin-bottom:16px;">Ürün Görselleri</h3>
+              <div class="field"><label>Görsel Bağlantıları</label><textarea name="image_urls" rows="4" placeholder="Her satıra bir görsel adresi yapıştırın (ilk satır kapak görseli olur):&#10;https://...&#10;https://...&#10;https://..."></textarea></div>
+              <p class="field-hint">Dosya yükleme henüz desteklenmiyor — birden fazla açı/detay görseli eklemek için her birini ayrı satıra yapıştırın. Boş bırakılırsa varsayılan görsel kullanılır.</p>
             </div>
           </div>
 
@@ -158,7 +158,7 @@
       document.getElementById('shipping-option').value = p.shipping_option;
       document.getElementById('shipping-option').dispatchEvent(new Event('change'));
       document.getElementById('shipping-fee').value = p.shipping_fee || '';
-      form.image_url.value = p.image_url || '';
+      form.image_urls.value = (p.images && p.images.length ? p.images : [p.image_url].filter(Boolean)).join('\n');
       form.pub.value = p.status === 'draft' ? 'draft' : 'published';
       form.querySelector('[type=submit]').textContent = 'Ürünü Güncelle';
     } catch (err) {
@@ -174,6 +174,7 @@
     try {
       const shippingOption = document.getElementById('shipping-option').value;
       const shippingFee = document.getElementById('shipping-fee').value;
+      const images = form.image_urls.value.split('\n').map(s => s.trim()).filter(Boolean);
       const fields = {
         name: form.name.value.trim(),
         category: form.category.value,
@@ -185,7 +186,8 @@
         weight_grams: form.weight_grams.value ? parseFloat(form.weight_grams.value) : null,
         shipping_option: shippingOption,
         shipping_fee: shippingOption === 'alici' ? parseFloat(shippingFee || '0') : 0,
-        image_url: form.image_url.value.trim() || null,
+        image_url: images[0] || null,
+        images: images.length ? images : null,
         status: form.pub.value,
       };
       if (editId) await DB.updateProduct(editId, fields);
