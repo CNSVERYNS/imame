@@ -252,6 +252,9 @@ const IMAME = (() => {
     document.title = `${p.name} — TesbihYol`;
     const catLink = document.getElementById("pd-breadcrumb-cat");
     if (catLink) { catLink.href = p.category === "Yüzük" ? "yuzuk.html" : "tesbih.html"; catLink.textContent = p.category; }
+    document.querySelectorAll(".main-nav a").forEach(a => {
+      a.classList.toggle("active", a.getAttribute("href") === (p.category === "Yüzük" ? "yuzuk.html" : "tesbih.html"));
+    });
     set("pd-breadcrumb-name", p.name);
     set("pd-cat", `${p.category} · ${p.material || ""}`);
     set("pd-title", p.name);
