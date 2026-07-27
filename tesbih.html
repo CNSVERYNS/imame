@@ -132,22 +132,8 @@
 <section class="section section--tight">
   <div class="container">
 
-    <div class="filter-bar" data-filter-group>
-      <div class="filter-chips">
-        <button class="chip active" data-filter="all">Tümü</button>
-        <button class="chip" data-filter="kehribar">Kehribar</button>
-        <button class="chip" data-filter="oltu">Oltu Taşı</button>
-        <button class="chip" data-filter="sedef">Sedef</button>
-        <button class="chip" data-filter="sandal">Sandal Ağacı</button>
-        <button class="chip" data-filter="ceviz">Ceviz Ağacı</button>
-        <button class="chip" data-filter="pirinc">Pirinç</button>
-        <button class="chip" data-filter="akik">Akik</button>
-        <button class="chip" data-filter="kaplan-gozu">Kaplan Gözü</button>
-        <button class="chip" data-filter="luletasi">Lületaşı</button>
-        <button class="chip" data-filter="zeytin">Zeytin Ağacı</button>
-        <button class="chip" data-filter="gumus">Gümüş</button>
-      </div>
-      <select class="sort-select">
+    <div class="filter-bar">
+      <select class="sort-select" style="margin-left:auto;">
         <option value="recommended">Önerilen Sıralama</option>
         <option value="price-asc">Fiyat: Artan</option>
         <option value="price-desc">Fiyat: Azalan</option>
@@ -158,6 +144,23 @@
 
     <div class="filter-layout">
       <aside class="filter-side">
+        <div class="filter-group">
+          <h4>Malzeme</h4>
+          <div class="material-scroll" data-filter-group>
+            <button class="chip chip--block active" data-filter="all">Tümü</button>
+            <button class="chip chip--block" data-filter="kehribar">Kehribar</button>
+            <button class="chip chip--block" data-filter="oltu">Oltu Taşı</button>
+            <button class="chip chip--block" data-filter="sedef">Sedef</button>
+            <button class="chip chip--block" data-filter="sandal">Sandal Ağacı</button>
+            <button class="chip chip--block" data-filter="ceviz">Ceviz Ağacı</button>
+            <button class="chip chip--block" data-filter="pirinc">Pirinç</button>
+            <button class="chip chip--block" data-filter="akik">Akik</button>
+            <button class="chip chip--block" data-filter="kaplan-gozu">Kaplan Gözü</button>
+            <button class="chip chip--block" data-filter="luletasi">Lületaşı</button>
+            <button class="chip chip--block" data-filter="zeytin">Zeytin Ağacı</button>
+            <button class="chip chip--block" data-filter="gumus">Gümüş</button>
+          </div>
+        </div>
         <div class="filter-group">
           <h4>Kargo</h4>
           <label class="filter-option"><input type="checkbox" data-filter-input="shipping-free"> Sadece Ücretsiz Kargo</label>
