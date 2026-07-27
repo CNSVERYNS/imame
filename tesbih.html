@@ -133,6 +133,10 @@
   <div class="container">
 
     <div class="filter-bar">
+      <button type="button" class="filter-toggle-btn" id="filter-toggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+        Filtrele
+      </button>
       <select class="sort-select" style="margin-left:auto;">
         <option value="recommended">Önerilen Sıralama</option>
         <option value="price-asc">Fiyat: Artan</option>
@@ -144,6 +148,12 @@
 
     <div class="filter-layout">
       <aside class="filter-side">
+        <div class="filter-drawer-head">
+          <h4>Filtrele</h4>
+          <button type="button" class="filter-drawer-close" id="filter-close" aria-label="Kapat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
         <div class="filter-group">
           <h4>Malzeme</h4>
           <div class="material-scroll" data-filter-group>

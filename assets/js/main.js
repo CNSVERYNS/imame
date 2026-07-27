@@ -203,10 +203,24 @@ const IMAME = (() => {
     const prevBtn = document.getElementById("pd-gallery-prev");
     const nextBtn = document.getElementById("pd-gallery-next");
     let index = 0;
+    let firstShow = true;
 
     function show(i) {
       index = (i + images.length) % images.length;
-      if (mainImg) { mainImg.src = images[index]; mainImg.alt = p.name; }
+      if (mainImg) {
+        if (firstShow || mainImg.src === images[index]) {
+          mainImg.src = images[index];
+          mainImg.alt = p.name;
+          firstShow = false;
+        } else {
+          mainImg.classList.add("is-switching");
+          setTimeout(() => {
+            mainImg.src = images[index];
+            mainImg.alt = p.name;
+            mainImg.classList.remove("is-switching");
+          }, 180);
+        }
+      }
       if (thumbsWrap) {
         thumbsWrap.querySelectorAll(".pd-gallery-thumb").forEach((t, idx) => t.classList.toggle("active", idx === index));
       }
@@ -591,7 +605,16 @@ const IMAME = (() => {
 
     sideInputs.forEach(input => input.addEventListener("change", applyFilters));
     if (sortSelect) sortSelect.addEventListener("change", applyFilters);
-    if (applyBtn) applyBtn.addEventListener("click", (e) => { e.preventDefault(); applyFilters(); });
+
+    const filterSide = document.querySelector(".filter-side");
+    const filterToggle = document.getElementById("filter-toggle");
+    const filterClose = document.getElementById("filter-close");
+    const closeDrawer = () => { if (filterSide) filterSide.classList.remove("open"); document.body.style.overflow = ""; };
+    if (filterToggle && filterSide) {
+      filterToggle.addEventListener("click", () => { filterSide.classList.add("open"); document.body.style.overflow = "hidden"; });
+    }
+    if (filterClose) filterClose.addEventListener("click", closeDrawer);
+    if (applyBtn) applyBtn.addEventListener("click", (e) => { e.preventDefault(); applyFilters(); closeDrawer(); });
 
     applyFilters();
   }
